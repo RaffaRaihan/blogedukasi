@@ -18,7 +18,7 @@ func SetupRoutes(r *gin.Engine) {
 
 	// Group Admin (dengan middleware Auth)
 	adminRoutes := r.Group("/admin")
-	adminRoutes.Use(middlewares.AuthMiddleware())
+	adminRoutes.Use(middlewares.AuthMiddleware(), middlewares.AdminMiddleware())
 	{
 		// Admin User Management
 		adminRoutes.GET("/users", controllers.GetUsers)
