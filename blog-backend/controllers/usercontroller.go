@@ -9,7 +9,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// Register User
 func Register(c *gin.Context) {
 	var user models.User
 	if err := c.ShouldBindJSON(&user); err != nil {
@@ -17,8 +16,17 @@ func Register(c *gin.Context) {
 		return
 	}
 
+	// Default role jika bukan admin
+	if user.Role != "admin" {
+		user.Role = "user"
+	}
+
 	// Hash password
-	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(user.Password), 12)
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to hash password"})
+		return
+	}
 	user.Password = string(hashedPassword)
 
 	// Save user
@@ -26,8 +34,10 @@ func Register(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
 	c.JSON(http.StatusCreated, gin.H{"message": "User registered successfully"})
 }
+
 
 // Get Users (Admin Only)
 func GetUsers(c *gin.Context) {

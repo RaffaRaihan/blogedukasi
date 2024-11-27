@@ -31,7 +31,7 @@
                   <h5 class="card-title">{{ articles.title }}</h5>
                   <p class="card-text">{{ articles.content }}</p>
                   <p class="text-muted">{{ articles.CreatedAt }}</p>
-                  <NuxtLink to="/detail" class="btn btn-success btn-sm">Baca Selengkapnya</NuxtLink>
+                  <NuxtLink to="/login" class="btn btn-success btn-sm">Baca Selengkapnya</NuxtLink>
                 </div>
               </div>
             </div>
@@ -46,27 +46,23 @@
     <Footer />
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
-export default {
-  data() {
-    return {
-      articles: []
-    };
-  },
-  created() {
-    this.fetchArticles();
-  },
-  methods: {
-    async fetchArticles() {
-      try {
-        const response = await axios.get('http://localhost:8080/articles'); // Ganti dengan URL backend Anda
-        this.articles = response.data;
-      } catch (error) {
-        console.error('Error fetching articles:', error);
-      }
-    }
+const articles = ref([]);
+
+const fetchArticles = async () => {
+  try {
+    const response = await axios.get('http://localhost:8080/articles'); // Ganti dengan URL backend Anda
+    articles.value = response.data;
+  } catch (error) {
+    console.error('Error fetching articles:', error);
   }
 };
+
+// Panggil fetchArticles saat komponen dimuat
+onMounted(() => {
+  fetchArticles();
+});
 </script>
