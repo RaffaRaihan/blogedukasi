@@ -1,19 +1,24 @@
 package routes
 
 import (
-	"blog-backend/middlewares"
 	"blog-backend/controllers"
+	"blog-backend/middlewares"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func SetupRoutes(r *gin.Engine) {
+
+	// setup cors
+	r.Use(cors.Default())
 
 	// Routes Public
 	r.POST("/login", controllers.Login)
 	r.POST("/register", controllers.Register)
 
 	r.GET("/articles", controllers.GetAll)
+	r.GET("/category", controllers.GetAllCategory)
 	r.GET("/articles/:id/comments", controllers.GetByArticle)
 
 	// Group Admin (dengan middleware Auth)
@@ -26,7 +31,7 @@ func SetupRoutes(r *gin.Engine) {
 		// Admin Article Management
 		adminRoutes.GET("/articles", controllers.GetAll)
 		adminRoutes.POST("/articles", controllers.CreateArticle)
-		adminRoutes.PUT("/articles/:id", controllers.Update)
+		adminRoutes.PUT("/articles/:id", controllers.UpdateArticle)
 		adminRoutes.DELETE("/articles/:id", controllers.Delete)
 	}
 

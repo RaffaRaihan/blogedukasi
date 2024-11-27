@@ -4,7 +4,10 @@ import "gorm.io/gorm"
 
 type Article struct {
 	gorm.Model
-	Title   string `json:"title"`
-	Content string `json:"content"`
-	Author  string `json:"author"`
+	Label		string		`json:"label"`
+	Title   	string 		`json:"title"`
+	Content 	string 		`json:"content"`
+	CategoryID  uint        `json:"category_id"` // Foreign Key
+	Category    Category    `gorm:"foreignKey:CategoryID" json:"category"`
+	Author  	string 		`json:"author"`
 }

@@ -11,10 +11,34 @@
       </div>
       <div>
         <h5>Kategori</h5>
-        <ul>
-          <li>Label 1 (1)</li>
-          <li>Label 2 (2)</li>
+        <ul v-for="category in category" :key="category.id">
+          <li>{{ category.name }}</li>
         </ul>
       </div>
     </div>
 </template>
+
+<script>
+import axios from 'axios';
+
+export default {
+  data() {
+    return {
+      category: []
+    };
+  },
+  created() {
+    this.fetchCategory();
+  },
+  methods: {
+    async fetchCategory() {
+      try {
+        const response = await axios.get('http://localhost:8080/category'); // Ganti dengan URL backend Anda
+        this.category = response.data;
+      } catch (error) {
+        console.error('Error fetching category:', error);
+      }
+    }
+  }
+};
+</script>
