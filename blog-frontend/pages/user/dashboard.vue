@@ -1,3 +1,5 @@
 <template>
-    <div>ini dashboard user</div>
+    <LoginNavbar />
+    <div>Main Content user</div>
+    <Footer />
 </template>

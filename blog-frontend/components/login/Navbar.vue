@@ -28,7 +28,7 @@
 <script setup>
 import { ref } from 'vue';
 
-const isLoggedIn = ref(false);
+const isLoggedIn = ref(true);
 </script>
 
 <style scoped>

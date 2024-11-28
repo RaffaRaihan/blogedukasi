@@ -12,7 +12,7 @@
       <div>
         <h5>Kategori</h5>
         <ul v-for="category in category" :key="category.id">
-          <li>{{ category.name }}</li>
+          <li><NuxtLink to="/">{{ category.name }}</NuxtLink></li>
         </ul>
       </div>
     </div>
