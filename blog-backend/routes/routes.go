@@ -10,8 +10,13 @@ import (
 
 func SetupRoutes(r *gin.Engine) {
 
-	// setup cors
-	r.Use(cors.Default())
+	// setup cors dengan konfigurasi yang tepat
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000"}, // Hanya izinkan asal dari frontend
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}, // Metode yang diizinkan
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"}, // Izinkan header Authorization
+		AllowCredentials: true, // Izinkan cookies untuk dikirimkan
+	}))
 
 	// Routes Public
 	r.POST("/login", controllers.Login)

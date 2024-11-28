@@ -25,8 +25,8 @@
           <div class="row">
             <div v-for="articles in articles" :key="articles.id" class="col-md-6 mb-3">
               <div class="card">
+                <img src="../assets/img/windah senyum Roblox.jpg" class="card-img-top" alt="...">
                 <div class="card-body">
-                  <img src="../assets/img/windah senyum Roblox.jpg" class="img-fluid" alt="...">
                   <h6 class="text-muted">{{ articles.label }}</h6>
                   <h5 class="card-title">{{ articles.title }}</h5>
                   <p class="card-text">{{ articles.content }}</p>
