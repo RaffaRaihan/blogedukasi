@@ -47,8 +47,8 @@ const getTokenFromCookies = () => {
 
 const fetchArticles = async () => {
   try {
-      // Ambil token dari cookies
-      const token = getTokenFromCookies();
+    // Ambil token dari cookies
+    const token = getTokenFromCookies();
     const response = await axios.get('http://localhost:8080/articles', {
     headers: {
       Authorization: `Bearer ${token}`,

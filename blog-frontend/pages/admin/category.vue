@@ -13,7 +13,7 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th scope="col">#</th>
+            <th scope="col">No</th>
             <th scope="col">Nama Kategori</th>
             <th scope="col">Aksi</th>
           </tr>
@@ -35,27 +35,38 @@
     </div>
   </template>
 
-<script>
+<script setup>
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
-export default {
-  data() {
-    return {
-      category: []
-    };
-  },
-  created() {
-    this.fetchCategory();
-  },
-  methods: {
-    async fetchCategory() {
-      try {
-        const response = await axios.get('http://localhost:8080/category'); // Ganti dengan URL backend Anda
-        this.category = response.data;
-      } catch (error) {
-        console.error('Error fetching category:', error);
-      }
-    }
+const category = ref([]);
+// Fungsi untuk mengambil token dari cookies
+const getTokenFromCookies = () => {
+  const token = document.cookie
+    .split('; ')
+    .find(row => row.startsWith('token='))
+    ?.split('=')[1];
+  
+  return token;
+};
+
+const fetchCategory = async () => {
+  try {
+    // Ambil token dari cookies
+    const token = getTokenFromCookies();
+    const response = await axios.get('http://localhost:8080/category', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }); // Ganti dengan URL backend Anda
+    category.value = response.data;
+  } catch (error) {
+    console.error('Error fetching category:', error);
   }
 };
+
+// Panggil fetchCategory saat komponen dimuat
+onMounted(() => {
+  fetchCategory();
+});
 </script>

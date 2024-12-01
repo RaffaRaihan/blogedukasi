@@ -13,10 +13,10 @@
           <li class="nav-item"><NuxtLink class="nav-link text-white" to="/">Pemrograman</NuxtLink></li>
           <li class="nav-item"><NuxtLink class="nav-link text-white" to="/">Teknologi</NuxtLink></li>
           <!-- Logika untuk menampilkan input atau tombol login -->
-          <li class="nav-item ms-3" v-if="isLoggedIn">
+          <li class="nav-item" v-if="isLoggedIn">
             <input class="form-control" type="text" placeholder="search..." aria-label="default input example">
           </li>
-          <li class="nav-item ms-3" v-else>
+          <li class="nav-item" v-else>
             <NuxtLink class="btn btn-outline-light" to="/login">Login</NuxtLink>
           </li>
         </ul>

@@ -8,7 +8,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><NuxtLink class="nav-link text-white" to="/">Beranda</NuxtLink></li>
+          <li class="nav-item"><NuxtLink class="nav-link text-white" to="/user/dashboard">Beranda</NuxtLink></li>
           <li class="nav-item"><NuxtLink class="nav-link text-white" to="/">Tutorial</NuxtLink></li>
           <li class="nav-item"><NuxtLink class="nav-link text-white" to="/">Pemrograman</NuxtLink></li>
           <li class="nav-item"><NuxtLink class="nav-link text-white" to="/">Teknologi</NuxtLink></li>

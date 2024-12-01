@@ -11,34 +11,30 @@
       </div>
       <div>
         <h5>Kategori</h5>
-        <ul v-for="category in category" :key="category.id">
-          <li><NuxtLink to="/">{{ category.name }}</NuxtLink></li>
+        <ul v-for="category in category" :key="category.id" class="list-grup">
+          <li class="list-grup-item"><NuxtLink class="text-muted" to="/">{{ category.name }}</NuxtLink></li>
         </ul>
       </div>
     </div>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
-export default {
-  data() {
-    return {
-      category: []
-    };
-  },
-  created() {
-    this.fetchCategory();
-  },
-  methods: {
-    async fetchCategory() {
-      try {
-        const response = await axios.get('http://localhost:8080/category'); // Ganti dengan URL backend Anda
-        this.category = response.data;
-      } catch (error) {
-        console.error('Error fetching category:', error);
-      }
-    }
+const category = ref([]);
+
+const fetchCategory = async () => {
+  try {
+    const response = await axios.get('http://localhost:8080/category'); // Ganti dengan URL backend Anda
+    category.value = response.data;
+  } catch (error) {
+    console.error('Error fetching articles:', error);
   }
 };
+
+// Panggil fetchCategory saat komponen dimuat
+onMounted(() => {
+  fetchCategory();
+});
 </script>
