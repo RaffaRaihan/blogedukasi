@@ -36,4 +36,15 @@
   </div>
 </template>
 
+<script setup>
+import { useRouter } from 'vue-router'
+
+definePageMeta({
+  middleware: 'auth',
+})
+
+  // Redirect ke halaman login
+  useRouter.Push('/login')
+</script>
+
   

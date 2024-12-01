@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -83,28 +84,53 @@ func SearchArticles(c *gin.Context) {
 	// Ambil parameter pencarian
 	query := c.Query("query")
 	categoryID := c.Query("category_id")
+	page := c.DefaultQuery("page", "1")
+	limit := c.DefaultQuery("limit", "10")
+	sort := c.DefaultQuery("sort", "created_at desc")
+
+	// Konversi page dan limit ke integer
+	pageInt, err := strconv.Atoi(page)
+	if err != nil || pageInt < 1 {
+		pageInt = 1
+	}
+	limitInt, err := strconv.Atoi(limit)
+	if err != nil || limitInt < 1 {
+		limitInt = 10
+	}
 
 	var articles []models.Article
+	var total int64
 
 	// Query dasar
 	db := config.GetDB().Preload("Category")
 	if query != "" {
-		// Cari berdasarkan judul atau konten
 		db = db.Where("title LIKE ? OR content LIKE ?", "%"+query+"%", "%"+query+"%")
 	}
 	if categoryID != "" {
-		// Filter berdasarkan kategori
 		db = db.Where("category_id = ?", categoryID)
 	}
 
-	// Eksekusi query
-	if err := db.Find(&articles).Error; err != nil {
+	// Hitung total data
+	db.Model(&models.Article{}).Count(&total)
+
+	// Eksekusi query dengan pagination dan sorting
+	if err := db.Order(sort).Offset((pageInt - 1) * limitInt).Limit(limitInt).Find(&articles).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": "Failed to search articles", "error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"status": "success", "data": articles})
+	// Kirim response
+	c.JSON(http.StatusOK, gin.H{
+		"status": "success",
+		"data":   articles,
+		"meta": gin.H{
+			"page":       pageInt,
+			"limit":      limitInt,
+			"total_data": total,
+		},
+	})
 }
+
 
 // Upload File
 func UploadFile(c *gin.Context) {

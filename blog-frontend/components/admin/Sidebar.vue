@@ -7,21 +7,19 @@
             <NuxtLink class="nav-link text-black" to="/admin/users">Users</NuxtLink>
             <NuxtLink class="nav-link text-black" to="/admin/articles">Article</NuxtLink>
             <NuxtLink class="nav-link text-black" to="/admin/category">Categories</NuxtLink>
-            <Button @onclick="logout" class="btn btn-primary text-black mt-auto">Sign out</Button>
+            <Button @onclick="handleLogout" class="btn btn-primary text-black mt-auto">Sign out</Button>
           </nav>
         </aside>
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
+import Cookies from 'js-cookie' // Pastikan library js-cookie sudah diinstal
 
-const router = useRouter();
+const handleLogout = () => {
+  // Hapus token dari cookies
+  Cookies.remove('token')
 
-const logout = () => {
-  // Hapus cookie yang berisi token
-  document.cookie = 'token=; Max-Age=0; path=/';
-
-  // Arahkan pengguna ke halaman login (misalnya /login)
-  router.push('/login');
-};
+  // Redirect ke halaman login
+  window.location.href = '/login'
+}
 </script>

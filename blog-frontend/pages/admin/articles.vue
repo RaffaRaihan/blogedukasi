@@ -41,7 +41,7 @@
                 >
                   Edit
                 </button>
-                <button class="btn btn-danger">Hapus</button>
+                <button class="btn btn-danger ms-2">Hapus</button>
               </div>
             </div>
           </div>
@@ -142,7 +142,14 @@ const getTokenFromCookies = () => {
 
 const fetchArticles = async () => {
   try {
+    // Ambil token dari cookies
     const token = getTokenFromCookies();
+
+    if (!token) {
+      throw new Error('Token tidak ditemukan. Harap login terlebih dahulu.');
+    }
+
+    console.log('Token yang diambil:', token);  // Debugging token
     const response = await axios.get('http://localhost:8080/articles', {
       headers: {
         Authorization: `Bearer ${token}`,

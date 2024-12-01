@@ -1,68 +1,137 @@
 <template>
-    <Navbar />
-    <!-- Content -->
-    <div class="container mt-4">
-      <div class="search-box mb-4">
-        <form action="#" method="GET" class="d-flex">
-          <input class="form-control me-2" type="search" placeholder="Cari artikel..." name="query" aria-label="Search">
-          <button class="btn btn-success" type="submit">Cari</button>
-        </form>
-      </div>
+  <LoginNavbar />
+  <div class="container mt-4">
+    <h4>Hasil Pencarian untuk: "{{ route.query.query || 'Semua Artikel' }}"</h4>
+    <p class="text-muted">Ditemukan {{ meta.total_data || 0 }} hasil</p>
 
-      <h4>Hasil Pencarian untuk: "HTML"</h4>
-      <p class="text-muted">Ditemukan 3 hasil</p>
-
-      <div class="row">
-        <!-- Article 1 -->
-        <div class="col-12 mb-4">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="article-title">Apa Itu HTML?</h5>
-              <p class="article-meta">By Ridho Satriawan - 22 Agustus 2022</p>
-              <p>HTML adalah singkatan dari HyperText Markup Language, yang digunakan untuk membuat struktur halaman website...</p>
-              <a href="#" class="btn btn-success btn-sm">Baca Selengkapnya</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Article 2 -->
-        <div class="col-12 mb-4">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="article-title">Panduan Dasar HTML untuk Pemula</h5>
-              <p class="article-meta">By Jane Doe - 15 Juli 2022</p>
-              <p>Panduan ini dirancang untuk membantu pemula memahami dasar-dasar HTML dan cara penggunaannya...</p>
-              <a href="#" class="btn btn-success btn-sm">Baca Selengkapnya</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Article 3 -->
-        <div class="col-12 mb-4">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="article-title">Sejarah dan Perkembangan HTML</h5>
-              <p class="article-meta">By John Smith - 10 Juni 2022</p>
-              <p>HTML telah berkembang sejak pertama kali diperkenalkan oleh Tim Berners-Lee pada tahun 1989...</p>
-              <a href="#" class="btn btn-success btn-sm">Baca Selengkapnya</a>
-            </div>
+    <!-- Daftar Artikel -->
+    <div class="row" v-if="articles.length">
+      <div class="col-12 mb-4" v-for="article in articles" :key="article.id">
+        <div class="card">
+          <img :src="`http://localhost:8080/uploads/${article.file_name}`" class="card-img-top img-fluid" alt="..."/>
+          <div class="card-body">
+            <h5 class="article-title">{{ article.title }}</h5>
+            <p class="article-meta">By {{ article.author || 'Unknown' }} - {{ formatDate(article.CreatedAt) }}</p>
+            <p>{{ article.content.substring(0, 100) }}...</p>
+            <a :href="'/articles/' + article.id" class="btn btn-success btn-sm">Baca Selengkapnya</a>
           </div>
         </div>
       </div>
     </div>
-    <Footer />
+    <p v-else>Tidak ada artikel ditemukan.</p>
+
+    <!-- Pagination -->
+    <div class="d-flex justify-content-between align-items-center mt-4">
+      <button :disabled="page <= 1" class="btn btn-outline-primary" @click="prevPage">Previous</button>
+      <span>Halaman {{ page }} dari {{ Math.ceil(meta.total_data / limit) || 1 }}</span>
+      <button :disabled="page >= Math.ceil(meta.total_data / limit)" class="btn btn-outline-primary" @click="nextPage">Next</button>
+    </div>
+  </div>
+  <Footer />
 </template>
 
-<style scoped>
-.search-box {
-  background-color: #f8f9fa;
-  padding: 15px;
-  border-radius: 5px;
+<script setup>
+import { ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import axios from 'axios'
+
+// Fungsi untuk mengambil token dari cookies
+const getTokenFromCookies = () => {
+  const token = document.cookie
+    .split('; ')
+    .find(row => row.startsWith('token='))
+    ?.split('=')[1];
+  
+  return token;
+};
+
+// Route dan Router
+const route = useRoute()
+const router = useRouter()
+
+// State
+const articles = ref([])
+const meta = ref({})
+const page = ref(Number(route.query.page) || 1)
+const limit = ref(10)
+const loading = ref(false)
+
+// Fungsi API untuk mencari artikel
+const searchArticles = async () => {
+  loading.value = true
+  try {
+    // Ambil token dari cookies
+    const token = getTokenFromCookies();
+
+    if (!token) {
+      throw new Error('Token tidak ditemukan. Harap login terlebih dahulu.');
+    }
+
+    console.log('Token yang diambil:', token);  // Debugging token
+    const response = await axios.get('http://localhost:8080/user/articles/search', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        query: route.query.query || '',
+        category_id: route.query.category_id || '',
+        page: page.value,
+        limit: limit.value,
+      },
+    })
+    articles.value = response.data.data
+    meta.value = response.data.meta
+  } catch (error) {
+    console.error('Failed to fetch articles:', error)
+  } finally {
+    loading.value = false
+  }
 }
+
+// Fungsi format tanggal
+const formatDate = (date) => {
+  const options = { year: 'numeric', month: 'long', day: 'numeric' }
+  return new Date(date).toLocaleDateString('id-ID', options)
+}
+
+// Navigasi ke halaman sebelumnya
+const prevPage = () => {
+  if (page.value > 1) {
+    page.value--
+    updateQuery()
+  }
+}
+
+// Navigasi ke halaman berikutnya
+const nextPage = () => {
+  if (page.value < Math.ceil(meta.value.total_data / limit.value)) {
+    page.value++
+    updateQuery()
+  }
+}
+
+// Perbarui query parameter di URL
+const updateQuery = () => {
+  router.push({
+    path: '/user/search',
+    query: {
+      ...route.query,
+      page: page.value,
+    },
+  })
+}
+
+// Panggil API saat parameter query berubah
+watch(() => route.query, () => {
+  page.value = Number(route.query.page) || 1
+  searchArticles()
+}, { immediate: true })
+</script>
+
+<style scoped>
 .article-title {
   font-size: 1.25rem;
   font-weight: bold;
-  margin-bottom: 0.5rem;
 }
 .article-meta {
   font-size: 0.9rem;

@@ -13,34 +13,57 @@
           <li class="nav-item"><NuxtLink class="nav-link text-white" to="/">Pemrograman</NuxtLink></li>
           <li class="nav-item"><NuxtLink class="nav-link text-white" to="/">Teknologi</NuxtLink></li>
           <!-- Logika untuk menampilkan input atau tombol login -->
-          <li class="nav-item ms-3" v-if="isLoggedIn">
-            <input class="form-control" type="text" placeholder="search..." aria-label="default input example">
+          <li class="d-flex nav-item ms-3" v-if="isLoggedIn">
+            <input
+              class="form-control"
+              type="text"
+              v-model="query"
+              placeholder="Cari artikel atau konten"
+              aria-label="default input example"
+            />
+            <button @click="goToSearchPage" class="btn btn-primary">Search</button>
           </li>
           <li class="nav-item ms-3" v-else>
             <NuxtLink class="btn btn-outline-light" to="/login">Login</NuxtLink>
           </li>
         </ul>
-      </div> 
+      </div>
     </div>
   </nav>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
-const isLoggedIn = ref(true);
+// Status login user
+const isLoggedIn = ref(true)
+
+// State untuk pencarian
+const query = ref('')
+const categoryId = ref('')
+const router = useRouter()
+
+// Navigasi ke halaman search
+const goToSearchPage = () => {
+  if (!query.value.trim()) {
+    alert('Masukkan kata kunci pencarian.')
+    return
+  }
+
+  router.push({
+    path: '/user/search', // Pastikan rute ini ada di Nuxt
+    query: {
+      query: query.value.trim(),
+      category_id: categoryId.value || '', // Pastikan query string tidak kosong
+    },
+  })
+}
 </script>
 
 <style scoped>
 body {
   font-family: Arial, sans-serif;
-}
-.card-title {
-  font-size: 1.25rem;
-  font-weight: bold;
-}
-.card-text {
-  font-size: 0.9rem;
 }
 .navbar {
   background-color: #00A885;
@@ -48,5 +71,9 @@ body {
 .navbar-brand {
   font-weight: bold;
   color: white;
+}
+.nav-link:hover {
+  color: #FFD700; /* Warna hover */
+  transition: color 0.3s;
 }
 </style>

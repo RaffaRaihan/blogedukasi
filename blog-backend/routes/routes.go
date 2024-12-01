@@ -52,5 +52,6 @@ func SetupRoutes(r *gin.Engine) {
 	{
 		// User Comment Management
 		userRoutes.POST("/articles/:id/comments", controllers.CreateComment)
+		userRoutes.GET("/articles/search", controllers.SearchArticles)
 	}
 }
