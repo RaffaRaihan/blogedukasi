@@ -4,11 +4,13 @@ import (
 	"blog-backend/config"
 	"blog-backend/models"
 	"net/http"
+	"os"
+	"path/filepath"
 
 	"github.com/gin-gonic/gin"
 )
 
-/// Create Article
+// Create Article
 func CreateArticle(c *gin.Context) {
 	var article models.Article
 	if err := c.ShouldBindJSON(&article); err != nil {
@@ -102,4 +104,51 @@ func SearchArticles(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"status": "success", "data": articles})
+}
+
+// Upload File
+func UploadFile(c *gin.Context) {
+	file, err := c.FormFile("file")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "No file is received", "error": err.Error()})
+		return
+	}
+
+	// Validasi ukuran dan tipe file
+	if file.Size > 2*1024*1024 {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "File size exceeds 2MB"})
+		return
+	}
+
+	if contentType := file.Header.Get("Content-Type"); contentType != "image/jpeg" && contentType != "image/png" {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid file type"})
+		return
+	}
+
+	// Simpan file
+	uploadPath := "./uploads/"
+	if _, err := os.Stat(uploadPath); os.IsNotExist(err) {
+		os.Mkdir(uploadPath, os.ModePerm)
+	}
+
+	filePath := filepath.Join(uploadPath, file.Filename)
+	if err := c.SaveUploadedFile(file, filePath); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": "Unable to save file", "error": err.Error()})
+		return
+	}
+
+	// Update artikel dengan nama file
+	var article models.Article
+	if err := config.GetDB().Where("id = ?", c.Param("id")).First(&article).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"status": "error", "message": "Article not found", "error": err.Error()})
+		return
+	}
+
+	article.FileName = file.Filename
+	if err := config.GetDB().Save(&article).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": "Failed to update article with file name", "error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": "success", "message": "File uploaded successfully", "data": article})
 }

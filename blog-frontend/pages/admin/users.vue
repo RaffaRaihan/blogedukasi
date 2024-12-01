@@ -43,8 +43,8 @@
               <td>{{ user.name }}</td>
               <td>{{ user.email }}</td>
               <td>{{ user.role }}</td>
-              <td>{{ user.CreatedAt }}</td>
-              <td>{{ user.UpdatedAt }}</td>
+              <td>{{ formatDate(user.CreatedAt) }}</td>
+              <td>{{ formatDate(user.UpdatedAt) }}</td>
               <td>
                 <NuxtLink class="btn btn-warning btn-sm me-2">Edit</NuxtLink>
                 <button class="btn btn-danger btn-sm">Hapus</button>
@@ -60,8 +60,14 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { format } from 'date-fns';  // Import date-fns
+import { id } from 'date-fns/locale';  // Import locale for Indonesian
 
 const users = ref([]);
+// Function to format the date
+const formatDate = (date) => {
+  return format(new Date(date), 'dd MMMM yyyy', { locale: id });
+};
 
 // Fungsi untuk mengambil token dari cookies
 const getTokenFromCookies = () => {

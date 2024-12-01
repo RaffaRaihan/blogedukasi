@@ -44,19 +44,33 @@
 
           <h5>Postingan Terbaru</h5>
           <div class="row">
-            <div v-for="articles in articles" :key="articles.id" class="col-md-6 mb-3">
+            <div v-for="articles in articles.slice(0, 4)" :key="articles.id" class="col-md-6 mb-3">
               <div class="card">
-                <img src="../assets/img/windah senyum Roblox.jpg" class="card-img-top" alt="...">
+                <img :src="`http://localhost:8080/uploads/${articles.file_name}`" class="card-img-top" alt="...">
                 <div class="card-body">
                   <h6 class="text-muted">{{ articles.label }}</h6>
                   <h5 class="card-title">{{ articles.title }}</h5>
                   <p class="card-text">{{ articles.content }}</p>
-                  <p class="text-muted">{{ articles.CreatedAt }}</p>
+                  <p class="text-muted">{{ formatDate(articles.CreatedAt) }}</p>
                   <NuxtLink to="/login" class="btn btn-success btn-sm">Baca Selengkapnya</NuxtLink>
                 </div>
               </div>
             </div>
           </div>
+          <!-- Paginations -->
+          <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-center">
+            <li class="page-item disabled">
+              <a class="page-link">Previous</a>
+            </li>
+            <li class="page-item"><a class="page-link active" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+              <a class="page-link" href="#">Next</a>
+            </li>
+          </ul>
+        </nav>
         </div>
         <!-- Sidebar -->
         <Sidebar />
@@ -68,6 +82,13 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { format } from 'date-fns';  // Import date-fns
+import { id } from 'date-fns/locale';  // Import locale for Indonesian
+
+// Function to format the date
+const formatDate = (date) => {
+  return format(new Date(date), 'dd MMMM yyyy', { locale: id });
+};
 
 const articles = ref([]);
 

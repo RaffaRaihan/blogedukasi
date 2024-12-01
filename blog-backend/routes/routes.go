@@ -26,6 +26,9 @@ func SetupRoutes(r *gin.Engine) {
 	r.GET("/category", controllers.GetAllCategory)
 	r.GET("/articles/:id/comments", controllers.GetByArticle)
 
+	// Uploads
+	r.Static("/uploads", "./uploads")
+
 	// Group Admin (dengan middleware Auth)
 	adminRoutes := r.Group("/admin")
 	adminRoutes.Use(middlewares.AuthMiddleware(), middlewares.AdminMiddleware())
@@ -38,6 +41,9 @@ func SetupRoutes(r *gin.Engine) {
 		adminRoutes.POST("/articles", controllers.CreateArticle)
 		adminRoutes.PUT("/articles/:id", controllers.UpdateArticle)
 		adminRoutes.DELETE("/articles/:id", controllers.Delete)
+
+		//upload file
+		adminRoutes.POST("/articles/:id/uploads", controllers.UploadFile)
 	}
 
 	// Group User (dengan middleware Auth)
