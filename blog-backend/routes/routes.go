@@ -54,5 +54,6 @@ func SetupRoutes(r *gin.Engine) {
 		userRoutes.POST("/articles/:id/comments", controllers.CreateComment)
 		userRoutes.GET("/articles/search", controllers.SearchArticles)
 		userRoutes.GET("/articles/:id", controllers.GetArticleByID)
+		userRoutes.GET("/:id", controllers.GetUserByID)
 	}
 }

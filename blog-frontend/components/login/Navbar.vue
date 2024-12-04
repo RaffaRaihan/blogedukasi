@@ -9,9 +9,11 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item"><NuxtLink class="nav-link text-white" to="/user/dashboard">Beranda</NuxtLink></li>
-          <li class="nav-item"><button @click="handleLogout" class="btn btn-danger">LOGOUT</button></li>
+          <li class="nav-item" v-if="user_id">
+            <NuxtLink :to="`/user/profile/${user_id}`" class="nav-link text-white">Profile</NuxtLink>
+          </li>
           <!-- Logika untuk menampilkan input atau tombol login -->
-          <li class="d-flex nav-item ms-2" v-if="isLoggedIn">
+          <li class="d-flex nav-item" v-if="isLoggedIn">
             <input
               class="form-control"
               type="text"
@@ -31,23 +33,26 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import Cookies from 'js-cookie'
+import { ref, onMounted } from 'vue';
+import { jwtDecode } from 'jwt-decode';
+import { useRouter } from 'vue-router';
 
 // Status login user
-const isLoggedIn = ref(true)
+const isLoggedIn = ref(true);
+
+// Email pengguna dari token
+const user_id = ref('');
 
 // State untuk pencarian
-const query = ref('')
-const categoryId = ref('')
-const router = useRouter()
+const query = ref('');
+const categoryId = ref('');
+const router = useRouter();
 
 // Navigasi ke halaman search
 const goToSearchPage = () => {
   if (!query.value.trim()) {
-    alert('Masukkan kata kunci pencarian.')
-    return
+    alert('Masukkan kata kunci pencarian.');
+    return;
   }
 
   router.push({
@@ -56,24 +61,36 @@ const goToSearchPage = () => {
       query: query.value.trim(),
       category_id: categoryId.value || '', // Pastikan query string tidak kosong
     },
-  })
-}
+  });
+};
 
-const handleLogout = () => {
+// Fungsi untuk mengambil token dari cookies
+const getTokenFromCookies = () => {
+  const token = document.cookie
+    .split('; ')
+    .find(row => row.startsWith('token='))
+    ?.split('=')[1];
+
+  return token;
+};
+
+// Fungsi untuk mendekode token JWT
+const decodeToken = () => {
   try {
-    // Hapus token dari cookies
-    Cookies.remove('token')
+    const token = getTokenFromCookies();
+    if (!token) throw new Error('Token tidak ditemukan. Harap login terlebih dahulu.');
 
-    alert('Logout berhasil!')
-
-    // Redirect ke halaman login
-    window.location.href = '/login'
+    const decoded = jwtDecode(token); // Dekode JWT
+    user_id.value = decoded.user_id; // Ambil email dari payload
+    console.log(decoded)
   } catch (error) {
-    console.error('Terjadi kesalahan saat logout:', error)
-    alert('Logout gagal. Silakan coba lagi.')
+    console.error('Error decoding token:', error);
   }
-}
+};
 
+onMounted(() => {
+  decodeToken();
+});
 </script>
 
 <style scoped>

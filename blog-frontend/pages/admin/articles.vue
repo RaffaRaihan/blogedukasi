@@ -7,9 +7,22 @@
         <h1 class="mb-4">Halaman Admin - Kelola Artikel</h1>
         <!-- Filters -->
         <div class="d-flex align-items-center mb-4 mt-4">
-          <input type="text" class="form-control me-2" placeholder="Search" />
-          <select class="form-select me-2">
-            <option v-for="category in category">{{category.name}}</option>
+          <input 
+            type="text" 
+            class="form-control me-2" 
+            placeholder="Search by Title" 
+            v-model="searchQuery" 
+            @input="filterArticles"
+          />
+          <select 
+            class="form-select me-2" 
+            v-model="selectedCategory" 
+            @change="filterArticlesByCategory"
+          >
+            <option value="">Semua Kategori</option>
+            <option v-for="category in category" :key="category.id" :value="category.id">
+              {{ category.name }}
+            </option>
           </select>
         </div>
 
@@ -55,80 +68,9 @@
         </div>
       </div>
     </div>
-
-    <!-- Modal Bootstrap -->
-    <div
-      class="modal fade"
-      id="articleModal"
-      tabindex="-1"
-      aria-labelledby="articleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="articleModalLabel">{{ modalTitle }}</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <form @submit.prevent="handleSubmit">
-              <div class="mb-3">
-                <label for="title" class="form-label">Judul</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="title"
-                  v-model="form.title"
-                  required
-                />
-              </div>
-              <div class="mb-3">
-                <label for="label" class="form-label">Label</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="label"
-                  v-model="form.label"
-                  required
-                />
-              </div>
-              <div class="mb-3">
-                <label for="content" class="form-label">Konten</label>
-                <textarea
-                  class="form-control"
-                  id="content"
-                  rows="4"
-                  v-model="form.content"
-                  required
-                ></textarea>
-              </div>
-              <div class="mb-3">
-                <label for="file" class="form-label">Upload File</label>
-                <input
-                  type="file"
-                  class="form-control"
-                  id="file"
-                  @change="handleFileChange"
-                />
-                <small v-if="form.file_name">
-                  File saat ini: {{ form.file_name }}
-                </small>
-              </div>
-              <button type="submit" class="btn btn-primary">
-                {{ modalAction }}
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
+
 
 <script setup>
 import { ref, onMounted } from 'vue';
@@ -140,10 +82,11 @@ definePageMeta({
 });
 
 const articles = ref([]);
-const modalTitle = ref('');
-const modalAction = ref('');
-const form = ref({ title: '', label: '', content: '', id: null, file: null, file_name: '' });
+const category = ref([]);
+const selectedCategory = ref(null); // Menyimpan kategori yang dipilih
+const searchQuery = ref(''); // Menyimpan query pencarian
 
+// Mengambil token dari cookies
 const getTokenFromCookies = () => {
   const token = document.cookie
     .split('; ')
@@ -152,19 +95,22 @@ const getTokenFromCookies = () => {
   return token;
 };
 
-const fetchArticles = async () => {
+// Fungsi untuk mengambil artikel
+const fetchArticles = async (categoryId = null, search = '') => {
   try {
-    // Ambil token dari cookies
     const token = getTokenFromCookies();
 
     if (!token) {
       throw new Error('Token tidak ditemukan. Harap login terlebih dahulu.');
     }
 
-    console.log('Token yang diambil:', token);  // Debugging token
     const response = await axios.get('http://localhost:8080/articles', {
       headers: {
         Authorization: `Bearer ${token}`,
+      },
+      params: {
+        categoryId, // Kirimkan kategori sebagai parameter jika ada
+        search, // Kirimkan query pencarian jika ada
       },
     });
     articles.value = response.data;
@@ -173,91 +119,24 @@ const fetchArticles = async () => {
   }
 };
 
-const openModal = (type, article = null) => {
-  if (type === 'add') {
-    modalTitle.value = 'Tambah Artikel Baru';
-    modalAction.value = 'Tambah';
-    form.value = { title: '', label: '', content: '', id: null, file: null, file_name: '' };
-  } else if (type === 'edit' && article) {
-    modalTitle.value = 'Edit Artikel';
-    modalAction.value = 'Simpan';
-    form.value = { ...article, file: null }; // Tidak menyertakan file asli dalam edit
-  }
-};
-
-const handleFileChange = (event) => {
-  form.value.file = event.target.files[0];
-};
-
-const handleSubmit = async () => {
-  const token = getTokenFromCookies();
-
-  try {
-    let uploadedFileName = form.value.file_name; // Untuk menyimpan nama file yang sudah diunggah
-
-    // 1. Upload file jika ada file baru
-    if (form.value.file) {
-      const fileData = new FormData();
-      fileData.append("file", form.value.file);
-
-      const uploadResponse = await axios.post(
-        `http://localhost:8080/admin/articles/${form.value.id || 'temp'}/uploads`,
-        fileData,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-
-      uploadedFileName = uploadResponse.data.file_name; // Sesuaikan properti nama file dari respons backend Anda
-    }
-
-    // 2. Kirim data artikel
-    const articleData = {
-      title: form.value.title,
-      label: form.value.label,
-      content: form.value.content,
-      file_name: uploadedFileName, // Masukkan nama file dari hasil upload
-    };
-
-    if (form.value.id) {
-      // Update artikel
-      await axios.put(
-        `http://localhost:8080/articles/${form.value.id}`,
-        articleData,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-    } else {
-      // Tambah artikel baru
-      await axios.post(`http://localhost:8080/articles`, articleData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-    }
-
-    // Refresh data artikel setelah submit
-    fetchArticles();
-
-    // Tutup modal
-    const modalElement = document.getElementById("articleModal");
-    const modal = bootstrap.Modal.getInstance(modalElement);
-    modal.hide();
-  } catch (error) {
-    console.error("Error submitting form:", error);
-  }
-};
-
-
-const category = ref([]);
-
+// Fungsi untuk mengambil kategori
 const fetchCategory = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/category', {
-  }); // Ganti dengan URL backend Anda
+    const response = await axios.get('http://localhost:8080/category');
     category.value = response.data;
   } catch (error) {
     console.error('Error fetching category:', error);
   }
+};
+
+// Fungsi untuk filter artikel berdasarkan kategori
+const filterArticlesByCategory = () => {
+  fetchArticles(selectedCategory.value, searchQuery.value); // Panggil fetchArticles dengan kategori dan pencarian
+};
+
+// Fungsi untuk filter artikel berdasarkan pencarian judul
+const filterArticles = () => {
+  fetchArticles(selectedCategory.value, searchQuery.value); // Panggil fetchArticles dengan query pencarian
 };
 
 onMounted(() => {

@@ -45,3 +45,19 @@ func GetUsers(c *gin.Context) {
 	config.GetDB().Find(&users)
 	c.JSON(http.StatusOK, users)
 }
+
+func GetUserByID(c *gin.Context) {
+	// Ambil ID dari parameter URL
+	id := c.Param("id")
+
+	var user models.User
+	// Cari user berdasarkan ID
+	if err := config.GetDB().First(&user, id).Error; err != nil {
+		// Jika tidak ditemukan, kembalikan pesan error
+		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		return
+	}
+
+	// Jika ditemukan, kembalikan data user
+	c.JSON(http.StatusOK, user)
+}

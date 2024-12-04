@@ -7,12 +7,13 @@
           <h1>Users</h1>
           <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#articleModal" @click="openModal('add')">+ Invite</button>
         </div>
-        <div class="d-flex align-items-center mb-4">
-          <input type="text" class="form-control me-2" placeholder="Search" />
-          <select class="form-select me-2">
-            <option>All</option>
-            <option>Admin</option>
-            <option>User</option>
+        <!-- Filters -->
+        <div class="d-flex align-items-center mb-4 mt-4">
+          <input type="text" class="form-control me-2" placeholder="Search by email" v-model="searchQuery" />
+          <select class="form-select me-2" v-model="selectedRole" @change="filteredUsers">
+            <option value="">All</option>
+            <option value="admin">Admin</option>
+            <option value="user">User</option>
           </select>
         </div>
         <table class="table table-hover align-middle">
@@ -31,7 +32,7 @@
             <tr v-if="users.length === 0">
               <td colspan="7" class="text-center">No users found</td>
             </tr>
-            <tr v-for="(user, index) in users" :key="user.id">
+            <tr v-for="(user, index) in filteredUsers" :key="user.id">
               <td>{{ index + 1 }}</td>
               <td>{{ user.name }}</td>
               <td>{{ user.email }}</td>
@@ -95,6 +96,8 @@ definePageMeta({
 });
 
 const users = ref([]);
+const searchQuery = ref('');
+const selectedRole = ref('');
 const modalInstance = ref(null);
 const modalMode = ref('add');
 const formData = ref({
@@ -177,6 +180,15 @@ const handleSubmit = async () => {
     console.error('Error submitting data:', error);
   }
 };
+
+// Filter users berdasarkan role dan email
+const filteredUsers = computed(() => {
+  return users.value.filter(user => {
+    const matchesRole = selectedRole.value ? user.role === selectedRole.value : true;
+    const matchesSearch = user.email && user.email.toLowerCase().includes(searchQuery.value.toLowerCase());
+    return matchesRole && matchesSearch;
+  });
+});
 
 // Panggil fetchUsers saat komponen dimuat
 onMounted(() => {

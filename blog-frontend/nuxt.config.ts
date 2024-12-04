@@ -5,4 +5,7 @@ export default defineNuxtConfig({
   modules: ['@bootstrap-vue-next/nuxt'],
   css: ['bootstrap/dist/css/bootstrap.min.css'],
   plugins: ['~/plugins/bootstrap.client.ts'],
+  build: {
+    transpile: ['@heroicons/vue']
+  }
 })

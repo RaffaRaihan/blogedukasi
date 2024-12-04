@@ -44,7 +44,7 @@
 
           <h5>Postingan Terbaru</h5>
           <div class="row">
-            <div v-for="articles in articles.slice(0, 4)" :key="articles.id" class="col-md-6 mb-3">
+            <div v-for="articles in articles" :key="articles.id" class="col-md-6 mb-3">
               <div class="card">
                 <img :src="`http://localhost:8080/uploads/${articles.file_name}`" class="card-img-top" alt="...">
                 <div class="card-body">
