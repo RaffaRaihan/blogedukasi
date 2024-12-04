@@ -5,6 +5,13 @@
       <AdminSidebar />
       <div class="col-md-9 col-lg-10 p-4">
         <h1 class="mb-4">Halaman Admin - Kelola Artikel</h1>
+        <!-- Filters -->
+        <div class="d-flex align-items-center mb-4 mt-4">
+          <input type="text" class="form-control me-2" placeholder="Search" />
+          <select class="form-select me-2">
+            <option v-for="category in category">{{category.name}}</option>
+          </select>
+        </div>
 
         <!-- Tombol untuk menambah artikel baru -->
         <button
@@ -127,6 +134,11 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
+definePageMeta({
+  middleware: 'auth',
+  requiresAdmin: true,
+});
+
 const articles = ref([]);
 const modalTitle = ref('');
 const modalAction = ref('');
@@ -179,40 +191,77 @@ const handleFileChange = (event) => {
 
 const handleSubmit = async () => {
   const token = getTokenFromCookies();
+
   try {
-    const formData = new FormData();
-    formData.append('title', form.value.title);
-    formData.append('label', form.value.label);
-    formData.append('content', form.value.content);
+    let uploadedFileName = form.value.file_name; // Untuk menyimpan nama file yang sudah diunggah
+
+    // 1. Upload file jika ada file baru
     if (form.value.file) {
-      formData.append('file', form.value.file);
+      const fileData = new FormData();
+      fileData.append("file", form.value.file);
+
+      const uploadResponse = await axios.post(
+        `http://localhost:8080/admin/articles/${form.value.id || 'temp'}/uploads`,
+        fileData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      uploadedFileName = uploadResponse.data.file_name; // Sesuaikan properti nama file dari respons backend Anda
     }
+
+    // 2. Kirim data artikel
+    const articleData = {
+      title: form.value.title,
+      label: form.value.label,
+      content: form.value.content,
+      file_name: uploadedFileName, // Masukkan nama file dari hasil upload
+    };
 
     if (form.value.id) {
       // Update artikel
       await axios.put(
         `http://localhost:8080/articles/${form.value.id}`,
-        formData,
+        articleData,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
     } else {
       // Tambah artikel baru
-      await axios.post('http://localhost:8080/articles', formData, {
+      await axios.post(`http://localhost:8080/articles`, articleData, {
         headers: { Authorization: `Bearer ${token}` },
       });
     }
-    fetchArticles(); // Refresh data artikel
-    const modalElement = document.getElementById('articleModal');
+
+    // Refresh data artikel setelah submit
+    fetchArticles();
+
+    // Tutup modal
+    const modalElement = document.getElementById("articleModal");
     const modal = bootstrap.Modal.getInstance(modalElement);
     modal.hide();
   } catch (error) {
-    console.error('Error submitting form:', error);
+    console.error("Error submitting form:", error);
+  }
+};
+
+
+const category = ref([]);
+
+const fetchCategory = async () => {
+  try {
+    const response = await axios.get('http://localhost:8080/category', {
+  }); // Ganti dengan URL backend Anda
+    category.value = response.data;
+  } catch (error) {
+    console.error('Error fetching category:', error);
   }
 };
 
 onMounted(() => {
   fetchArticles();
+  fetchCategory();
 });
 </script>

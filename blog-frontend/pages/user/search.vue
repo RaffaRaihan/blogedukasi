@@ -13,7 +13,7 @@
             <h5 class="article-title">{{ article.title }}</h5>
             <p class="article-meta">By {{ article.author || 'Unknown' }} - {{ formatDate(article.CreatedAt) }}</p>
             <p>{{ article.content.substring(0, 100) }}...</p>
-            <a :href="'/articles/' + article.id" class="btn btn-success btn-sm">Baca Selengkapnya</a>
+            <a :href="'/user/articles/' + article.ID" class="btn btn-success btn-sm">Baca Selengkapnya</a>
           </div>
         </div>
       </div>
@@ -34,6 +34,10 @@
 import { ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
+
+definePageMeta({
+  middleware: 'auth',
+});
 
 // Fungsi untuk mengambil token dari cookies
 const getTokenFromCookies = () => {

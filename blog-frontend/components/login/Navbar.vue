@@ -9,11 +9,9 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item"><NuxtLink class="nav-link text-white" to="/user/dashboard">Beranda</NuxtLink></li>
-          <li class="nav-item"><NuxtLink class="nav-link text-white" to="/">Tutorial</NuxtLink></li>
-          <li class="nav-item"><NuxtLink class="nav-link text-white" to="/">Pemrograman</NuxtLink></li>
-          <li class="nav-item"><NuxtLink class="nav-link text-white" to="/">Teknologi</NuxtLink></li>
+          <li class="nav-item"><button @click="handleLogout" class="btn btn-danger">LOGOUT</button></li>
           <!-- Logika untuk menampilkan input atau tombol login -->
-          <li class="d-flex nav-item ms-3" v-if="isLoggedIn">
+          <li class="d-flex nav-item ms-2" v-if="isLoggedIn">
             <input
               class="form-control"
               type="text"
@@ -21,7 +19,7 @@
               placeholder="Cari artikel atau konten"
               aria-label="default input example"
             />
-            <button @click="goToSearchPage" class="btn btn-primary">Search</button>
+            <button @click="goToSearchPage" class="btn btn-outline-light ms-2">Search</button>
           </li>
           <li class="nav-item ms-3" v-else>
             <NuxtLink class="btn btn-outline-light" to="/login">Login</NuxtLink>
@@ -35,6 +33,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import Cookies from 'js-cookie'
 
 // Status login user
 const isLoggedIn = ref(true)
@@ -59,6 +58,22 @@ const goToSearchPage = () => {
     },
   })
 }
+
+const handleLogout = () => {
+  try {
+    // Hapus token dari cookies
+    Cookies.remove('token')
+
+    alert('Logout berhasil!')
+
+    // Redirect ke halaman login
+    window.location.href = '/login'
+  } catch (error) {
+    console.error('Terjadi kesalahan saat logout:', error)
+    alert('Logout gagal. Silakan coba lagi.')
+  }
+}
+
 </script>
 
 <style scoped>

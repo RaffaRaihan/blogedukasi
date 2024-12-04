@@ -40,6 +40,25 @@ func GetAll(c *gin.Context) {
 	c.JSON(http.StatusOK, articles)
 }
 
+// Get Article by ID
+func GetArticleByID(c *gin.Context) {
+	id := c.Param("id")
+	var article models.Article
+
+	// Mencari artikel berdasarkan ID
+	if err := config.GetDB().Preload("Category").First(&article, id).Error; err != nil {
+		if err.Error() == "record not found" {
+			c.JSON(http.StatusNotFound, gin.H{"status": "error", "message": "Article not found"})
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": "Failed to retrieve article", "error": err.Error()})
+		}
+		return
+	}
+
+	// Jika artikel ditemukan, kembalikan data artikel
+	c.JSON(http.StatusOK, gin.H{"status": "success", "data": article})
+}
+
 // Update Article
 func UpdateArticle(c *gin.Context) {
 	id := c.Param("id")
