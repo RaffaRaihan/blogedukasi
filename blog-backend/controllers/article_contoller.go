@@ -35,10 +35,32 @@ func CreateArticle(c *gin.Context) {
 
 // Get All Articles
 func GetAll(c *gin.Context) {
-	var articles []models.Article
-	config.GetDB().Find(&articles)
-	c.JSON(http.StatusOK, articles)
+    var articles []models.Article
+    db := config.GetDB()
+
+    // Ambil query parameters
+    categoryID := c.Query("categoryId")
+    search := c.Query("search")
+
+    // Filter berdasarkan kategori jika categoryId tersedia
+    if categoryID != "" {
+        db = db.Where("category_id = ?", categoryID)
+    }
+
+    // Filter berdasarkan pencarian jika search tersedia
+    if search != "" {
+        db = db.Where("title LIKE ?", "%"+search+"%")
+    }
+
+    // Muat artikel beserta kategori
+    if err := db.Preload("Category").Find(&articles).Error; err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
+
+    c.JSON(http.StatusOK, articles)
 }
+
 
 // Get Article by ID
 func GetArticleByID(c *gin.Context) {

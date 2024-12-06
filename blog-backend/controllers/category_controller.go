@@ -30,7 +30,10 @@ func CreateCategory(c *gin.Context) {
 
 // Get All category
 func GetAllCategory(c *gin.Context) {
-	var category []models.Category
-	config.GetDB().Find(&category)
-	c.JSON(http.StatusOK, category)
+    var categories []models.Category
+    if err := config.GetDB().Preload("Articles").Find(&categories).Error; err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
+    c.JSON(http.StatusOK, categories)
 }

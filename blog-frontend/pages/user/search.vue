@@ -21,7 +21,7 @@
     <p v-else>Tidak ada artikel ditemukan.</p>
 
     <!-- Pagination -->
-    <div class="d-flex justify-content-between align-items-center mt-4">
+    <div class="d-flex justify-content-between align-items-center mt-4 mb-4">
       <button :disabled="page <= 1" class="btn btn-outline-primary" @click="prevPage">Previous</button>
       <span>Halaman {{ page }} dari {{ Math.ceil(meta.total_data / limit) || 1 }}</span>
       <button :disabled="page >= Math.ceil(meta.total_data / limit)" class="btn btn-outline-primary" @click="nextPage">Next</button>

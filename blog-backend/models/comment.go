@@ -7,4 +7,5 @@ type Comment struct {
 	Content   string `json:"content"`
 	ArticleID uint   `json:"article_id"`
 	UserID    uint   `json:"user_id"`
+	User      User   `json:"user" gorm:"foreignKey:UserID"`
 }

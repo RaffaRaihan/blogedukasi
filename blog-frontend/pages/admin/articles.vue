@@ -5,41 +5,34 @@
       <AdminSidebar />
       <div class="col-md-9 col-lg-10 p-4">
         <h1 class="mb-4">Halaman Admin - Kelola Artikel</h1>
+
         <!-- Filters -->
         <div class="d-flex align-items-center mb-4 mt-4">
+          <!-- Search by Title -->
           <input 
             type="text" 
             class="form-control me-2" 
             placeholder="Search by Title" 
-            v-model="searchQuery" 
+            v-model="searchQuery"
             @input="filterArticles"
           />
+          <!-- Kategori Filter -->
           <select 
             class="form-select me-2" 
             v-model="selectedCategory" 
-            @change="filterArticlesByCategory"
+            @change="filterArticles"
           >
             <option value="">Semua Kategori</option>
-            <option v-for="category in category" :key="category.id" :value="category.id">
+            <option v-for="category in categories" :key="category.id" :value="category.id">
               {{ category.name }}
             </option>
           </select>
         </div>
 
-        <!-- Tombol untuk menambah artikel baru -->
-        <button
-          class="btn btn-primary mb-4"
-          data-bs-toggle="modal"
-          data-bs-target="#articleModal"
-          @click="openModal('add')"
-        >
-          Tambah Artikel Baru
-        </button>
-
-        <!-- Daftar artikel dalam bentuk card -->
+        <!-- Daftar Artikel -->
         <div class="row">
           <div
-            v-for="article in articles"
+            v-for="article in filteredArticles"
             :key="article.id"
             class="col-md-4 mb-4"
           >
@@ -50,15 +43,9 @@
                 alt="..."
               />
               <div class="card-body">
-                <h6 class="card-label">{{ article.label }}</h6>
                 <h5 class="card-title">{{ article.title }}</h5>
                 <p class="card-text">{{ article.content }}</p>
-                <button
-                  class="btn btn-warning"
-                  data-bs-toggle="modal"
-                  data-bs-target="#articleModal"
-                  @click="openModal('edit', article)"
-                >
+                <button class="btn btn-warning" @click="editArticle(article)">
                   Edit
                 </button>
                 <button class="btn btn-danger ms-2">Hapus</button>
@@ -71,9 +58,8 @@
   </div>
 </template>
 
-
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 
 definePageMeta({
@@ -82,16 +68,15 @@ definePageMeta({
 });
 
 const articles = ref([]);
-const category = ref([]);
-const selectedCategory = ref(null); // Menyimpan kategori yang dipilih
-const searchQuery = ref(''); // Menyimpan query pencarian
+const categories = ref([]);
+const selectedCategory = ref(null); // Kategori yang dipilih
+const searchQuery = ref(''); // Pencarian judul artikel
 
 // Mengambil token dari cookies
 const getTokenFromCookies = () => {
   const token = document.cookie
     .split('; ')
-    .find(row => row.startsWith('token='))
-    ?.split('=')[1];
+    .find(row => row.startsWith('token='))?.split('=')[1];
   return token;
 };
 
@@ -99,7 +84,6 @@ const getTokenFromCookies = () => {
 const fetchArticles = async (categoryId = null, search = '') => {
   try {
     const token = getTokenFromCookies();
-
     if (!token) {
       throw new Error('Token tidak ditemukan. Harap login terlebih dahulu.');
     }
@@ -109,8 +93,8 @@ const fetchArticles = async (categoryId = null, search = '') => {
         Authorization: `Bearer ${token}`,
       },
       params: {
-        categoryId, // Kirimkan kategori sebagai parameter jika ada
-        search, // Kirimkan query pencarian jika ada
+        categoryId,
+        search,
       },
     });
     articles.value = response.data;
@@ -120,27 +104,31 @@ const fetchArticles = async (categoryId = null, search = '') => {
 };
 
 // Fungsi untuk mengambil kategori
-const fetchCategory = async () => {
+const fetchCategories = async () => {
   try {
     const response = await axios.get('http://localhost:8080/category');
-    category.value = response.data;
+    categories.value = response.data;
   } catch (error) {
-    console.error('Error fetching category:', error);
+    console.error('Error fetching categories:', error);
   }
 };
 
-// Fungsi untuk filter artikel berdasarkan kategori
-const filterArticlesByCategory = () => {
-  fetchArticles(selectedCategory.value, searchQuery.value); // Panggil fetchArticles dengan kategori dan pencarian
-};
+// Computed untuk memfilter artikel berdasarkan kategori dan pencarian judul
+const filteredArticles = computed(() => {
+  return articles.value.filter(article => {
+    const matchesCategory = selectedCategory.value ? article.category.id === selectedCategory.value : true;
+    const matchesSearch = article.title.toLowerCase().includes(searchQuery.value.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+});
 
-// Fungsi untuk filter artikel berdasarkan pencarian judul
+// Fungsi untuk memfilter artikel saat kategori atau pencarian berubah
 const filterArticles = () => {
-  fetchArticles(selectedCategory.value, searchQuery.value); // Panggil fetchArticles dengan query pencarian
+  fetchArticles(selectedCategory.value, searchQuery.value);
 };
 
 onMounted(() => {
-  fetchArticles();
-  fetchCategory();
+  fetchArticles(); // Ambil artikel saat komponen dimuat
+  fetchCategories(); // Ambil kategori
 });
 </script>

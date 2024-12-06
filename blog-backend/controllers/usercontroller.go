@@ -38,7 +38,6 @@ func Register(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"message": "User registered successfully"})
 }
 
-
 // Get Users (Admin Only)
 func GetUsers(c *gin.Context) {
 	var users []models.User
@@ -60,4 +59,80 @@ func GetUserByID(c *gin.Context) {
 
 	// Jika ditemukan, kembalikan data user
 	c.JSON(http.StatusOK, user)
+}
+
+func UploadProfilePhoto(c *gin.Context) {
+	id := c.Param("id")
+
+	var user models.User
+	if err := config.GetDB().First(&user, id).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		return
+	}
+
+	// Cek apakah foto profil sudah ada
+	if user.Foto != "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Profile photo already exists. Use PUT to update."})
+		return
+	}
+
+	// Lanjutkan unggah file
+	file, err := c.FormFile("profile_photo")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to upload file"})
+		return
+	}
+
+	filePath := "./uploads/" + file.Filename
+	if err := c.SaveUploadedFile(file, filePath); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save file"})
+		return
+	}
+
+	user.Foto = file.Filename
+	if err := config.GetDB().Save(&user).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user"})
+		return
+	}
+
+	c.JSON(http.StatusCreated, gin.H{
+		"message":       "Profile photo uploaded successfully",
+		"profile_photo": file.Filename,
+	})
+}
+
+func UpdateProfilePhoto(c *gin.Context) {
+	id := c.Param("id")
+
+	var user models.User
+	if err := config.GetDB().First(&user, id).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		return
+	}
+
+	// Ambil file dari form-data
+	file, err := c.FormFile("profile_photo")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to upload file"})
+		return
+	}
+
+	// Simpan file ke folder uploads
+	filePath := "./uploads/" + file.Filename
+	if err := c.SaveUploadedFile(file, filePath); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save file"})
+		return
+	}
+
+	// Perbarui kolom ProfilePhoto
+	user.Foto = file.Filename
+	if err := config.GetDB().Save(&user).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message":       "Profile photo updated successfully",
+		"profile_photo": file.Filename,
+	})
 }

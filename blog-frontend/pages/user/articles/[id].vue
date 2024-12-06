@@ -24,7 +24,29 @@
           <h4>Apa itu {{ articles.title }}?</h4>
           <p>{{ articles.content }}</p>        
           <img :src="`http://localhost:8080/uploads/${articles.file_name}`" class="card-img-top" alt="...">
-          <p>{{ articles.content }}</p>
+
+          <!-- Comments Section -->
+          <div class="mt-5">
+            <h4>Komentar</h4>
+            <ul class="list-group" v-if="comments.length > 0">
+              <li class="list-group-item" v-for="comment in comments" :key="comment.id">
+                <strong>{{ comment.user.name }}</strong>: {{ comment.content }}
+              </li>
+            </ul>
+            <p v-else>Belum ada komentar.</p>
+
+            <!-- Add Comment Form -->
+            <div class="mt-3 mb-3">
+              <h5>Tambah Komentar</h5>
+              <form @submit.prevent="submitComment">
+                <div>
+                  <textarea v-model="newComment" class="form-control" placeholder="Tulis komentar..."></textarea>
+                  <!-- Pastikan articleId dikirim dengan benar -->
+                  <button @click="submitComment(articles.ID)" :data-article-id="articles.id" class="btn btn-primary mt-3">Submit Comment</button>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
       <!-- Sidebar -->
@@ -33,6 +55,99 @@
   </div>
   <Footer />
 </template>
+
+<script setup>
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
+import { format } from 'date-fns';
+import { id } from 'date-fns/locale';
+import { useRoute } from 'vue-router';
+
+definePageMeta({
+  middleware: 'auth',
+});
+
+const articles = ref([]);
+const comments = ref([]);
+const newComment = ref('');
+const user_id = ref('');
+const error = ref(null);
+
+const formatDate = (date) => {
+  const formattedDate = new Date(date);
+  if (isNaN(formattedDate)) {
+    return 'Tanggal tidak valid';
+  }
+  return format(formattedDate, 'dd MMMM yyyy', { locale: id });
+};
+
+const getTokenFromCookies = () => {
+  const token = document.cookie
+    .split('; ')
+    .find(row => row.startsWith('token='))
+    ?.split('=')[1];
+  return token;
+};
+
+// Fungsi untuk mendekode token JWT
+const decodeToken = () => {
+  try {
+    const token = getTokenFromCookies();
+    if (!token) throw new Error('Token tidak ditemukan. Harap login terlebih dahulu.');
+
+    const decoded = jwtDecode(token); // Dekode JWT
+    user_id.value = decoded.user_id; // Ambil email dari payload
+    console.log(decoded)
+  } catch (error) {
+    console.error('Error decoding token:', error);
+  }
+};
+
+const fetchArticle = async (id) => {
+  try {
+    const token = getTokenFromCookies();
+    if (!token) throw new Error('Token tidak ditemukan. Harap login terlebih dahulu.');
+
+    const response = await axios.get(`http://localhost:8080/user/articles/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    articles.value = response.data.data;
+  } catch (err) {
+    error.value = err.response?.data?.message || err.message;
+  }
+};
+
+const fetchComments = async (articleId) => {
+  try {
+    const response = await axios.get(`http://localhost:8080/articles/${articleId}/comments`);
+    comments.value = response.data;
+  } catch (err) {
+    console.error('Error fetching comments:', err);
+  }
+};
+
+const submitComment = async (articleId) => {
+  // Pastikan articleId diterima sebagai parameter yang benar
+  const response = await axios.post(`http://localhost:8080/user/articles/${articleId}/comments`, {
+    content: commentContent.value,
+    article_id: articleId,
+    user_id: user_id,
+  }, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+const route = useRoute();
+onMounted(() => {
+  const articleId = route.params.id;
+  fetchArticle(articleId);
+  fetchComments(articleId);
+  decodeToken();
+});
+</script>
 
 <style scoped>
 .breadcrumb {
@@ -48,63 +163,3 @@
   color: #6c757d;
 }
 </style>
-
-<script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
-import { format } from 'date-fns';
-import { id } from 'date-fns/locale';
-import { useRoute } from 'vue-router';
-
-definePageMeta({
-  middleware: 'auth', // Middleware untuk autentikasi
-});
-
-const articles = ref([]);
-const error = ref(null);
-
-// Fungsi untuk memformat tanggal
-const formatDate = (date) => {
-  const formattedDate = new Date(date);
-  if (isNaN(formattedDate)) {
-    return 'Tanggal tidak valid'; // Tampilkan pesan default jika tanggal tidak valid
-  }
-  return format(formattedDate, 'dd MMMM yyyy', { locale: id });
-};
-
-// Fungsi untuk mengambil token dari cookies
-const getTokenFromCookies = () => {
-  const token = document.cookie
-    .split('; ')
-    .find(row => row.startsWith('token='))
-    ?.split('=')[1];
-  
-  return token;
-};
-
-const fetchArticle = async (id) => {
-  try {
-    const token = getTokenFromCookies();
-    if (!token) throw new Error('Token tidak ditemukan. Harap login terlebih dahulu.');
-
-    const response = await axios.get(`http://localhost:8080/user/articles/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    console.log('Respons API:', response.data);
-    articles.value = response.data.data;
-  } catch (err) {
-    error.value = err.response?.data?.message || err.message;
-    console.error('Error fetching article:', err);
-  }
-};
-
-// Mengambil ID dari URL
-const route = useRoute();
-onMounted(() => {
-  const articleId = route.params.id;
-  fetchArticle(articleId);
-});
-</script>

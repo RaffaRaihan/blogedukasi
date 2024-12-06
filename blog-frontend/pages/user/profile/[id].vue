@@ -1,13 +1,13 @@
 <template>
   <div class="container mt-5">
     <div class="card mx-auto" style="max-width: 600px;">
-      <div class="card-header bg-primary text-white">
+      <div class="card-header bg-success text-white">
         <h3 class="mb-0">Profil Pengguna</h3>
       </div>
       <div class="card-body">
         <div class="text-center">
           <img
-            src="https://picsum.photos/200/300"
+            :src="users.foto ? `http://localhost:8080/uploads/${users.foto}` : 'default-avatar.png'"
             alt="Foto Profil"
             class="rounded-circle mb-3"
             style="width: 120px; height: 120px; object-fit: cover;"

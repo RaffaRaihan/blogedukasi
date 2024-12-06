@@ -37,12 +37,15 @@ func CreateComment(c *gin.Context) {
 
 // Get Comments
 func GetByArticle(c *gin.Context) {
-	articleID := c.Param("id")
-	var comments []models.Comment
-	if err := config.GetDB().Where("article_id = ?", articleID).Find(&comments).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
+    articleID := c.Param("id")
+    var comments []models.Comment
 
-	c.JSON(http.StatusOK, comments)
+    // Gunakan Preload untuk memuat data User
+    if err := config.GetDB().Preload("User").Where("article_id = ?", articleID).Find(&comments).Error; err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
+
+    c.JSON(http.StatusOK, comments)
 }
+

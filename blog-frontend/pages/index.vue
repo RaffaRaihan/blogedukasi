@@ -44,7 +44,7 @@
 
           <h5>Postingan Terbaru</h5>
           <div class="row">
-            <div v-for="articles in articles" :key="articles.id" class="col-md-6 mb-3">
+            <div v-for="articles in paginatedArticles" :key="articles.id" class="col-md-6 mb-3">
               <div class="card">
                 <img :src="`http://localhost:8080/uploads/${articles.file_name}`" class="card-img-top" alt="...">
                 <div class="card-body">
@@ -57,17 +57,17 @@
               </div>
             </div>
           </div>
-          <!-- Paginations -->
-          <nav aria-label="Page navigation example">
+        <!-- Paginations -->
+        <nav aria-label="Page navigation example">
           <ul class="pagination justify-content-center">
-            <li class="page-item disabled">
-              <a class="page-link">Previous</a>
+            <li class="page-item" :class="{'disabled': currentPage === 1}">
+              <a @click.prevent="changePage(currentPage - 1)" class="page-link">Previous</a>
             </li>
-            <li class="page-item"><a class="page-link active" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-              <a class="page-link" href="#">Next</a>
+            <li v-for="page in totalPages" :key="page" class="page-item" :class="{'active': currentPage === page}">
+              <a @click.prevent="changePage(page)" class="page-link">{{ page }}</a>
+            </li>
+            <li class="page-item" :class="{'disabled': currentPage === totalPages}">
+              <a @click.prevent="changePage(currentPage + 1)" class="page-link">Next</a>
             </li>
           </ul>
         </nav>
@@ -91,6 +91,8 @@ const formatDate = (date) => {
 };
 
 const articles = ref([]);
+const currentPage = ref(1); // Track the current page
+const articlesPerPage = 4;  // Number of articles per page
 
 const fetchArticles = async () => {
   try {
@@ -100,6 +102,26 @@ const fetchArticles = async () => {
     console.error('Error fetching articles:', error);
   }
 };
+
+// Calculate the paginated articles for the current page
+const getPaginatedArticles = () => {
+  const start = (currentPage.value - 1) * articlesPerPage;
+  return articles.value.slice(start, start + articlesPerPage);
+};
+
+// Function to change the current page
+const changePage = (page) => {
+  if (page < 1 || page > totalPages.value) return;
+  currentPage.value = page;
+};
+
+// Calculate total pages
+const totalPages = computed(() => {
+  return Math.ceil(articles.value.length / articlesPerPage);
+});
+
+// Watch for changes in articles to update the paginated articles
+const paginatedArticles = computed(() => getPaginatedArticles());
 
 // Panggil fetchArticles saat komponen dimuat
 onMounted(() => {
