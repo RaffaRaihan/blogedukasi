@@ -12,7 +12,7 @@
         <!-- Filters -->
         <div class="d-flex align-items-center mb-4 mt-4">
           <input type="text" class="form-control me-2" placeholder="Search by email" v-model="searchQuery" />
-          <select class="form-select me-2" v-model="selectedRole" @change="filteredUsers">
+          <select class="form-select me-2" v-model="selectedRole">
             <option value="">All</option>
             <option value="admin">Admin</option>
             <option value="user">User</option>
@@ -25,7 +25,7 @@
             <div v-for="user in filteredUsers" :key="user.id" class="card me-2 mb-2" style="width: 170px;">
               <div class="card-body text-center">
                 <img
-                  :src="user.foto ? `http://localhost:8080/uploads/${user.foto}` : 'default-avatar.png'"
+                  :src="`http://localhost:8080/uploads/${user.foto}`"
                   alt="Foto Profil"
                   class="rounded-circle mb-3"
                   style="width: 120px; height: 120px; object-fit: cover;"
@@ -33,7 +33,7 @@
                 <h6 class="card-title">{{ user.name }}</h6>
                 <p class="text-muted">{{ user.email }}</p>
                 <p class="text-muted">{{ user.role }}</p>
-                <button class="btn btn-sm btn-danger">Remove</button>
+                <button @click="removeUser(user.ID)" class="btn btn-sm btn-danger">Remove</button>
               </div>
             </div>
           </div>
@@ -147,11 +147,41 @@ const addAdmin = async () => {
       }
     );
 
-    users.value.push(response.data); // Tambahkan admin baru ke daftar
-    showModal.value = true; // Tutup modal setelah berhasil
+    // Refresh daftar users dari API
+    await fetchUsers(); // Tambahkan admin baru ke daftar
+    showModal.value = false; // Tutup modal setelah berhasil
     newAdmin.value = { name: '', email: '', password: '', role: 'admin' }; // Reset form
   } catch (error) {
     console.error('Error adding admin:', error);
+    if (error.response && error.response.data.error === 'Email already exists') {
+      errorMessage.value = 'Email sudah digunakan, silakan gunakan email lain.';
+    } else {
+      errorMessage.value = 'Terjadi kesalahan saat menambahkan admin. Silakan coba lagi.';
+    }
+  }
+};
+
+const removeUser = async (id) => {
+  if (!confirm('Apakah Anda yakin ingin menghapus pengguna ini?')) {
+    return;
+  }
+
+  try {
+    const token = getTokenFromCookies();
+    if (!token) {
+      throw new Error('Token tidak ditemukan. Harap login terlebih dahulu.');
+    }
+
+    await axios.delete(`http://localhost:8080/admin/users/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    users.value = users.value.filter(user => user.ID !== id);
+    console.log(`User dengan ID ${id} berhasil dihapus.`);
+  } catch (error) {
+    console.error('Error removing user:', error);
   }
 };
 

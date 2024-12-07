@@ -3,15 +3,40 @@
   <div class="container mt-4">
     <div class="row">
       <div class="col-lg-8">
+        <div class="card mb-4">
+            <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+              <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="3" aria-label="Slide 4"></button>
+              </div>
+              <div class="carousel-inner">
+                <div class="carousel-item active">
+                  <img src="/assets/img/ssstik.io_1733559735154.jpeg" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                  <img src="/assets/img/ssstik.io_1733559730444.jpeg" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                  <img src="/assets/img/ssstik.io_1733559725987.jpeg" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                  <img src="/assets/img/ssstik.io_1733559722482.jpeg" class="d-block w-100" alt="...">
+                </div>
+              </div>
+            </div>
+          </div>
+
         <h5>Postingan Terbaru</h5>
         <div class="row">
-          <div v-for="articlesItem in paginatedArticles" :key="articlesItem.id" class="col-md-6 mb-3">
+          <div v-for="articlesItem in paginatedArticles" :key="articlesItem.ID" class="col-md-6 mb-3">
             <div class="card">
               <img :src="`http://localhost:8080/uploads/${articlesItem.file_name}`" class="card-img-top" alt="...">
               <div class="card-body">
                 <h6 class="text-muted">{{ articlesItem.label }}</h6>
                 <h5 class="card-title">{{ articlesItem.title }}</h5>
-                <p class="card-text">{{ articlesItem.content }}</p>
+                <p class="card-text">{{ articlesItem.content.substring(0, 100) }}...</p>
                 <p class="text-muted">{{ formatDate(articlesItem.CreatedAt) }}</p>
                 <NuxtLink :to="`/user/articles/${articlesItem.ID}`" class="btn btn-success btn-sm">Baca Selengkapnya</NuxtLink>
               </div>
@@ -63,7 +88,7 @@ const articlesPerPage = 4;  // Number of articles per page
 const fetchArticles = async () => {
   try {
     const response = await axios.get('http://localhost:8080/articles');
-    articles.value = response.data;
+    articles.value = response.data.sort((a, b) => new Date(b.CreatedAt) - new Date(a.CreatedAt));
   } catch (error) {
     console.error('Error fetching articles:', error);
   }

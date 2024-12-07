@@ -168,3 +168,26 @@ func UpdateProfilePhoto(c *gin.Context) {
 		"profile_photo": file.Filename,
 	})
 }
+
+func DeleteUser(c *gin.Context) {
+    // Ambil ID dari parameter URL
+    id := c.Param("id")
+
+    var user models.User
+    // Cari user berdasarkan ID
+    if err := config.GetDB().First(&user, id).Error; err != nil {
+        // Jika user tidak ditemukan, kembalikan pesan error
+        c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+        return
+    }
+
+    // Hapus user dari database
+    if err := config.GetDB().Delete(&user).Error; err != nil {
+        // Jika gagal menghapus, kembalikan pesan error
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete user"})
+        return
+    }
+
+    // Kembalikan respons sukses
+    c.JSON(http.StatusOK, gin.H{"message": "User deleted successfully"})
+}

@@ -10,6 +10,6 @@ type Article struct {
 	CategoryID  uint        `json:"category_id"` // Foreign Key
 	Category    Category    `gorm:"foreignKey:CategoryID" json:"category"`
 	Author  	string 		`json:"author"`
-	FilePath    string    `json:"file_path"` // Menyimpan path file yang diupload
-    FileName    string    `json:"file_name"` // Menyimpan nama file yang diupload
+	FilePath    string    	`json:"file_path"` // Menyimpan path file yang diupload
+    FileName    string    	`json:"file_name"` // Menyimpan nama file yang diupload
 }

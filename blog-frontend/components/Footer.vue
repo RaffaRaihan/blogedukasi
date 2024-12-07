@@ -1,7 +1,7 @@
 <template>
 <!-- Footer -->
 <footer>
-  <p>Copyright © Kang Tutor</p>
+  <p>&copy;Copyright raffamr 2024</p>
 </footer>
 </template>
 

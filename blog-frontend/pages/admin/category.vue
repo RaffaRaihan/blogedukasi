@@ -10,9 +10,9 @@
           <input type="text" class="form-control me-2" placeholder="Search" />
         </div>
         <!-- Tombol untuk menambah kategori baru -->
-        <NuxtLink to="/tambah-category" class="btn btn-primary mb-4">Tambah Kategori Baru</NuxtLink>
+        <NuxtLink to="/tambah-category" class="btn btn-outline-primary mb-4">Tambah Kategori Baru</NuxtLink>
         <!-- Tabel Kategori -->
-        <table class="table table-striped">
+        <table class="table table-hover align-middle table-striped">
           <thead>
             <tr>
               <th scope="col">No</th>
@@ -26,8 +26,8 @@
               <th scope="row">{{ index + 1 }}</th>
               <td>{{ kategori.name }}</td>
               <td>
-                <NuxtLink class="btn btn-warning btn-sm me-2">Edit</NuxtLink>
-                <button class="btn btn-danger btn-sm">Hapus</button>
+                <NuxtLink class="btn btn-outline-warning btn-sm me-2">Edit</NuxtLink>
+                <button class="btn btn-outline-danger btn-sm">Hapus</button>
               </td>
             </tr>
           </tbody>

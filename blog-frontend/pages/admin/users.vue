@@ -5,7 +5,7 @@
       <main class="col-md-9 col-lg-10 p-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
           <h1>Users</h1>
-          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#articleModal" @click="openModal('add')">+ Invite</button>
+          <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#articleModal" @click="showModal = true">+ Invite</button>
         </div>
         <!-- Filters -->
         <div class="d-flex align-items-center mb-4 mt-4">
@@ -16,7 +16,7 @@
             <option value="user">User</option>
           </select>
         </div>
-        <table class="table table-hover align-middle">
+        <table class="table table-hover align-middle table-striped">
           <thead>
             <tr>
               <th scope="col">No</th>
@@ -40,8 +40,8 @@
               <td>{{ formatDate(user.CreatedAt) }}</td>
               <td>{{ formatDate(user.UpdatedAt) }}</td>
               <td>
-                <button class="btn btn-warning btn-sm me-2" @click="openModal('edit', user)">Edit</button>
-                <button class="btn btn-danger btn-sm">Hapus</button>
+                <button class="btn btn-outline-warning btn-sm me-2" @click="openModal('edit', user)">Edit</button>
+                <button @click="removeUser(user.ID)" class="btn btn-sm btn-outline-danger">Hapus</button>
               </td>
             </tr>
           </tbody>
@@ -49,32 +49,72 @@
       </main>
     </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+    <!-- Modal Add Admin -->
+    <div class="modal fade" tabindex="-1" :class="{ 'show': showModal }" style="display: block;" v-if="showModal">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="userModalLabel">{{ modalMode === 'add' ? 'Add User' : 'Edit User' }}</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <h5 class="modal-title">Add Users</h5>
+            <button type="button" class="btn-close" @click="showModal = false"></button>
           </div>
           <div class="modal-body">
-            <form @submit.prevent="handleSubmit">
+            <form @submit.prevent="addUsers">
               <div class="mb-3">
                 <label for="name" class="form-label">Name</label>
-                <input type="text" id="name" v-model="formData.name" class="form-control" required />
+                <input type="text" class="form-control" id="name" v-model="newUsers.name" required />
               </div>
               <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" id="email" v-model="formData.email" class="form-control" required />
+                <input type="email" class="form-control" id="email" v-model="newUsers.email" required />
+              </div>
+              <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" v-model="newUsers.password" required />
               </div>
               <div class="mb-3">
                 <label for="role" class="form-label">Role</label>
-                <select id="role" v-model="formData.role" class="form-select" required>
-                  <option value="Admin">Admin</option>
-                  <option value="User">User</option>
+                <select class="form-select" id="role" v-model="newUsers.role" required>
+                  <option value="user">User</option>
+                  <option value="admin">Admin</option>
                 </select>
               </div>
-              <button type="submit" class="btn btn-primary w-100">Save</button>
+              <button type="submit" class="btn btn-primary">Add Users</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-backdrop fade" :class="{ 'show': showModal }" v-if="showModal" @click="showModal = false"></div>
+    <!-- Modal Edit -->
+    <div class="modal fade" tabindex="-1" :class="{ 'show': showEditModal }" style="display: block;" v-if="showEditModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Edit User</h5>
+            <button type="button" class="btn-close" @click="showEditModal = false"></button>
+          </div>
+          <div class="modal-body">
+            <form @submit.prevent="updateUser">
+              <div class="mb-3">
+                <label for="editName" class="form-label">Name</label>
+                <input type="text" class="form-control" id="editName" v-model="editUser.name" required />
+              </div>
+              <div class="mb-3">
+                <label for="editEmail" class="form-label">Email</label>
+                <input type="email" class="form-control" id="editEmail" v-model="editUser.email" required />
+              </div>
+              <div class="mb-3">
+                <label for="editRole" class="form-label">Role</label>
+                <select class="form-select" id="editRole" v-model="editUser.role" required>
+                  <option value="user">User</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="editFoto" class="form-label">Profile Photo</label>
+                <input type="file" class="form-control" id="editFoto" @change="handleFileUpload" />
+              </div>
+              <button type="submit" class="btn btn-primary">Save Changes</button>
             </form>
           </div>
         </div>
@@ -98,14 +138,21 @@ definePageMeta({
 const users = ref([]);
 const searchQuery = ref('');
 const selectedRole = ref('');
-const modalInstance = ref(null);
-const modalMode = ref('add');
-const formData = ref({
+const showModal = ref(false);
+const newUsers = ref({
+  name: '',
+  email: '',
+  password: '',
+  role: 'user',
+});
+const showEditModal = ref(false);
+const editUser = ref({
   id: null,
   name: '',
   email: '',
-  role: 'User',
+  role: '',
 });
+const selectedFile = ref(null);
 
 // Function to format the date
 const formatDate = (date) => {
@@ -132,8 +179,6 @@ const fetchUsers = async () => {
       throw new Error('Token tidak ditemukan. Harap login terlebih dahulu.');
     }
 
-    console.log('Token yang diambil:', token);  // Debugging token
-
     // Panggil API dengan token
     const response = await axios.get('http://localhost:8080/admin/users', {
       headers: {
@@ -147,39 +192,113 @@ const fetchUsers = async () => {
   }
 };
 
-// Fungsi untuk membuka modal
-const openModal = (mode, user = null) => {
-  modalMode.value = mode;
-  if (mode === 'edit' && user) {
-    formData.value = { ...user };
-  } else {
-    formData.value = { id: null, name: '', email: '', role: 'User' };
+// Fungsi untuk menambah admin
+const addUsers = async () => {
+  try {
+    const token = getTokenFromCookies();
+    if (!token) {
+      throw new Error('Token tidak ditemukan. Harap login terlebih dahulu.');
+    }
+
+    await axios.post(
+      'http://localhost:8080/register',
+      newUsers.value,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    // Refresh daftar users dari API
+    await fetchUsers(); // Tambahkan admin baru ke daftar
+    showModal.value = false; // Tutup modal setelah berhasil
+    newUsers.value = { name: '', email: '', password: '', role: 'user' }; // Reset form
+  } catch (error) {
+    console.error('Error adding admin:', error);
+    if (error.response && error.response.data.error === 'Email already exists') {
+      errorMessage.value = 'Email sudah digunakan, silakan gunakan email lain.';
+    } else {
+      errorMessage.value = 'Terjadi kesalahan saat menambahkan admin. Silakan coba lagi.';
+    }
   }
-  if (!modalInstance.value) {
-    const modalEl = document.getElementById('userModal');
-    modalInstance.value = new bootstrap.Modal(modalEl);
-  }
-  modalInstance.value.show();
 };
 
-// Fungsi untuk submit data
-const handleSubmit = async () => {
+const removeUser = async (id) => {
+  if (!confirm('Apakah Anda yakin ingin menghapus pengguna ini?')) {
+    return;
+  }
+
   try {
-    if (modalMode.value === 'add') {
-      await axios.post('http://localhost:8080/admin/users', formData.value, {
-        headers: { Authorization: `Bearer ${getTokenFromCookies()}` },
-      });
-    } else if (modalMode.value === 'edit') {
-      await axios.put(`http://localhost:8080/admin/users/${formData.value.id}`, formData.value, {
-        headers: { Authorization: `Bearer ${getTokenFromCookies()}` },
-      });
+    const token = getTokenFromCookies();
+    if (!token) {
+      throw new Error('Token tidak ditemukan. Harap login terlebih dahulu.');
     }
-    fetchUsers(); // Refresh data setelah submit
-    modalInstance.value.hide();
+
+    await axios.delete(`http://localhost:8080/admin/users/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    users.value = users.value.filter(user => user.ID !== id);
+    console.log(`User dengan ID ${id} berhasil dihapus.`);
   } catch (error) {
-    console.error('Error submitting data:', error);
+    console.error('Error removing user:', error);
   }
 };
+
+// Fungsi untuk menangani file yang diunggah
+const handleFileUpload = (event) => {
+  selectedFile.value = event.target.files[0]; // Ambil file pertama dari input
+};
+
+// Fungsi untuk membuka modal edit
+const openModal = (type, user) => {
+  if (type === 'edit') {
+    editUser.value = { ...user };
+    showEditModal.value = true;
+  }
+};
+
+const updateUser = async () => {
+  try {
+    const token = getTokenFromCookies();
+    if (!token) {
+      throw new Error('Token tidak ditemukan. Harap login terlebih dahulu.');
+    }
+
+    const formData = new FormData();
+    formData.append('name', editUser.value.name);
+    formData.append('email', editUser.value.email);
+    formData.append('role', editUser.value.role);
+
+    // Cek apakah ada foto yang diunggah
+    if (selectedFile.value) {
+      formData.append('foto', selectedFile.value); // Menambahkan file foto ke formData
+    }
+
+    // Kirim ke backend (untuk update profil pengguna)
+    await axios.put(
+      `http://localhost:8080/admin/users/${editUser.value.ID}/foto`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+
+    // Segarkan daftar pengguna
+    await fetchUsers();
+    showEditModal.value = false; // Tutup modal setelah berhasil
+    console.log('User berhasil diperbarui.');
+  } catch (error) {
+    console.error('Error updating user:', error);
+  }
+};
+
 
 // Filter users berdasarkan role dan email
 const filteredUsers = computed(() => {

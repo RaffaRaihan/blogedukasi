@@ -1,6 +1,6 @@
 <template>
     <!-- Sidebar -->
-    <div class="col-lg-4">
+    <div class="col-lg-4 mb-3">
       <div class="mb-4">
         <h5>Paling Populer</h5>
         <ul class="list-group">

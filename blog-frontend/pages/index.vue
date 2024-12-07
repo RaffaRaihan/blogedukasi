@@ -12,23 +12,19 @@
                 <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
                 <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
                 <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="3" aria-label="Slide 4"></button>
-                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="4" aria-label="Slide 5"></button>
               </div>
               <div class="carousel-inner">
                 <div class="carousel-item active">
-                  <img src="../assets/img/Inumaki.jpg" class="d-block w-100" alt="...">
+                  <img src="../assets/img/ssstik.io_1733559735154.jpeg" class="d-block w-100" alt="...">
                 </div>
                 <div class="carousel-item">
-                  <img src="../assets/img/𓆩⛧𓆪.jpg" class="d-block w-100" alt="...">
+                  <img src="../assets/img/ssstik.io_1733559730444.jpeg" class="d-block w-100" alt="...">
                 </div>
                 <div class="carousel-item">
-                  <img src="../assets/img/wallpaper.jpg" class="d-block w-100" alt="...">
+                  <img src="../assets/img/ssstik.io_1733559725987.jpeg" class="d-block w-100" alt="...">
                 </div>
                 <div class="carousel-item">
-                  <img src="../assets/img/20487358.jpg" class="d-block w-100" alt="...">
-                </div>
-                <div class="carousel-item">
-                  <img src="../assets/img/de2158bba1bf3c5b60bb234b16b7545b.jpg" class="d-block w-100" alt="...">
+                  <img src="../assets/img/ssstik.io_1733559722482.jpeg" class="d-block w-100" alt="...">
                 </div>
               </div>
               <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
@@ -50,7 +46,7 @@
                 <div class="card-body">
                   <h6 class="text-muted">{{ articles.label }}</h6>
                   <h5 class="card-title">{{ articles.title }}</h5>
-                  <p class="card-text">{{ articles.content }}</p>
+                  <p class="card-text">{{ articles.content.substring(0, 100) }}...</p>
                   <p class="text-muted">{{ formatDate(articles.CreatedAt) }}</p>
                   <NuxtLink to="/login" class="btn btn-success btn-sm">Baca Selengkapnya</NuxtLink>
                 </div>

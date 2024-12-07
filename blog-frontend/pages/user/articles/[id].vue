@@ -22,7 +22,13 @@
           <h2>{{ articles.title }}</h2>
           <p class="text-muted">By {{ articles.author }} - {{ formatDate(articles.CreatedAt) }}</p>        
           <h4>Apa itu {{ articles.title }}?</h4>
-          <p>{{ articles.content }}</p>        
+          <p>{{ articles.content.substring(0, 370) }}</p><br>
+          <p><b>{{ articles.content.substring(370, 404) }}</b></p><br>
+          <p>{{ articles.content.substring(404, 517) }}</p><br>
+          <ul>
+            <li>{{ articles.content.substring(517, 581) }}</li>
+            <li>{{ articles.content.substring(581, 647) }}</li>
+          </ul>      
           <img :src="`http://localhost:8080/uploads/${articles.file_name}`" class="card-img-top" alt="...">
 
           <!-- Comments Section -->
@@ -42,7 +48,7 @@
                 <div>
                   <textarea v-model="newComment" class="form-control" placeholder="Tulis komentar..."></textarea>
                   <!-- Pastikan articleId dikirim dengan benar -->
-                  <button type="submit" class="btn btn-primary mt-3">Submit Comment</button>
+                  <button type="submit" class="btn btn-primary mt-3">Comment</button>
                 </div>
               </form>
             </div>
