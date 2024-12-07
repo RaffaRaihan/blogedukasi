@@ -61,6 +61,38 @@ func GetUserByID(c *gin.Context) {
 	c.JSON(http.StatusOK, user)
 }
 
+func UpdateUser(c *gin.Context) {
+    // Ambil ID dari parameter URL
+    id := c.Param("id")
+
+    var user models.User
+    // Cari user berdasarkan ID
+    if err := config.GetDB().First(&user, id).Error; err != nil {
+        // Jika tidak ditemukan, kembalikan pesan error
+        c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+        return
+    }
+
+    // Bind data JSON dari request body ke user
+    if err := c.ShouldBindJSON(&user); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
+
+    // Simpan perubahan ke database
+    if err := config.GetDB().Save(&user).Error; err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user"})
+        return
+    }
+
+    // Kembalikan data user yang sudah diperbarui
+    c.JSON(http.StatusOK, gin.H{
+        "message": "User updated successfully",
+        "user":    user,
+    })
+}
+
+
 func UploadProfilePhoto(c *gin.Context) {
 	id := c.Param("id")
 
@@ -77,7 +109,7 @@ func UploadProfilePhoto(c *gin.Context) {
 	}
 
 	// Lanjutkan unggah file
-	file, err := c.FormFile("profile_photo")
+	file, err := c.FormFile("foto")
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to upload file"})
 		return
@@ -111,7 +143,7 @@ func UpdateProfilePhoto(c *gin.Context) {
 	}
 
 	// Ambil file dari form-data
-	file, err := c.FormFile("profile_photo")
+	file, err := c.FormFile("foto")
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to upload file"})
 		return

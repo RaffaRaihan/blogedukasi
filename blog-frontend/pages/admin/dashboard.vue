@@ -22,8 +22,14 @@
         <!-- Admin Cards -->
         <div class="mb-4">
           <div class="row d-flex">
-            <div v-for="user in filteredUsers" :key="user.id" class="card me-2 mb-2" style="width: 150px;">
+            <div v-for="user in filteredUsers" :key="user.id" class="card me-2 mb-2" style="width: 170px;">
               <div class="card-body text-center">
+                <img
+                  :src="user.foto ? `http://localhost:8080/uploads/${user.foto}` : 'default-avatar.png'"
+                  alt="Foto Profil"
+                  class="rounded-circle mb-3"
+                  style="width: 120px; height: 120px; object-fit: cover;"
+                />
                 <h6 class="card-title">{{ user.name }}</h6>
                 <p class="text-muted">{{ user.email }}</p>
                 <p class="text-muted">{{ user.role }}</p>

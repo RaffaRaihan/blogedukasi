@@ -10,7 +10,7 @@
               <NuxtLink to="/user/dashboard">Home</NuxtLink>
             </li>
             <li class="breadcrumb-item">
-              <NuxtLink :to="`/categories/${articles.category.id}`">{{ articles.category.name }}</NuxtLink>
+              <NuxtLink :to="`/categories/${articles.category.ID}`">{{ articles.category.name }}</NuxtLink>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
               {{ articles.title }}
@@ -38,11 +38,11 @@
             <!-- Add Comment Form -->
             <div class="mt-3 mb-3">
               <h5>Tambah Komentar</h5>
-              <form @submit.prevent="submitComment">
+              <form @submit.prevent="submitComment(articles.ID)">
                 <div>
                   <textarea v-model="newComment" class="form-control" placeholder="Tulis komentar..."></textarea>
                   <!-- Pastikan articleId dikirim dengan benar -->
-                  <button @click="submitComment(articles.ID)" :data-article-id="articles.id" class="btn btn-primary mt-3">Submit Comment</button>
+                  <button type="submit" class="btn btn-primary mt-3">Submit Comment</button>
                 </div>
               </form>
             </div>
@@ -50,7 +50,7 @@
         </div>
       </div>
       <!-- Sidebar -->
-      <Sidebar />
+      <LoginSidebar />
     </div>
   </div>
   <Footer />
@@ -128,16 +128,35 @@ const fetchComments = async (articleId) => {
 };
 
 const submitComment = async (articleId) => {
-  // Pastikan articleId diterima sebagai parameter yang benar
-  const response = await axios.post(`http://localhost:8080/user/articles/${articleId}/comments`, {
-    content: commentContent.value,
-    article_id: articleId,
-    user_id: user_id,
-  }, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  try {
+    const token = getTokenFromCookies();
+    if (!token) throw new Error("Token tidak ditemukan. Harap login terlebih dahulu.");
+
+    const response = await axios.post(
+      `http://localhost:8080/user/articles/${articleId}/comments`,
+      {
+        content: newComment.value, // Mengambil isi komentar
+        article_id: articleId,
+        user_id: user_id.value, // Pastikan mengambil nilai user_id yang benar
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    // Tambahkan komentar baru ke daftar komentar
+    comments.value.push(response.data);
+
+    // Reset form komentar
+    newComment.value = "";
+
+    alert("Komentar berhasil ditambahkan!");
+  } catch (err) {
+    console.error("Error submitting comment:", err);
+    alert(err.response?.data?.message || "Gagal menambahkan komentar.");
+  }
 };
 
 const route = useRoute();

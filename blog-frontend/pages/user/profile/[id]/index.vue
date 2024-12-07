@@ -22,7 +22,7 @@
           <p class="form-control-plaintext">{{ users.email }}</p>
         </div>
         <div class="text-center">
-          <button class="btn btn-warning" @click="editProfile">Edit Profil</button>
+          <button class="btn btn-warning" @click="navigateToEditProfile">Edit Profil</button>
           <button class="btn btn-danger ms-2" @click="handleLogout">Logout</button>
         </div>
       </div>
@@ -41,6 +41,12 @@ definePageMeta({
 
 const users = ref([])
 const error = ref([])
+const router = useRouter();
+
+const navigateToEditProfile = () => {
+  router.push(`/user/profile/${route.params.id}/edit`);
+};
+
 
 // Fungsi untuk mengambil token dari cookies
 const getTokenFromCookies = () => {

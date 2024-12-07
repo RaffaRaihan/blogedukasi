@@ -55,6 +55,7 @@ func SetupRoutes(r *gin.Engine) {
 		userRoutes.GET("/articles/search", controllers.SearchArticles)
 		userRoutes.GET("/articles/:id", controllers.GetArticleByID)
 		userRoutes.GET("/:id", controllers.GetUserByID)
+		userRoutes.PUT("/:id", controllers.UpdateUser)
 		userRoutes.POST("/:id/foto", controllers.UploadProfilePhoto)
 		userRoutes.PUT("/:id/foto", controllers.UpdateProfilePhoto)
 	}
