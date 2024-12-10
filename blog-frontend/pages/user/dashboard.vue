@@ -13,7 +13,7 @@
               </div>
               <div class="carousel-inner">
                 <div class="carousel-item active">
-                  <img src="/assets/img/ssstik.io_1733559735154.jpeg" class="d-block w-100" alt="...">
+                  <img src="/assets/img/Inumaki.jpg" class="d-block w-100" alt="...">
                 </div>
                 <div class="carousel-item">
                   <img src="/assets/img/ssstik.io_1733559730444.jpeg" class="d-block w-100" alt="...">
@@ -36,7 +36,7 @@
               <div class="card-body">
                 <h6 class="text-muted">{{ articlesItem.label }}</h6>
                 <h5 class="card-title">{{ articlesItem.title }}</h5>
-                <p class="card-text">{{ articlesItem.content.substring(0, 100) }}...</p>
+                <p class="card-text" v-html="articlesItem.content.substring(0, 30)"></p>
                 <p class="text-muted">{{ formatDate(articlesItem.CreatedAt) }}</p>
                 <NuxtLink :to="`/user/articles/${articlesItem.ID}`" class="btn btn-success btn-sm">Baca Selengkapnya</NuxtLink>
               </div>

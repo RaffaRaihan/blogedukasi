@@ -15,7 +15,7 @@
               </div>
               <div class="carousel-inner">
                 <div class="carousel-item active">
-                  <img src="../assets/img/ssstik.io_1733559735154.jpeg" class="d-block w-100" alt="...">
+                  <img src="../assets/img/ssstik.io_1733559722482.jpeg" class="d-block w-100" alt="...">
                 </div>
                 <div class="carousel-item">
                   <img src="../assets/img/ssstik.io_1733559730444.jpeg" class="d-block w-100" alt="...">
@@ -92,7 +92,7 @@ const articlesPerPage = 4;  // Number of articles per page
 
 const fetchArticles = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/articles'); // Ganti dengan URL backend Anda
+    const response = await axios.get('http://localhost:8080/articles');
     articles.value = response.data;
   } catch (error) {
     console.error('Error fetching articles:', error);

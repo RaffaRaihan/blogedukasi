@@ -93,14 +93,7 @@
               <!-- Konten Artikel -->
               <div class="mb-3">
                 <label for="articleContent" class="form-label">Konten Artikel</label>
-                <textarea
-                  id="articleContent"
-                  class="form-control"
-                  rows="4"
-                  v-model="newArticle.content"
-                  required
-                  placeholder="Masukkan konten artikel"
-                ></textarea>
+                <QuillEditor v-model="newArticle.content"/>
               </div>
               <!-- Kategori Artikel -->
               <div class="mb-3">
@@ -154,7 +147,7 @@
                   type="text"
                   id="editLabel"
                   class="form-control"
-                  v-model="selectedArticle.label"
+                  v-model="editArticle.label"
                   required
                   placeholder="Masukkan label"
                 />
@@ -166,7 +159,7 @@
                   type="text"
                   id="editTitle"
                   class="form-control"
-                  v-model="selectedArticle.title"
+                  v-model="editArticle.title"
                   required
                   placeholder="Masukkan judul artikel"
                 />
@@ -174,14 +167,7 @@
               <!-- Konten Artikel -->
               <div class="mb-3">
                 <label for="editContent" class="form-label">Konten Artikel</label>
-                <textarea
-                  id="editContent"
-                  class="form-control"
-                  rows="4"
-                  v-model="selectedArticle.content"
-                  required
-                  placeholder="Masukkan konten artikel"
-                ></textarea>
+                <QuillEditor v-model="editArticle.content" />
               </div>
               <!-- Kategori Artikel -->
               <div class="mb-3">
@@ -189,7 +175,7 @@
                 <select
                   id="editCategory"
                   class="form-select"
-                  v-model="selectedArticle.category_id"
+                  v-model="editArticle.category_id"
                   required
                 >
                   <option value="" disabled>Pilih kategori</option>
@@ -205,7 +191,7 @@
                   type="text"
                   id="editAuthor"
                   class="form-control"
-                  v-model="selectedArticle.author"
+                  v-model="editArticle.author"
                   required
                   placeholder="Masukkan author"
                 />
@@ -249,14 +235,14 @@ const newArticle = ref({
 const showModal = ref(false);
 const errorMessage = ref('');
 const showEditModal = ref(false);
-const selectedArticle = ref({
+const editArticle = ref({
   label: '',
   title: '',
   content: '',
   category_id: null,
   author: '',
 });
-const selectedFile = ref(null)
+const selectedFile = ref(null);
 
 // Mengambil token dari cookies
 const getTokenFromCookies = () => {
@@ -323,7 +309,7 @@ const removeArticles = async (id) => {
   }
 };
 
-// Fungsi untuk menambah admin
+// Fungsi untuk menambah artikel
 const submitArticle = async () => {
   try {
     const token = getTokenFromCookies();
@@ -354,7 +340,7 @@ const submitArticle = async () => {
 // Fungsi untuk membuka modal edit
 const openModal = (type, article) => {
   if (type === 'edit') {
-    selectedArticle.value = { ...article };
+    editArticle.value = { ...article };
     showEditModal.value = true;
   }
 };
@@ -372,11 +358,11 @@ const updateArticle = async () => {
     }
 
     const formData = new FormData();
-    formData.append('label', selectedArticle.value.label);
-    formData.append('title', selectedArticle.value.title);
-    formData.append('content', selectedArticle.value.content);
-    formData.append('category_id', selectedArticle.value.category_id);
-    formData.append('author', selectedArticle.value.author);
+    formData.append('label', editArticle.value.label);
+    formData.append('title', editArticle.value.title);
+    formData.append('content', editArticle.value.content);
+    formData.append('category_id', editArticle.value.category_id);
+    formData.append('author', editArticle.value.author);
 
     // Cek apakah ada foto yang diunggah
     if (selectedFile.value) {
@@ -385,7 +371,7 @@ const updateArticle = async () => {
 
     // Kirim ke backend (untuk update profil pengguna)
     await axios.put(
-      `http://localhost:8080/admin/articles/${selectedArticle.value.ID}/uploads`,
+      `http://localhost:8080/admin/articles/${editArticle.value.ID}/uploads`,
       formData,
       {
         headers: {

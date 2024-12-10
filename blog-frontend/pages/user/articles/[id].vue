@@ -22,14 +22,9 @@
           <h2>{{ articles.title }}</h2>
           <p class="text-muted">By {{ articles.author }} - {{ formatDate(articles.CreatedAt) }}</p>        
           <h4>Apa itu {{ articles.title }}?</h4>
-          <p>{{ articles.content.substring(0, 370) }}</p><br>
-          <p><b>{{ articles.content.substring(370, 404) }}</b></p><br>
-          <p>{{ articles.content.substring(404, 517) }}</p><br>
-          <ul>
-            <li>{{ articles.content.substring(517, 581) }}</li>
-            <li>{{ articles.content.substring(581, 647) }}</li>
-          </ul>      
+          <p v-html="articles.content"></p><br>     
           <img :src="`http://localhost:8080/uploads/${articles.file_name}`" class="card-img-top" alt="...">
+          <hr class="mt-5">
 
           <!-- Comments Section -->
           <div class="mt-5">

@@ -46,9 +46,15 @@ func SetupRoutes(r *gin.Engine) {
 		adminRoutes.PUT("/articles/:id", controllers.UpdateArticle)
 		adminRoutes.DELETE("/articles/:id", controllers.Delete)
 
-		//upload file
+		// Admin File Management
 		adminRoutes.POST("/articles/:id/uploads", controllers.UploadFile)
 		adminRoutes.PUT("/articles/:id/uploads", controllers.UpdateFile)
+
+		// Admin Categories
+		adminRoutes.POST("/category", controllers.CreateCategory)
+		adminRoutes.PUT("/category/:id", controllers.UpdateCategory)
+		adminRoutes.DELETE("/category/:id", controllers.DeleteCategory)
+
 	}
 
 	// Group User (dengan middleware Auth)
