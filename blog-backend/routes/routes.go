@@ -24,6 +24,7 @@ func SetupRoutes(r *gin.Engine) {
 
 	r.GET("/articles", controllers.GetAll)
 	r.GET("/category", controllers.GetAllCategory)
+	r.GET("/articles/:id", controllers.GetArticleByID)
 	r.GET("/articles/:id/comments", controllers.GetByArticle)
 
 	// Uploads

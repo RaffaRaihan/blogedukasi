@@ -67,7 +67,7 @@
           </nav>
       </div>
       <!-- Sidebar -->
-      <LoginSidebar />
+      <Sidebar />
     </div>
   </div>
   <Footer />

@@ -2,15 +2,14 @@
   <div class="container-fluid">
     <div class="row">
       <!-- Sidebar -->
-      <AdminSidebar />
-
+      <AdminSidebar :is-collapsed="isCollapsed" />
       <!-- Main Content -->
-      <main class="col-md-9 col-lg-10 p-4">
+      <main :class="['p-4', isCollapsed ? 'col-md-12' : 'col-md-9 col-lg-10']">
         <h2>Workspace admins</h2>
         <button class="btn btn-outline-primary" @click="showModal = true">
-          <i class="bi bi-person-plus"></i>  Add Admin
+          <i class="bi bi-person-plus"></i> Add Admin
         </button>
-        
+
         <!-- Filters -->
         <div class="d-flex align-items-center mb-4 mt-4">
           <input type="text" class="form-control me-2" placeholder="Search by email" v-model="searchQuery" />
@@ -35,7 +34,7 @@
                 <h6 class="card-title">{{ user.name }}</h6>
                 <p class="text-muted">{{ user.email }}</p>
                 <p class="text-muted">{{ user.role }}</p>
-                <button @click="removeUser(user.ID)" class="btn btn-sm btn-danger"><i class="bi bi-person-dash"></i>  Remove</button>
+                <button @click="removeUser(user.ID)" class="btn btn-sm btn-danger"><i class="bi bi-person-dash"></i> Remove</button>
               </div>
             </div>
           </div>
@@ -87,11 +86,6 @@ import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
-definePageMeta({
-  middleware: 'auth',
-  requiresAdmin: true,
-});
-
 const users = ref([]);
 const searchQuery = ref('');
 const selectedRole = ref('');
@@ -102,8 +96,8 @@ const newAdmin = ref({
   password: '',
   role: 'admin',
 });
+const isCollapsed = ref(false);
 
-// Fungsi untuk mengambil token dari cookies
 const getTokenFromCookies = () => {
   const token = document.cookie
     .split('; ')
@@ -112,7 +106,6 @@ const getTokenFromCookies = () => {
   return token;
 };
 
-// Fungsi untuk fetch users dari API
 const fetchUsers = async () => {
   try {
     const token = getTokenFromCookies();
@@ -132,7 +125,6 @@ const fetchUsers = async () => {
   }
 };
 
-// Fungsi untuk menambah admin
 const addAdmin = async () => {
   try {
     const token = getTokenFromCookies();
@@ -150,17 +142,11 @@ const addAdmin = async () => {
       }
     );
 
-    // Refresh daftar users dari API
-    await fetchUsers(); // Tambahkan admin baru ke daftar
-    showModal.value = false; // Tutup modal setelah berhasil
-    newAdmin.value = { name: '', email: '', password: '', role: 'admin' }; // Reset form
+    await fetchUsers();
+    showModal.value = false;
+    newAdmin.value = { name: '', email: '', password: '', role: 'admin' };
   } catch (error) {
     console.error('Error adding admin:', error);
-    if (error.response && error.response.data.error === 'Email already exists') {
-      errorMessage.value = 'Email sudah digunakan, silakan gunakan email lain.';
-    } else {
-      errorMessage.value = 'Terjadi kesalahan saat menambahkan admin. Silakan coba lagi.';
-    }
   }
 };
 
@@ -182,13 +168,11 @@ const removeUser = async (id) => {
     });
 
     users.value = users.value.filter(user => user.ID !== id);
-    console.log(`User dengan ID ${id} berhasil dihapus.`);
   } catch (error) {
     console.error('Error removing user:', error);
   }
 };
 
-// Filter users berdasarkan role dan email
 const filteredUsers = computed(() => {
   return users.value.filter(user => {
     const matchesRole = selectedRole.value ? user.role === selectedRole.value : true;
@@ -197,8 +181,13 @@ const filteredUsers = computed(() => {
   });
 });
 
-// Panggil fetchUsers saat komponen dimuat
 onMounted(() => {
   fetchUsers();
 });
 </script>
+
+<style scoped>
+main {
+  transition: all 0.3s ease;
+}
+</style>

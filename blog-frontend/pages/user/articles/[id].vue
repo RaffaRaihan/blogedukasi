@@ -1,5 +1,6 @@
 <template>
-  <LoginNavbar />
+  <LoginNavbar v-if="isLoggedIn"/>
+  <Navbar v-else />
   <div class="container mt-4">
     <div class="row">
       <div class="col-lg-8">
@@ -7,7 +8,8 @@
         <nav aria-label="breadcrumb" v-if="articles?.category?.name">
           <ol class="breadcrumb">
             <li class="breadcrumb-item">
-              <NuxtLink to="/user/dashboard">Home</NuxtLink>
+              <NuxtLink to="/user/dashboard" v-if="isLoggedIn">Home</NuxtLink>
+              <NuxtLink to="/" v-else>Home</NuxtLink>
             </li>
             <li class="breadcrumb-item">
               <NuxtLink :to="`/categories/${articles.category.ID}`">{{ articles.category.name }}</NuxtLink>
@@ -51,24 +53,24 @@
         </div>
       </div>
       <!-- Sidebar -->
-      <LoginSidebar />
+      <Sidebar />
     </div>
   </div>
   <Footer />
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { useRoute } from 'vue-router';
 
-definePageMeta({
-  middleware: 'auth',
+const isLoggedIn = computed(() => {
+  const token = getTokenFromCookies();
+  return !!token; // Return true jika token ada, false jika tidak ada
 });
-
 const articles = ref([]);
 const comments = ref([]);
 const newComment = ref('');
@@ -107,12 +109,7 @@ const decodeToken = () => {
 
 const fetchArticle = async (id) => {
   try {
-    const token = getTokenFromCookies();
-    if (!token) throw new Error('Token tidak ditemukan. Harap login terlebih dahulu.');
-
-    const response = await axios.get(`http://localhost:8080/user/articles/${id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const response = await axios.get(`http://localhost:8080/articles/${id}`);
     articles.value = response.data.data;
   } catch (err) {
     error.value = err.response?.data?.message || err.message;
@@ -156,7 +153,7 @@ const submitComment = async (articleId) => {
     alert("Komentar berhasil ditambahkan!");
   } catch (err) {
     console.error("Error submitting comment:", err);
-    alert(err.response?.data?.message || "Gagal menambahkan komentar.");
+    alert("Gagal menambahkan komentar.");
   }
 };
 

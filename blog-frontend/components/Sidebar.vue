@@ -2,20 +2,20 @@
   <!-- Sidebar -->
   <div class="col-lg-4 mb-3">
     <div class="mb-4">
-      <h5>Paling Populer</h5>
+      <h5 style="color: #1D2B53;">Paling Populer</h5>
       <ul class="list-group">
-        <li v-for="article in popularArticles" :key="article.id" class="list-group-item">
+        <li v-for="article in popularArticles" :key="article.id" class="list-group-item" style="color: #1D2B53;">
           {{ article.title }} <br>
-          <span class="text-muted">{{ formatDate(article.CreatedAt) }}</span><br>
-          <NuxtLink to="/login" class="btn btn-success btn-sm mt-2">Lihat</NuxtLink>
+          <span class="text-muted" style="color: #1D2B53;">{{ formatDate(article.CreatedAt) }}</span><br>
+          <NuxtLink :to="`/user/articles/${article.ID}`" class="btn btn-sm mt-2">Lihat</NuxtLink>
         </li>
       </ul>
     </div>
     <div>
       <h5>Kategori</h5>
       <ul v-for="category in category" :key="category.id" class="list-group">
-        <li class="list-group-item">
-          <NuxtLink class="text-muted" to="/">#{{ category.name }}</NuxtLink>
+        <li class="list-group-item mb-2">
+          <NuxtLink class="text-muted text-decoration-none" style="color: #1D2B53;" to="/">#{{ category.name }}</NuxtLink>
         </li>
       </ul>
     </div>
@@ -69,3 +69,16 @@ onMounted(() => {
   fetchArticles();
 });
 </script>
+
+<style scoped>
+.btn{
+  color: #1D2B53;
+  background-color: #FF004D;
+  border-color: #1D2B53;
+}
+.btn:hover{
+  color: #FF004D;
+  background-color: #1D2B53;
+  border-color: #FF004D;
+}
+</style>

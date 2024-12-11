@@ -11,4 +11,13 @@ export default defineNuxtConfig({
   build: {
     transpile: ['@heroicons/vue']
   },
+  app: {
+    head: {
+      titleTemplate: '%s - My Website',
+      title: 'My Website',
+      meta: [
+        { name: 'description', content: 'Deskripsi default website' }
+      ]
+    }
+  }
 })

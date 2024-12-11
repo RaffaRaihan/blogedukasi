@@ -35,7 +35,7 @@
                     </ul>
                 </div>
               </div>
-              <NuxtLink v-else class="btn btn-light" to="/login">Login</NuxtLink>
+              <li class="nav-link" v-else><NuxtLink class="btn" to="/login">Login</NuxtLink></li>
             </div>
         </div>
     </nav>

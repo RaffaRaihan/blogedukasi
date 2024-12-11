@@ -1,15 +1,51 @@
 <template>
 <!-- Footer -->
-<footer>
-  <p>&copy;Copyright raffamr 2024</p>
+<footer class="text-center text-lg-start">
+  <div class="container p-4">
+    <div class="row">
+      <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+        <h5 class="text-uppercase">Footer Content</h5>
+        <p>Here you can use rows and columns to organize your footer content. Lorem ipsum dolor sit amet,
+          consectetur adipisicing elit</p>
+      </div>
+      <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+        <h5 class="text-uppercase">Links</h5>
+          <ul class="list-unstyled mb-0">
+            <li><NuxtLink href="#!" class="link text-decoration-none">Link 1</NuxtLink></li>
+            <li><NuxtLink href="#!" class="link text-decoration-none">Link 2</NuxtLink></li>
+            <li><NuxtLink href="#!" class="link text-decoration-none">Link 3</NuxtLink></li>
+            <li><NuxtLink href="#!" class="link text-decoration-none">Link 4</NuxtLink></li>
+          </ul>
+      </div>
+      <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+        <h5 class="text-uppercase">Links</h5>
+          <ul class="list-unstyled mb-0">
+            <li><NuxtLink href="#!" class="link text-decoration-none">Link 1</NuxtLink></li>
+            <li><NuxtLink href="#!" class="link text-decoration-none">Link 2</NuxtLink></li>
+            <li><NuxtLink href="#!" class="link text-decoration-none">Link 3</NuxtLink></li>
+            <li><NuxtLink href="#!" class="link text-decoration-none">Link 4</NuxtLink></li>
+          </ul>
+      </div>
+    </div>
+  </div>
+  <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+    &copy; 2024 raffamr, Inc. All rights reserved
+  </div>
 </footer>
 </template>
 
 <style scoped>
 footer {
-  background-color: #00A885;
-  color: white;
+  width: 100%;
+  background-color: #211951;
+  color: #FF004D;
   text-align: center;
-  padding: 10px 0;
+}
+
+.link {
+  color: #FF004D;
+}
+.link:hover {
+  color: #FFFFFF;
 }
 </style>
