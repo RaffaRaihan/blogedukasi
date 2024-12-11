@@ -27,7 +27,7 @@
             </option>
           </select>
         </div>
-        <button class="btn btn-outline-primary mb-4" @click="navigateToAddArticle">Tambah Artikel</button>
+        <button class="btn btn-outline-primary mb-4" @click="navigateToAddArticle"><i class="bi bi-plus"></i>Tambah</button>
 
         <!-- Daftar Artikel -->
         <div class="row">
@@ -45,11 +45,8 @@
               <div class="card-body">
                 <h5 class="card-title">{{ article.title }}</h5>
                 <p class="card-text">{{ article.content.substring(0, 100)}}...</p>
-                <p class="text-muted">By {{ article.author }}</p>
-                <button class="btn btn-outline-warning" @click="navigateToEditArticle(article.ID)">
-                  Edit
-                </button>
-                <button @click="removeArticles(article.ID)"  class="btn btn-outline-danger ms-2">Hapus</button>
+                <button class="btn btn-outline-warning" @click="navigateToEditArticle(article.ID)"><i class="bi bi-pencil"></i></button>
+                <button @click="removeArticles(article.ID)"  class="btn btn-outline-danger ms-2"><i class="bi bi-trash"></i></button>
               </div>
             </div>
           </div>

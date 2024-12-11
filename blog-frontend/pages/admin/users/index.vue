@@ -42,8 +42,8 @@
               <td>{{ formatDate(user.CreatedAt) }}</td>
               <td>{{ formatDate(user.UpdatedAt) }}</td>
               <td>
-                <router-link :to="`users/edit/${user.ID}`" class="btn btn-outline-warning btn-sm me-2">Edit</router-link>
-                <button @click="removeUser(user.ID)" class="btn btn-sm btn-outline-danger">Hapus</button>
+                <router-link :to="`users/edit/${user.ID}`" class="btn btn-outline-warning btn-sm me-2"><i class="bi bi-pencil"></i></router-link>
+                <button @click="removeUser(user.ID)" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
               </td>
             </tr>
           </tbody>
