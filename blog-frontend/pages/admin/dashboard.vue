@@ -6,9 +6,6 @@
       <!-- Main Content -->
       <main :class="['p-4', isCollapsed ? 'col-md-12' : 'col-md-9 col-lg-10']">
         <h2>Workspace admins</h2>
-        <button class="btn btn-outline-primary" @click="showModal = true">
-          <i class="bi bi-person-plus"></i> Add Admin
-        </button>
 
         <!-- Filters -->
         <div class="d-flex align-items-center mb-4 mt-4">
@@ -20,8 +17,11 @@
           </select>
         </div>
 
+        <!-- Loading Indicators -->
+        <Loading v-if="loadingUsers" />
+
         <!-- Admin Cards -->
-        <div class="mb-4">
+        <div class="mb-4" v-else>
           <div class="row d-flex">
             <div v-for="user in filteredUsers" :key="user.id" class="card me-2 mb-2" style="width: 170px;">
               <div class="card-body text-center">
@@ -41,43 +41,6 @@
         </div>
       </main>
     </div>
-
-    <!-- Modal Add Admin -->
-    <div class="modal fade" tabindex="-1" :class="{ 'show': showModal }" style="display: block;" v-if="showModal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Add Admin</h5>
-            <button type="button" class="btn-close" @click="showModal = false"></button>
-          </div>
-          <div class="modal-body">
-            <form @submit.prevent="addAdmin">
-              <div class="mb-3">
-                <label for="name" class="form-label">Name</label>
-                <input type="text" class="form-control" id="name" v-model="newAdmin.name" required />
-              </div>
-              <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" v-model="newAdmin.email" required />
-              </div>
-              <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" v-model="newAdmin.password" required />
-              </div>
-              <div class="mb-3">
-                <label for="role" class="form-label">Role</label>
-                <select class="form-select" id="role" v-model="newAdmin.role" required>
-                  <option value="admin">Admin</option>
-                  <option value="user">User</option>
-                </select>
-              </div>
-              <button type="submit" class="btn btn-primary">Add Admin</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="modal-backdrop fade" :class="{ 'show': showModal }" v-if="showModal" @click="showModal = false"></div>
   </div>
 </template>
 
@@ -89,14 +52,8 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 const users = ref([]);
 const searchQuery = ref('');
 const selectedRole = ref('');
-const showModal = ref(false);
-const newAdmin = ref({
-  name: '',
-  email: '',
-  password: '',
-  role: 'admin',
-});
 const isCollapsed = ref(false);
+const loadingUsers = ref(true);
 
 const getTokenFromCookies = () => {
   const token = document.cookie
@@ -122,31 +79,8 @@ const fetchUsers = async () => {
     users.value = response.data;
   } catch (error) {
     console.error('Error fetching users:', error);
-  }
-};
-
-const addAdmin = async () => {
-  try {
-    const token = getTokenFromCookies();
-    if (!token) {
-      throw new Error('Token tidak ditemukan. Harap login terlebih dahulu.');
-    }
-
-    const response = await axios.post(
-      'http://localhost:8080/register',
-      newAdmin.value,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    await fetchUsers();
-    showModal.value = false;
-    newAdmin.value = { name: '', email: '', password: '', role: 'admin' };
-  } catch (error) {
-    console.error('Error adding admin:', error);
+  } finally {
+    loadingUsers.value = false
   }
 };
 

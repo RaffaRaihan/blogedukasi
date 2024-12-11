@@ -84,7 +84,7 @@ onMounted(() => {
 .sidebar {
     width: 250px;
     height: 100vh;
-    background-color: #f8f9fa; /* Warna latar sidebar */
+    background-color: #1D2B53; /* Warna latar sidebar */
     display: flex;
     flex-direction: column;
     padding: 1rem;
@@ -97,18 +97,19 @@ onMounted(() => {
     margin-bottom: 1rem;
     margin-left: 1rem;
     margin-top: 1rem;
+    color: #f03e3e;
 }
 .sidebar .nav-item {
     margin: 0.5rem 0;
 }
 .sidebar .nav-link {
-    color: #495057;
+    color: #f03e3e;
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 .sidebar .nav-link:hover {
-    background-color: #e9ecef;
+    background-color: #f03e3e;
     border-radius: 5px;
     color: #212529;
 }
@@ -120,15 +121,7 @@ onMounted(() => {
     border-radius: 50%;
     padding: 0.25rem 0.5rem;
 }
-.sidebar .bottom-section {
-    margin-top: auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-.profile-img {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
+.sidebar hr{
+  color: #f03e3e;
 }
 </style>

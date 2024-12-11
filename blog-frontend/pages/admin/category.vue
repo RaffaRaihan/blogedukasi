@@ -7,8 +7,12 @@
         <h1 class="mb-4">Halaman Admin - Kelola Kategori</h1>
         <!-- Tombol untuk menambah kategori baru -->
         <button class="btn btn-outline-primary" @click="showModal = true">+ Add Categories</button>
+
+        <!-- Loading Indicator -->
+        <Loading v-if="loadingCategory" />
+
         <!-- Tabel Kategori -->
-        <table class="table table-hover align-middle table-striped">
+        <table class="table table-hover align-middle mt-3" v-else>
           <thead>
             <tr>
               <th scope="col">No</th>
@@ -91,7 +95,8 @@ const newCategory = ref({
 const showEditModal = ref(false);
 const editCategory = ref({
   name: '',
-})
+});
+const loadingCategory = ref(true)
 
 // Fungsi untuk mengambil token dari cookies
 const getTokenFromCookies = () => {
@@ -121,6 +126,8 @@ const fetchCategory = async () => {
     category.value = response.data;
   } catch (error) {
     console.error('Error fetching category:', error);
+  } finally {
+    loadingCategory.value = false;
   }
 };
 

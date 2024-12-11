@@ -3,31 +3,37 @@
   <div class="container mt-4">
     <div class="row">
       <div class="col-lg-8">
+        <!-- Carousel -->
         <div class="card mb-4">
-            <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
-              <div class="carousel-indicators">
-                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="3" aria-label="Slide 4"></button>
+          <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+              <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+              <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+              <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+              <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="3" aria-label="Slide 4"></button>
+            </div>
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src="/assets/img/ssstik.io_1733559722482.jpeg" class="d-block w-100" alt="...">
               </div>
-              <div class="carousel-inner">
-                <div class="carousel-item active">
-                  <img src="/assets/img/ssstik.io_1733559722482.jpeg" class="d-block w-100" alt="...">
-                </div>
-                <div class="carousel-item">
-                  <img src="/assets/img/ssstik.io_1733559730444.jpeg" class="d-block w-100" alt="...">
-                </div>
-                <div class="carousel-item">
-                  <img src="/assets/img/ssstik.io_1733559725987.jpeg" class="d-block w-100" alt="...">
-                </div>
-                <div class="carousel-item">
-                  <img src="/assets/img/ssstik.io_1733559722482.jpeg" class="d-block w-100" alt="...">
-                </div>
+              <div class="carousel-item">
+                <img src="/assets/img/ssstik.io_1733559730444.jpeg" class="d-block w-100" alt="...">
+              </div>
+              <div class="carousel-item">
+                <img src="/assets/img/ssstik.io_1733559725987.jpeg" class="d-block w-100" alt="...">
+              </div>
+              <div class="carousel-item">
+                <img src="/assets/img/ssstik.io_1733559722482.jpeg" class="d-block w-100" alt="...">
               </div>
             </div>
           </div>
+        </div>
 
+        <!-- Loading Indicator -->
+        <Loading v-if="loadingArticles" />
+
+        <!-- Content -->
+        <div v-else>
           <div class="mb-3">
             <input
               class="form-control"
@@ -50,7 +56,7 @@
               </div>
             </div>
           </div>
-          
+
           <!-- Pagination -->
           <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
@@ -65,6 +71,7 @@
               </li>
             </ul>
           </nav>
+        </div>
       </div>
       <!-- Sidebar -->
       <Sidebar />
@@ -89,6 +96,7 @@ const articles = ref([]);
 const searchQuery = ref('');
 const currentPage = ref(1); // Halaman saat ini
 const articlesPerPage = 4; // Jumlah artikel per halaman
+const loadingArticles = ref(true);
 
 // Format tanggal
 const formatDate = (date) => {
@@ -102,6 +110,8 @@ const fetchArticles = async () => {
     articles.value = response.data.sort((a, b) => new Date(b.CreatedAt) - new Date(a.CreatedAt));
   } catch (error) {
     console.error('Error fetching articles:', error);
+  } finally {
+    loadingArticles.value = false;
   }
 };
 

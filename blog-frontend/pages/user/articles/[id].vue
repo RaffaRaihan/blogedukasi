@@ -45,7 +45,7 @@
                 <div>
                   <textarea v-model="newComment" class="form-control" placeholder="Tulis komentar..."></textarea>
                   <!-- Pastikan articleId dikirim dengan benar -->
-                  <button type="submit" class="btn btn-primary mt-3">Comment</button>
+                  <button type="submit" class="btn btn-outline-primary mt-3">Comment</button>
                 </div>
               </form>
             </div>
@@ -174,9 +174,19 @@ onMounted(() => {
 }
 .breadcrumb-item a {
   text-decoration: none;
-  color: #00A885;
+  color: #FF004D;
 }
 .breadcrumb-item.active {
-  color: #6c757d;
+  color: #1D2B53;
+}
+.btn{
+  color: #1D2B53;
+  background-color: #FF004D;
+  border-color: #1D2B53;
+}
+.btn:hover{
+  color: #FF004D;
+  background-color: #1D2B53;
+  border-color: #FF004D;
 }
 </style>

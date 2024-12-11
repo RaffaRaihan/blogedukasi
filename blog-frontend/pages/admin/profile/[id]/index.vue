@@ -1,7 +1,8 @@
 <template>
   <div class="container mt-5">
+    <NuxtLink to="/admin/dashboard" class="text-decoration-none" style="color: #1D2B53;"><i class="bi bi-arrow-left"></i>  Back</NuxtLink>
     <div class="card mx-auto" style="max-width: 600px;">
-      <div class="card-header bg-success text-white">
+      <div class="card-header" style="background-color: #1D2B53; color: #FF004D;">
         <h3 class="mb-0">Profil Pengguna</h3>
       </div>
       <div class="card-body">
@@ -14,12 +15,12 @@
           />
         </div>
         <div class="mb-3">
-          <label class="form-label fw-bold">Nama:</label>
-          <p class="form-control-plaintext">{{ users.name }}</p>
+          <label class="form-label fw-bold" style="color: #FF004D;">Nama:</label>
+          <p class="form-control-plaintext" style="color: #1D2B53;">{{ users.name }}</p>
         </div>
         <div class="mb-3">
-          <label class="form-label fw-bold">Email:</label>
-          <p class="form-control-plaintext">{{ users.email }}</p>
+          <label class="form-label fw-bold" style="color: #FF004D;">Email:</label>
+          <p class="form-control-plaintext" style="color: #1D2B53;">{{ users.email }}</p>
         </div>
       </div>
     </div>

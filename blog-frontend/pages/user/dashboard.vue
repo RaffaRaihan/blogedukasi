@@ -28,7 +28,10 @@
             </div>
           </div>
 
-          <div class="mb-3">
+          <!-- Loading Indicator -->
+          <Loading v-if="loadingArticles" />
+
+          <div class="mb-3" v-else>
             <input
               class="form-control"
               v-model="searchQuery"
@@ -45,7 +48,7 @@
                   <h5 class="card-title">{{ articlesItem.title }}</h5>
                   <p class="card-text" v-html="getTruncatedContent(articlesItem.content)"></p>
                   <p class="text-muted">{{ formatDate(articlesItem.CreatedAt) }}</p>
-                  <NuxtLink :to="`/user/articles/${articlesItem.ID}`" class="btn btn-success btn-sm">Baca Selengkapnya</NuxtLink>
+                  <NuxtLink :to="`/user/articles/${articlesItem.ID}`" class="btn">Baca Selengkapnya  <i class="bi bi-arrow-right-circle"></i></NuxtLink>
                 </div>
               </div>
             </div>
@@ -85,6 +88,7 @@ const articles = ref([]);
 const searchQuery = ref('');
 const currentPage = ref(1); // Halaman saat ini
 const articlesPerPage = 4; // Jumlah artikel per halaman
+const loadingArticles = ref(true);
 
 // Format tanggal
 const formatDate = (date) => {
@@ -98,6 +102,8 @@ const fetchArticles = async () => {
     articles.value = response.data.sort((a, b) => new Date(b.CreatedAt) - new Date(a.CreatedAt));
   } catch (error) {
     console.error('Error fetching articles:', error);
+  } finally {
+    loadingArticles.value = false;
   }
 };
 
@@ -138,3 +144,16 @@ onMounted(() => {
   fetchArticles();
 });
 </script>
+
+<style scoped>
+.btn{
+  color: #1D2B53;
+  background-color: #FF004D;
+  border-color: #1D2B53;
+}
+.btn:hover{
+  color: #FF004D;
+  background-color: #1D2B53;
+  border-color: #FF004D;
+}
+</style>

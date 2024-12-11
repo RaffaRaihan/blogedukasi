@@ -18,7 +18,11 @@
             <option value="user">User</option>
           </select>
         </div>
-        <table class="table table-hover align-middle table-striped">
+
+        <!-- Loading Indicators -->
+        <Loading v-if="loadingUsers" />
+
+        <table class="table table-hover align-middle" v-else>
           <thead>
             <tr>
               <th scope="col">No</th>
@@ -63,6 +67,7 @@ import { id } from 'date-fns/locale';
 const users = ref([]);
 const searchQuery = ref('');
 const selectedRole = ref('');
+const loadingUsers = ref(true);
 
 const fetchUsers = async () => {
   try {
@@ -80,6 +85,8 @@ const fetchUsers = async () => {
     users.value = response.data;
   } catch (error) {
     console.error('Error fetching users:', error);
+  } finally {
+    loadingUsers.value = false;
   }
 };
 

@@ -29,8 +29,11 @@
         </div>
         <button class="btn btn-outline-primary mb-4" @click="navigateToAddArticle"><i class="bi bi-plus"></i>Tambah</button>
 
+        <!-- Loading Indicator -->
+        <Loading v-if="loadingArticles" />
+
         <!-- Daftar Artikel -->
-        <div class="row">
+        <div class="row" v-else>
           <div
             v-for="article in filteredArticles"
             :key="article.id"
@@ -71,6 +74,7 @@ const articles = ref([]);
 const categories = ref([]);
 const selectedCategory = ref(null);
 const searchQuery = ref('');
+const loadingArticles = ref(true)
 
 const getTokenFromCookies = () => {
   const token = document.cookie
@@ -98,6 +102,8 @@ const fetchArticles = async (categoryId = null, search = '') => {
     articles.value = response.data;
   } catch (error) {
     console.error('Error fetching articles:', error);
+  } finally {
+    loadingArticles.value = false;
   }
 };
 
