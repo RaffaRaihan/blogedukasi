@@ -1,19 +1,64 @@
 <template>
     <!-- Sidebar -->
-    <aside class="col-md-3 col-lg-2 d-flex flex-column bg-light vh-100 p-3">
-      <h4 class="mb-4">Raffa Mr.</h4>
-      <nav class="nav flex-column"> 
-        <NuxtLink class="nav-link text-black active text-primary" to="/admin/dashboard">Dashboard</NuxtLink>
-        <NuxtLink class="nav-link text-black" to="/admin/users">Users</NuxtLink>
-        <NuxtLink class="nav-link text-black" to="/admin/articles">Article</NuxtLink>
-        <NuxtLink class="nav-link text-black" to="/admin/category">Categories</NuxtLink>
-        <Button @click="handleLogout" class="btn btn-outline-danger mt-auto">Sign out</Button>
-      </nav>
-    </aside>
+    <div class="sidebar">
+        <div class="logo">
+            <h3 class="fw-bold">Raffa Mr.</h3>
+        </div>
+        <nav class="nav flex-column">
+            <NuxtLink to="/admin/dashboard" class="nav-link">
+                <i class="bi bi-house"></i> Dashboard
+            </NuxtLink>
+            <NuxtLink to="/admin/users" class="nav-link">
+              <i class="bi bi-people"></i> Users
+            </NuxtLink>
+            <NuxtLink to="/admin/articles" class="nav-link">
+                <i class="bi bi-book"></i> Articles
+            </NuxtLink>
+            <NuxtLink to="/admin/category" class="nav-link">
+                <i class="bi bi-card-list"></i> Categories
+            </NuxtLink>
+            <NuxtLink :to="`/admin/profile/${user_id}`" class="nav-link">
+              <i class="bi bi-person"></i> Profile
+            </NuxtLink>
+            <hr>
+            <button @click="handleLogout" class="btn btn-outline-danger">
+              <i class="bi bi-box-arrow-left"></i> Logout
+            </button>
+        </nav>
+    </div>
 </template>
 
 <script setup>
 import Cookies from 'js-cookie' // Pastikan library js-cookie sudah diinstal
+import { jwtDecode } from 'jwt-decode';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+
+const user_id = ref('');
+
+// Fungsi untuk mengambil token dari cookies
+const getTokenFromCookies = () => {
+  const token = document.cookie
+    .split('; ')
+    .find(row => row.startsWith('token='))
+    ?.split('=')[1];
+
+  return token;
+};
+
+// Fungsi untuk mendekode token JWT
+const decodeToken = () => {
+  try {
+    const token = getTokenFromCookies();
+    if (!token) throw new Error('Token tidak ditemukan. Harap login terlebih dahulu.');
+
+    const decoded = jwtDecode(token); // Dekode JWT
+    user_id.value = decoded.user_id; // Ambil email dari payload
+    console.log(decoded);
+  } catch (error) {
+    console.error('Error decoding token:', error);
+    errorMessage.value = 'Terjadi kesalahan saat memproses token. Harap login kembali.'; // Tampilkan pesan error
+  }
+};
 
 const handleLogout = () => {
   try {
@@ -29,4 +74,61 @@ const handleLogout = () => {
     alert('Logout gagal. Silakan coba lagi.')
   }
 }
+
+onMounted(() => {
+  decodeToken();
+});
 </script>
+
+<style scoped>
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #f8f9fa; /* Warna latar sidebar */
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    border-right: 1px solid #e0e0e0;
+}
+.sidebar .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    margin-left: 1rem;
+    margin-top: 1rem;
+}
+.sidebar .nav-item {
+    margin: 0.5rem 0;
+}
+.sidebar .nav-link {
+    color: #495057;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.sidebar .nav-link:hover {
+    background-color: #e9ecef;
+    border-radius: 5px;
+    color: #212529;
+}
+.sidebar .notification-badge {
+    background-color: #f03e3e;
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: bold;
+    border-radius: 50%;
+    padding: 0.25rem 0.5rem;
+}
+.sidebar .bottom-section {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.profile-img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+</style>

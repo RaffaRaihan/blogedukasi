@@ -35,6 +35,7 @@ func SetupRoutes(r *gin.Engine) {
 	{
 		// Admin User Management
 		adminRoutes.GET("/users", controllers.GetUsers)
+		adminRoutes.GET("/users/:id", controllers.GetUserByID)
 		adminRoutes.PUT("/users/:id", controllers.UpdateUser)
 		adminRoutes.DELETE("/users/:id", controllers.DeleteUser)
 		adminRoutes.POST("/users/:id/foto", controllers.UploadProfilePhoto)
@@ -42,6 +43,7 @@ func SetupRoutes(r *gin.Engine) {
 
 		// Admin Article Management
 		adminRoutes.GET("/articles", controllers.GetAll)
+		adminRoutes.GET("/articles/:id", controllers.GetArticleByID)
 		adminRoutes.POST("/articles", controllers.CreateArticle)
 		adminRoutes.PUT("/articles/:id", controllers.UpdateArticle)
 		adminRoutes.DELETE("/articles/:id", controllers.Delete)

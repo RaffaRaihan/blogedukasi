@@ -46,7 +46,7 @@
                 <div class="card-body">
                   <h6 class="text-muted">{{ articles.label }}</h6>
                   <h5 class="card-title">{{ articles.title }}</h5>
-                  <p class="card-text">{{ articles.content.substring(0, 100) }}...</p>
+                  <p class="card-text" v-html="getTruncatedContent(articles.content)"></p>
                   <p class="text-muted">{{ formatDate(articles.CreatedAt) }}</p>
                   <NuxtLink to="/login" class="btn btn-success btn-sm">Baca Selengkapnya</NuxtLink>
                 </div>
@@ -118,6 +118,13 @@ const totalPages = computed(() => {
 
 // Watch for changes in articles to update the paginated articles
 const paginatedArticles = computed(() => getPaginatedArticles());
+
+// Truncate konten artikel
+function getTruncatedContent(content) {
+  if (!content) return "";
+  const truncated = content.split(" ").slice(0, 20).join(" ") + "...";
+  return DOMPurify.sanitize(truncated); // Aman untuk dirender
+}
 
 // Panggil fetchArticles saat komponen dimuat
 onMounted(() => {

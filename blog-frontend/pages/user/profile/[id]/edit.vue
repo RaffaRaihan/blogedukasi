@@ -119,7 +119,7 @@ const updateUserProfile = async () => {
       const formData = new FormData();
       formData.append("foto", fotoFile.value);
 
-      await axios.post(
+      await axios.put(
         `http://localhost:8080/user/${route.params.id}/foto`,
         formData,
         {

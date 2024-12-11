@@ -13,7 +13,7 @@
               </div>
               <div class="carousel-inner">
                 <div class="carousel-item active">
-                  <img src="/assets/img/Inumaki.jpg" class="d-block w-100" alt="...">
+                  <img src="/assets/img/ssstik.io_1733559722482.jpeg" class="d-block w-100" alt="...">
                 </div>
                 <div class="carousel-item">
                   <img src="/assets/img/ssstik.io_1733559730444.jpeg" class="d-block w-100" alt="...">
@@ -28,35 +28,43 @@
             </div>
           </div>
 
-        <h5>Postingan Terbaru</h5>
-        <div class="row">
-          <div v-for="articlesItem in paginatedArticles" :key="articlesItem.ID" class="col-md-6 mb-3">
-            <div class="card">
-              <img :src="`http://localhost:8080/uploads/${articlesItem.file_name}`" class="card-img-top" alt="...">
-              <div class="card-body">
-                <h6 class="text-muted">{{ articlesItem.label }}</h6>
-                <h5 class="card-title">{{ articlesItem.title }}</h5>
-                <p class="card-text" v-html="articlesItem.content.substring(0, 30)"></p>
-                <p class="text-muted">{{ formatDate(articlesItem.CreatedAt) }}</p>
-                <NuxtLink :to="`/user/articles/${articlesItem.ID}`" class="btn btn-success btn-sm">Baca Selengkapnya</NuxtLink>
+          <div class="mb-3">
+            <input
+              class="form-control"
+              v-model="searchQuery"
+              placeholder="Cari artikel berdasarkan judul..."
+            />
+          </div>
+          <h5>Postingan Terbaru</h5>
+          <div class="row">
+            <div v-for="articlesItem in paginatedArticles" :key="articlesItem.ID" class="col-md-6 mb-3">
+              <div class="card">
+                <img :src="`http://localhost:8080/uploads/${articlesItem.file_name}`" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h6 class="text-muted">{{ articlesItem.label }}</h6>
+                  <h5 class="card-title">{{ articlesItem.title }}</h5>
+                  <p class="card-text" v-html="getTruncatedContent(articlesItem.content)"></p>
+                  <p class="text-muted">{{ formatDate(articlesItem.CreatedAt) }}</p>
+                  <NuxtLink :to="`/user/articles/${articlesItem.ID}`" class="btn btn-success btn-sm">Baca Selengkapnya</NuxtLink>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <!-- Paginations -->
-        <nav aria-label="Page navigation example">
-          <ul class="pagination justify-content-center">
-            <li class="page-item" :class="{'disabled': currentPage === 1}">
-              <a @click.prevent="changePage(currentPage - 1)" class="page-link">Previous</a>
-            </li>
-            <li v-for="page in totalPages" :key="page" class="page-item" :class="{'active': currentPage === page}">
-              <a @click.prevent="changePage(page)" class="page-link">{{ page }}</a>
-            </li>
-            <li class="page-item" :class="{'disabled': currentPage === totalPages}">
-              <a @click.prevent="changePage(currentPage + 1)" class="page-link">Next</a>
-            </li>
-          </ul>
-        </nav>
+          
+          <!-- Pagination -->
+          <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+              <li class="page-item" :class="{'disabled': currentPage === 1}">
+                <a @click.prevent="changePage(currentPage - 1)" class="page-link">Previous</a>
+              </li>
+              <li v-for="page in totalPages" :key="page" class="page-item" :class="{'active': currentPage === page}">
+                <a @click.prevent="changePage(page)" class="page-link">{{ page }}</a>
+              </li>
+              <li class="page-item" :class="{'disabled': currentPage === totalPages}">
+                <a @click.prevent="changePage(currentPage + 1)" class="page-link">Next</a>
+              </li>
+            </ul>
+          </nav>
       </div>
       <!-- Sidebar -->
       <LoginSidebar />
@@ -66,25 +74,24 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
-import { format } from 'date-fns';  // Import date-fns
-import { id } from 'date-fns/locale';  // Import locale for Indonesian
+import { format } from 'date-fns'; // Format tanggal
+import { id } from 'date-fns/locale'; // Locale Indonesia
+import DOMPurify from "dompurify";
 
-// Function to format the date
+// State untuk artikel dan pencarian
+const articles = ref([]);
+const searchQuery = ref('');
+const currentPage = ref(1); // Halaman saat ini
+const articlesPerPage = 4; // Jumlah artikel per halaman
+
+// Format tanggal
 const formatDate = (date) => {
   return format(new Date(date), 'dd MMMM yyyy', { locale: id });
 };
 
-definePageMeta({
-  middleware: 'auth',
-});
-
-const articles = ref([]);
-const currentPage = ref(1); // Track the current page
-const articlesPerPage = 4;  // Number of articles per page
-
-// Function to fetch articles from the backend
+// Ambil artikel dari backend
 const fetchArticles = async () => {
   try {
     const response = await axios.get('http://localhost:8080/articles');
@@ -94,27 +101,39 @@ const fetchArticles = async () => {
   }
 };
 
-// Calculate the paginated articles for the current page
+// Filter artikel berdasarkan pencarian
+const filteredArticles = computed(() => {
+  if (!searchQuery.value.trim()) return articles.value; // Tampilkan semua artikel jika pencarian kosong
+  return articles.value.filter((article) =>
+    article.title.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
+});
+
+// Pagination
+const totalPages = computed(() => {
+  return Math.ceil(filteredArticles.value.length / articlesPerPage);
+});
+
 const getPaginatedArticles = () => {
   const start = (currentPage.value - 1) * articlesPerPage;
-  return articles.value.slice(start, start + articlesPerPage);
+  return filteredArticles.value.slice(start, start + articlesPerPage);
 };
 
-// Function to change the current page
+const paginatedArticles = computed(() => getPaginatedArticles());
+
 const changePage = (page) => {
   if (page < 1 || page > totalPages.value) return;
   currentPage.value = page;
 };
 
-// Calculate total pages
-const totalPages = computed(() => {
-  return Math.ceil(articles.value.length / articlesPerPage);
-});
+// Truncate konten artikel
+function getTruncatedContent(content) {
+  if (!content) return "";
+  const truncated = content.split(" ").slice(0, 20).join(" ") + "...";
+  return DOMPurify.sanitize(truncated); // Aman untuk dirender
+}
 
-// Watch for changes in articles to update the paginated articles
-const paginatedArticles = computed(() => getPaginatedArticles());
-
-// Fetch articles when component is mounted
+// Fetch data saat komponen di-mount
 onMounted(() => {
   fetchArticles();
 });

@@ -21,9 +21,6 @@
           <label class="form-label fw-bold">Email:</label>
           <p class="form-control-plaintext">{{ users.email }}</p>
         </div>
-        <div class="text-center">
-          <button class="btn btn-warning" @click="navigateToEditProfile">Edit Profil</button>
-        </div>
       </div>
     </div>
   </div>
@@ -35,16 +32,12 @@ import axios from "axios";
 
 definePageMeta({
   middleware: 'auth',
+  requiresAdmin: true,
 });
 
 const users = ref([])
 const error = ref([])
 const router = useRouter();
-
-const navigateToEditProfile = () => {
-  router.push(`/user/profile/${route.params.id}/edit`);
-};
-
 
 // Fungsi untuk mengambil token dari cookies
 const getTokenFromCookies = () => {
@@ -61,7 +54,7 @@ const fetchUsers = async (id) => {
     const token = getTokenFromCookies();
     if (!token) throw new Error('Token tidak ditemukan. Harap login terlebih dahulu.');
 
-    const response = await axios.get(`http://localhost:8080/user/${id}`, {
+    const response = await axios.get(`http://localhost:8080/admin/users/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

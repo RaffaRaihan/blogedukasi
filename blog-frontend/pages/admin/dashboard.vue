@@ -7,7 +7,9 @@
       <!-- Main Content -->
       <main class="col-md-9 col-lg-10 p-4">
         <h2>Workspace admins</h2>
-        <button class="btn btn-outline-primary" @click="showModal = true">+ Add Admin</button>
+        <button class="btn btn-outline-primary" @click="showModal = true">
+          <i class="bi bi-person-plus"></i>  Add Admin
+        </button>
         
         <!-- Filters -->
         <div class="d-flex align-items-center mb-4 mt-4">
@@ -33,7 +35,7 @@
                 <h6 class="card-title">{{ user.name }}</h6>
                 <p class="text-muted">{{ user.email }}</p>
                 <p class="text-muted">{{ user.role }}</p>
-                <button @click="removeUser(user.ID)" class="btn btn-sm btn-danger">Remove</button>
+                <button @click="removeUser(user.ID)" class="btn btn-sm btn-danger"><i class="bi bi-person-dash"></i>  Remove</button>
               </div>
             </div>
           </div>
@@ -83,6 +85,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 definePageMeta({
   middleware: 'auth',

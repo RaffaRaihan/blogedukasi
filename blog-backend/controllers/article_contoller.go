@@ -228,9 +228,10 @@ func UploadFile(c *gin.Context) {
 	}
 
 	article.FileName = file.Filename
+	article.FilePath = filePath // path lengkap ke file
 	if err := config.GetDB().Save(&article).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": "Failed to update article with file name", "error": err.Error()})
-		return
+	    c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": "Failed to update article with file name", "error": err.Error()})
+	    return
 	}
 
 	c.JSON(http.StatusOK, gin.H{"status": "success", "message": "File uploaded successfully", "data": article})
