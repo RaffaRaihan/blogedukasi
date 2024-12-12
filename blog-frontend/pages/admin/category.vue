@@ -26,8 +26,8 @@
               <th scope="row">{{ index + 1 }}</th>
               <td>{{ category.name }}</td>
               <td>
-                <button class="btn btn-outline-warning btn-sm me-2" @click="openModal('edit', category)">Edit</button>
-                <button @click="removeCategory(category.ID)" class="btn btn-outline-danger btn-sm">Hapus</button>
+                <button class="btn btn-outline-warning btn-sm me-2" @click="openModal('edit', category)"><i class="bi bi-pencil"></i> Edit</button>
+                <button @click="removeCategory(category.ID)" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i> Hapus</button>
               </td>
             </tr>
           </tbody>
@@ -48,7 +48,7 @@
                 <label for="name" class="form-label">Name</label>
                 <input type="text" class="form-control" id="name" v-model="newCategory.name" required />
               </div>
-              <button type="submit" class="btn btn-primary">Add Categories</button>
+              <button type="submit" class="btn btn-outline-primary">+ Add Categories</button>
             </form>
           </div>
         </div>

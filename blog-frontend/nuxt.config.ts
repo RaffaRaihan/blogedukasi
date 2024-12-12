@@ -13,10 +13,12 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
-      titleTemplate: '%s - My Website',
       title: 'My Website',
       meta: [
         { name: 'description', content: 'Deskripsi default website' }
+      ],
+      script: [
+        { src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js' }
       ]
     }
   }

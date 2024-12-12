@@ -6,7 +6,7 @@
       <!-- Loading Indicator -->
       <Loading v-if="loadingArticles" />
       <ul v-for="article in popularArticles" :key="article.id" class="list-group" v-else>
-        <li class="list-group-item mb-3" style="color: #1D2B53;">
+        <li class="category-1 list-group-item mb-3" style="color: #1D2B53;">
           {{ article.title }} <br>
           <span class="text-muted" style="color: #1D2B53;">{{ formatDate(article.CreatedAt) }}</span><br>
           <NuxtLink :to="`/user/articles/${article.ID}`" class="btn btn-sm mt-2"><i class="bi bi-eye"></i>  Lihat</NuxtLink>
@@ -18,7 +18,7 @@
       <Loading v-if="loadingArticles" />
       <ul v-for="category in category" :key="category.id" class="list-group" v-else>
         <li class="category list-group-item mb-2">
-          <NuxtLink class="text-decoration-none" style="color: #1D2B53;" to="/">#{{ category.name }}</NuxtLink>
+          <NuxtLink class="text-decoration-none" style="color: #1D2B53;" :to="`/category/${category.ID}`">#{{ category.name }}</NuxtLink>
         </li>
       </ul>
     </div>
@@ -83,6 +83,7 @@ onMounted(() => {
   color: #1D2B53;
   background-color: #FF004D;
   border-color: #1D2B53;
+  font-family: "Ubuntu";
 }
 .btn:hover{
   color: #FF004D;
@@ -90,6 +91,13 @@ onMounted(() => {
   border-color: #FF004D;
 }
 
+.category{
+  border-color: #1D2B53;
+}
+
+.category-1{
+  border-color: #1D2B53;
+}
 .category:hover {
   background-color: #FF004D;
   color: #1D2B53;

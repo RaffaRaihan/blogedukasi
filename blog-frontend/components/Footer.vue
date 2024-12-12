@@ -8,7 +8,7 @@
         <ul class="list-unstyled mb-0">
           <li class="link"><p><i class="bi bi-envelope"></i>   raffamraihan580@gmail.com</p></li>
           <li class="link"><p><i class="bi bi-telephone"></i>   +62 812-2159-4441</p></li>
-          <li class="link"><p><i class="bi bi-house"></i>  Kp. Barupadang Desa. Cipada Kec. Cisarua Kab. Bandung Barat Prov. Jawa Barat</p></li>
+          <li class="link"><p><i class="bi bi-house"></i>  Kp.Barupadang Desa.Cipada Kec.Cisarua Kab.Bandung Barat Prov.Jawa Barat</p></li>
         </ul>
       </div>
       <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
@@ -23,10 +23,10 @@
       <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
         <h5 class="text-uppercase">My Sosmed</h5>
           <ul class="list-unstyled mb-0">
-            <li><NuxtLink to="/" class="link text-decoration-none"><i class="bi bi-facebook"></i>  Raffa Raihan</NuxtLink></li>
-            <li><NuxtLink to="/" class="link text-decoration-none"><i class="bi bi-instagram"></i>  raffa.mr_</NuxtLink></li>
-            <li><NuxtLink to="/" class="link text-decoration-none"><i class="bi bi-linkedin"></i>  Raffa Raihan</NuxtLink></li>
-            <li><NuxtLink to="/" class="link text-decoration-none"><i class="bi bi-github"></i>  RaffaRaihan</NuxtLink></li>
+            <li><NuxtLink to="/" target="_black" class="link text-decoration-none"><i class="bi bi-facebook"></i>  Raffa Raihan</NuxtLink></li>
+            <li><NuxtLink to="/" target="_black" class="link text-decoration-none"><i class="bi bi-instagram"></i>  raffa.mr_</NuxtLink></li>
+            <li><NuxtLink to="/" target="_black" class="link text-decoration-none"><i class="bi bi-linkedin"></i>  Raffa Raihan</NuxtLink></li>
+            <li><NuxtLink to="/" target="_black" class="link text-decoration-none"><i class="bi bi-github"></i>  RaffaRaihan</NuxtLink></li>
           </ul>
       </div>
     </div>

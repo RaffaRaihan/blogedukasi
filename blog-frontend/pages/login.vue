@@ -2,7 +2,8 @@
   <div class="min-vh-100 d-flex align-items-center justify-content-center bg-light">
     <div class="card shadow border-0" style="width: 100%; max-width: 400px;">
       <div class="card-body">
-        <h2 class="text-center fw-bold mb-4">Sign in</h2>
+        <div class="mt-1"><i class="bi bi-arrow-left" style="color: #FF004D;"></i><NuxtLink to="/" class="text-decoration-none" style="color: #FF004D;">  Back</NuxtLink></div>
+        <h2 class="text-center fw-bold mb-4" style="color: #1D2B53;">Sign in</h2>
         <form @submit.prevent="handleLogin">
           <!-- Input Email -->
           <div class="mb-3">
@@ -27,15 +28,14 @@
           <!-- Button Login -->
           <button
             type="submit"
-            class="btn btn-primary w-100"
-            style="background-color: #00A885; border-color: #4caf50;"
+            class="btn w-100"
           >
             SIGN IN
           </button>
         </form>
         <!-- Register Link -->
-        <p class="text-center text-muted mt-3">
-          No account? <a href="/register" class="text-success fw-bold">Sign up</a>
+        <p class="text-center mt-3" style="color: #1D2B53;">
+          No account? <a href="/register" class="link fw-bold">Sign up</a>
         </p>
       </div>
     </div>
@@ -73,3 +73,27 @@ const handleLogin = async () => {
   }
 }
 </script>
+
+<style scoped>
+.btn{
+  color: #1D2B53;
+  background-color: #FF004D;
+  border-color: #1D2B53;
+}
+.btn:hover{
+  color: #FF004D;
+  background-color: #1D2B53;
+  border-color: #FF004D;
+}
+.link{
+  color: #FF004D;
+  text-decoration: none;
+}
+.link:hover{
+  color: #1D2B53;
+  text-decoration: underline;
+}
+input::placeholder{
+  color: #1D2B53;
+}
+</style>

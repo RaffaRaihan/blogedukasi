@@ -82,46 +82,58 @@ onMounted(() => {
 
 <style scoped>
 .sidebar {
-    width: 250px;
-    height: 100vh;
-    background-color: #1D2B53; /* Warna latar sidebar */
-    display: flex;
-    flex-direction: column;
-    padding: 1rem;
-    border-right: 1px solid #e0e0e0;
+  width: 250px;
+  height: 100vh;
+  background-color: #1D2B53; /* Warna latar sidebar */
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  border-right: 1px solid #e0e0e0;
+  position: sticky;
+  top: 1px;
 }
 .sidebar .logo {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-    margin-left: 1rem;
-    margin-top: 1rem;
-    color: #f03e3e;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  margin-left: 1rem;
+  margin-top: 1rem;
+  color: #f03e3e;
 }
 .sidebar .nav-item {
-    margin: 0.5rem 0;
+  margin: 0.5rem 0;
 }
 .sidebar .nav-link {
-    color: #f03e3e;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  color: #f03e3e;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 .sidebar .nav-link:hover {
-    background-color: #f03e3e;
-    border-radius: 5px;
-    color: #212529;
+  background-color: #f03e3e;
+  border-radius: 5px;
+  color: #212529;
 }
 .sidebar .notification-badge {
-    background-color: #f03e3e;
-    color: #fff;
-    font-size: 0.75rem;
-    font-weight: bold;
-    border-radius: 50%;
-    padding: 0.25rem 0.5rem;
+  background-color: #f03e3e;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: bold;
+  border-radius: 50%;
+  padding: 0.25rem 0.5rem;
 }
 .sidebar hr{
   color: #f03e3e;
+}
+.btn {
+  color: #f03e3e;
+  border-color: #f03e3e;
+  background-color: #1D2B53;
+}
+.btn:hover{
+  color: #1D2B53;
+  border-color: #1D2B53;
+  background-color: #f03e3e;
 }
 </style>

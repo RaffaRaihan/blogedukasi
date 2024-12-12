@@ -153,7 +153,14 @@ const submitComment = async (articleId) => {
     alert("Komentar berhasil ditambahkan!");
   } catch (err) {
     console.error("Error submitting comment:", err);
-    alert("Gagal menambahkan komentar.");
+    const token = getTokenFromCookies();
+
+    if (!token) {
+        alert("Harap login terlebih dahulu.");
+        window.location.href = "/login"; // Ganti "/login" dengan path ke halaman login Anda.
+    } else {
+        alert("Gagal menambahkan komentar.");
+    }
   }
 };
 

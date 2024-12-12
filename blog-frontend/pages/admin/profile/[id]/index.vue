@@ -1,7 +1,7 @@
 <template>
   <div class="container mt-5">
     <NuxtLink to="/admin/dashboard" class="text-decoration-none" style="color: #1D2B53;"><i class="bi bi-arrow-left"></i>  Back</NuxtLink>
-    <div class="card mx-auto" style="max-width: 600px;">
+    <div class="card mx-auto" style="max-width: 400px;">
       <div class="card-header" style="background-color: #1D2B53; color: #FF004D;">
         <h3 class="mb-0">Profil Pengguna</h3>
       </div>

@@ -21,6 +21,7 @@
             v-model="selectedCategory" 
             @change="filterArticles"
           >
+            <option disabled>Pilih Kategori</option>
             <option value="">Semua Kategori</option>
             <option v-for="category in categories" :key="category.id" :value="category.ID">
               {{ category.name }}
@@ -47,7 +48,7 @@
               />
               <div class="card-body">
                 <h5 class="card-title">{{ article.title }}</h5>
-                <p class="card-text">{{ article.content.substring(0, 100)}}...</p>
+                <p class="card-text" v-html="getTruncatedContent(article.content)"></p>
                 <button class="btn btn-outline-warning" @click="navigateToEditArticle(article.ID)"><i class="bi bi-pencil"></i></button>
                 <button @click="removeArticles(article.ID)"  class="btn btn-outline-danger ms-2"><i class="bi bi-trash"></i></button>
               </div>
@@ -63,6 +64,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
+import DOMPurify from "dompurify";
 
 definePageMeta({
   middleware: 'auth',
@@ -159,6 +161,13 @@ const navigateToAddArticle = () => {
 const navigateToEditArticle = (id) => {
   router.push(`/admin/articles/edit/${id}`);
 };
+
+// Truncate konten artikel
+function getTruncatedContent(content) {
+  if (!content) return "";
+  const truncated = content.split(" ").slice(0, 50).join(" ") + "...";
+  return DOMPurify.sanitize(truncated); // Aman untuk dirender
+}
 
 onMounted(() => {
   fetchArticles();

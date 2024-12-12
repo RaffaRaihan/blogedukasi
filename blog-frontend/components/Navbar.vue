@@ -50,6 +50,9 @@ const isLoggedIn = ref(false);
 <style scoped>
 .navbar {
   background-color: #1D2B53; /* Warna gelap */
+  position: sticky;
+  top: 1px;
+  z-index: 2;
 }
 .navbar .nav-link {
   color: #FF004D; /* Warna teks */
@@ -87,9 +90,5 @@ const isLoggedIn = ref(false);
 .dropdown-item:hover{
   color: #1D2B53;
   background-color: #FF004D;
-}
-.input{
-  color: #FF004D;
-  border-color: #FF004D;
 }
 </style>

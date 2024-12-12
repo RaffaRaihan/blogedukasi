@@ -2,9 +2,9 @@
   <div class="container-fluid">
     <div class="row">
       <!-- Sidebar -->
-      <AdminSidebar :is-collapsed="isCollapsed" />
+      <AdminSidebar />
       <!-- Main Content -->
-      <main :class="['p-4', isCollapsed ? 'col-md-12' : 'col-md-9 col-lg-10']">
+      <main class="p-4 col-md-12 col-md-9 col-lg-10">
         <h2>Workspace admins</h2>
 
         <!-- Filters -->
@@ -34,7 +34,7 @@
                 <h6 class="card-title">{{ user.name }}</h6>
                 <p class="text-muted">{{ user.email }}</p>
                 <p class="text-muted">{{ user.role }}</p>
-                <button @click="removeUser(user.ID)" class="btn btn-sm btn-danger"><i class="bi bi-person-dash"></i> Remove</button>
+                <button @click="removeUser(user.ID)" class="btn btn-sm btn-danger"><i class="bi bi-person-dash"></i>  Remove</button>
               </div>
             </div>
           </div>
@@ -52,7 +52,6 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 const users = ref([]);
 const searchQuery = ref('');
 const selectedRole = ref('');
-const isCollapsed = ref(false);
 const loadingUsers = ref(true);
 
 const getTokenFromCookies = () => {
