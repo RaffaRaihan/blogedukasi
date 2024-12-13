@@ -12,7 +12,7 @@
               <NuxtLink to="/" v-else>Home</NuxtLink>
             </li>
             <li class="breadcrumb-item">
-              <NuxtLink :to="`/categories/${articles.category.ID}`">{{ articles.category.name }}</NuxtLink>
+              <NuxtLink :to="`/category/${articles.category.ID}`">{{ articles.category.name }}</NuxtLink>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
               {{ articles.title }}

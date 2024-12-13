@@ -1,10 +1,16 @@
 <template>
     <LoginNavbar v-if="isLoggedIn"/>
       <Navbar v-else />
-      <div class="container mt-5">
-        <h1 class="mb-4">About Us</h1>
-        <p>Selamat datang di website kami! Kami menyediakan artikel-artikel berkualitas yang dirancang untuk membantu Anda mendapatkan informasi yang akurat dan bermanfaat.</p>
-        <p>Kami berdedikasi untuk menghadirkan konten terbaik bagi pembaca kami. Jika Anda memiliki pertanyaan atau masukan, jangan ragu untuk menghubungi kami.</p>
+      <div class="container mt-lg-4 mb-4">
+        <div class="row">
+          <div class="col-lg-6 col-md-8 col-sm-12">
+            <h1>About Us</h1>
+            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sit odio dolores magnam molestias reprehenderit in tempore harum doloribus dolorem, mollitia similique! Aliquam modi, dicta omnis cumque totam voluptatem autem odio?</p>
+          </div>
+          <div class="col-lg-6">
+            <img src="../assets/img/freelancer_web_developer_vector.jpg" class="img-fluid" alt="img-about">
+          </div>
+        </div>
       </div>
     <Footer />
 </template>
