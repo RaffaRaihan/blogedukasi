@@ -49,6 +49,11 @@ import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
+definePageMeta({
+  middleware: 'auth',
+  requiresAdmin: true,
+});
+
 const users = ref([]);
 const searchQuery = ref('');
 const selectedRole = ref('');
