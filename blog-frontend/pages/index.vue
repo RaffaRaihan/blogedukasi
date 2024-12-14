@@ -5,19 +5,24 @@
       <div class="col-lg-8">
         <!-- Carousel -->
         <div class="card mb-4">
-          <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+          <div
+            id="carouselExampleSlidesOnly"
+            class="carousel slide"
+            data-bs-ride="carousel" 
+            data-bs-interval="3000"
+          >
             <div class="carousel-inner">
               <div class="carousel-item active">
-                <img src="/assets/img/ssstik.io_1733559735154.jpeg" class="d-block w-100" alt="...">
+                <img src="/assets/img/Shinobu.jpg" class="d-block w-100" alt="Shinobu">
               </div>
               <div class="carousel-item">
-                <img src="/assets/img/ssstik.io_1733559730444.jpeg" class="d-block w-100" alt="...">
+                <img src="/assets/img/Gojo-lanscape.jpeg" class="d-block w-100" alt="Gojo">
               </div>
               <div class="carousel-item">
-                <img src="/assets/img/ssstik.io_1733559725987.jpeg" class="d-block w-100" alt="...">
+                <img src="/assets/img/tanjiro.jpeg" class="d-block w-100" alt="Tanjiro">
               </div>
               <div class="carousel-item">
-                <img src="/assets/img/ssstik.io_1733559722482.jpeg" class="d-block w-100" alt="...">
+                <img src="/assets/img/Tanjiro-2.jpeg" class="d-block w-100" alt="Tanjiro 2">
               </div>
             </div>
           </div>

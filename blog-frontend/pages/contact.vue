@@ -16,7 +16,7 @@
           <label for="message" class="form-label">Message</label>
           <textarea class="form-control" id="message" rows="4" placeholder="Your Message"></textarea>
         </div>
-        <button type="submit" class="btn btn-primary">Send</button>
+        <button type="submit" class="btn">Send</button>
       </form>
     </div>
     <Footer />
@@ -38,3 +38,16 @@ const getTokenFromCookies = () => {
   return token;
 };
 </script>
+
+<style scoped>
+.btn{
+  color: #1D2B53;
+  background-color: #FF004D;
+  border-color: #1D2B53;
+}
+.btn:hover{
+  color: #FF004D;
+  background-color: #1D2B53;
+  border-color: #FF004D;
+}
+</style>

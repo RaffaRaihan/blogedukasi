@@ -9,16 +9,16 @@
           <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
               <div class="carousel-item active">
-                <img src="/assets/img/ssstik.io_1733559735154.jpeg" class="d-block w-100" alt="...">
+                <img src="/assets/img/Shinobu.jpg" class="d-block w-100" alt="...">
               </div>
               <div class="carousel-item">
-                <img src="/assets/img/ssstik.io_1733559730444.jpeg" class="d-block w-100" alt="...">
+                <img src="/assets/img/Gojo-lanscape.jpeg" class="d-block w-100" alt="...">
               </div>
               <div class="carousel-item">
-                <img src="/assets/img/ssstik.io_1733559725987.jpeg" class="d-block w-100" alt="...">
+                <img src="/assets/img/tanjiro.jpeg" class="d-block w-100" alt="...">
               </div>
               <div class="carousel-item">
-                <img src="/assets/img/ssstik.io_1733559722482.jpeg" class="d-block w-100" alt="...">
+                <img src="/assets/img/Tanjiro-2.jpeg" class="d-block w-100" alt="...">
               </div>
             </div>
           </div>

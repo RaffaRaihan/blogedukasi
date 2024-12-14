@@ -34,7 +34,7 @@
                 <h6 class="card-title">{{ user.name }}</h6>
                 <p class="text-muted">{{ user.email }}</p>
                 <p class="text-muted">{{ user.role }}</p>
-                <button @click="removeUser(user.ID)" class="btn btn-sm btn-danger"><i class="bi bi-person-dash"></i>  Remove</button>
+                <button @click="removeUser(user.ID)" class="btn btn-outline-danger"><i class="bi bi-person-dash"></i>  Remove</button>
               </div>
             </div>
           </div>

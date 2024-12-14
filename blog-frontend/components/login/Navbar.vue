@@ -19,16 +19,29 @@
                     </li>
                 </ul>
                 <div class="dropdown ms-2" v-if="isLoggedIn">
-                    <a class="d-flex align-items-center text-decoration-none text-white" href="#" role="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                      <span class="me-2" style="color: #FF004D;"><i class="bi bi-chevron-down"></i>  {{ users.name }}</span>
-                      <img :src="`http://localhost:8080/uploads/${users.foto}`" alt="Profile" class="profile-img">
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                        <li><NuxtLink class="dropdown-item" :to="`/user/profile/${user_id}`">Profile</NuxtLink></li>
-                        <li><a class="dropdown-item" href="#">Settings</a></li>
-                        <li><hr class="hr"></li>
-                        <li><button class="dropdown-item" @click="handleLogout">Logout</button></li>
-                    </ul>
+                  <a
+                    class="d-flex align-items-center text-decoration-none text-white"
+                    href="#"
+                    role="button"
+                    id="profileDropdown"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    <span class="me-2" style="color: #FF004D;">
+                      <i class="bi bi-chevron-down"></i> {{ users.name }}
+                    </span>
+                    <img
+                      :src="`http://localhost:8080/uploads/${users.foto}`"
+                      alt="Profile"
+                      class="profile-img"
+                    />
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                    <li><NuxtLink class="dropdown-item" :to="`/user/profile/${user_id}`">Profile</NuxtLink></li>
+                    <li><a class="dropdown-item" href="#">Settings</a></li>
+                    <li><hr class="hr" /></li>
+                    <li><button class="dropdown-item" @click="handleLogout">Logout</button></li>
+                  </ul>
                 </div>
                 <li class="nav-link" v-else><NuxtLink class="btn" to="/login">Login</NuxtLink></li>
             </div>

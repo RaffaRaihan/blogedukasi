@@ -82,6 +82,7 @@ const editArticle = ref({
   content: '',
   category_id: null,
   author: '',
+  file: null, // Tambahkan properti file untuk menyimpan file gambar
 });
 const categories = ref([]);
 const route = useRoute();
@@ -108,7 +109,15 @@ const fetchArticle = async () => {
         },
       }
     );
-    editArticle.value = response.data.data;
+    const articleData = response.data.data;
+    editArticle.value = {
+      label: articleData.label,
+      title: articleData.title,
+      content: articleData.content,
+      category_id: articleData.category_id,
+      author: articleData.author,
+      file: null, // Reset file karena ini hanya untuk upload baru
+    };
   } catch (error) {
     console.error('Error fetching article:', error);
   }
@@ -141,9 +150,17 @@ const updateArticle = async () => {
     console.log('Artikel yang akan di-update:', editArticle.value);
 
     // Pertama, update artikel
+    const updatedArticle = {
+      label: editArticle.value.label,
+      title: editArticle.value.title,
+      content: editArticle.value.content,
+      category_id: editArticle.value.category_id,
+      author: editArticle.value.author,
+    };
+
     await axios.put(
       `http://localhost:8080/admin/articles/${articleId}`,
-      editArticle.value,
+      updatedArticle,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -152,7 +169,7 @@ const updateArticle = async () => {
     );
 
     // Jika ada file gambar yang diubah, upload gambar tersebut
-    if (editArticle.value.file_name) {
+    if (editArticle.value.file) {
       await uploadImage();
     }
 
@@ -196,5 +213,4 @@ onMounted(() => {
   fetchCategories();
   fetchArticle();
 });
-
 </script>

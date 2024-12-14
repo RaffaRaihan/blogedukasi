@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useNuxtApp } from '#app';
 
 // Deklarasikan props
@@ -21,7 +21,7 @@ onMounted(() => {
   const { $quill } = useNuxtApp();
 
   if (editorContainer.value) {
-    // Inisialisasi editor Quill
+    // Inisialisasi editor Quill jika belum ada
     editor = new $quill(editorContainer.value, {
       placeholder: 'Masukan Content',
       theme: 'snow',
@@ -38,7 +38,6 @@ onMounted(() => {
     // Gunakan props untuk mengatur nilai awal editor
     if (props.modelValue) {
       editor.clipboard.dangerouslyPasteHTML(props.modelValue);
-      console.log('Model Value:', props.modelValue);
     }
 
     // Emit perubahan konten ke parent
@@ -48,12 +47,20 @@ onMounted(() => {
     });
   }
 });
-</script>
 
+// Pantau perubahan pada modelValue dan perbarui konten editor jika perlu
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    if (editor && newValue !== editor.root.innerHTML) {
+      editor.clipboard.dangerouslyPasteHTML(newValue || '');
+    }
+  }
+);
+</script>
 
 <style scoped>
 .quill-editor {
   height: 300px;
 }
 </style>
-  
