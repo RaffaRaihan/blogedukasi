@@ -6,13 +6,13 @@
         <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
           <h5 class="text-uppercase">Contact</h5>
           <ul class="list-unstyled mb-0">
-            <li class="link">
+            <li>
               <p><i class="bi bi-envelope"></i> raffamraihan580@gmail.com</p>
             </li>
-            <li class="link">
+            <li>
               <p><i class="bi bi-telephone"></i> +62 812-2159-4441</p>
             </li>
-            <li class="link">
+            <li>
               <p>
                 <i class="bi bi-house"></i> Kp.Barupadang Desa.Cipada Kec.Cisarua Kab.Bandung Barat Prov.Jawa Barat
               </p>
