@@ -133,9 +133,9 @@ const submitComment = async (articleId) => {
     const response = await axios.post(
       `http://localhost:8080/user/articles/${articleId}/comments`,
       {
-        content: newComment.value, // Mengambil isi komentar
+        content: newComment.value,
         article_id: articleId,
-        user_id: user_id.value, // Pastikan mengambil nilai user_id yang benar
+        user_id: user_id.value,
       },
       {
         headers: {
@@ -144,8 +144,9 @@ const submitComment = async (articleId) => {
       }
     );
 
-    // Tambahkan komentar baru ke daftar komentar
-    comments.value.push(response.data);
+    // Pastikan respons mencakup data pengguna
+    const newCommentData = response.data; // Pastikan data pengguna ada di respons
+    comments.value.push(newCommentData); // Tambahkan komentar baru dengan data pengguna
 
     // Reset form komentar
     newComment.value = "";
@@ -156,13 +157,14 @@ const submitComment = async (articleId) => {
     const token = getTokenFromCookies();
 
     if (!token) {
-        alert("Harap login terlebih dahulu.");
-        window.location.href = "/login"; // Ganti "/login" dengan path ke halaman login Anda.
+      alert("Harap login terlebih dahulu.");
+      window.location.href = "/login"; // Ganti "/login" dengan path ke halaman login Anda.
     } else {
-        alert("Gagal menambahkan komentar.");
+      alert("Gagal menambahkan komentar.");
     }
   }
 };
+
 
 const route = useRoute();
 onMounted(() => {

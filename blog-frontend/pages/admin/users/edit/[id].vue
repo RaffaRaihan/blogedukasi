@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container mt-5">
     <h2>Edit User</h2>
     <form @submit.prevent="updateUser">
       <div class="mb-3">
@@ -17,6 +17,15 @@
           <option value="admin">Admin</option>
         </select>
       </div>
+      <div class="mb-3">
+        <label for="editImage" class="form-label">Foto Profile</label>
+        <input
+          type="file"
+          id="editImage"
+          class="form-control"
+          @change="handleImageChange"
+        />
+      </div>
       <button type="submit" class="btn btn-primary">Save Changes</button>
     </form>
   </div>
@@ -29,6 +38,7 @@ import axios from 'axios';
 
 const router = useRouter();
 const route = useRoute();
+const userId = route.params.id;
 
 const editUser = ref({
   id: null,
@@ -37,6 +47,8 @@ const editUser = ref({
   role: '',
 });
 
+const profileImage = ref(null);
+
 const fetchUser = async () => {
   try {
     const token = document.cookie
@@ -44,7 +56,7 @@ const fetchUser = async () => {
       .find(row => row.startsWith('token='))
       ?.split('=')[1];
 
-    const response = await axios.get(`http://localhost:8080/admin/users/${route.params.id}`, {
+    const response = await axios.get(`http://localhost:8080/admin/users/${userId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -63,15 +75,61 @@ const updateUser = async () => {
       .find(row => row.startsWith('token='))
       ?.split('=')[1];
 
-    await axios.put(`http://localhost:8080/admin/users/${editUser.value.id}`, editUser.value, {
+    await axios.put(`http://localhost:8080/admin/users/${userId}`, {
+      name: editUser.value.name,
+      email: editUser.value.email,
+      role: editUser.value.role,
+    }, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
 
-    router.push('/'); // Kembali ke halaman utama setelah berhasil
+    if (profileImage.value){
+      await uploadImage();
+    }
+
+    alert('Berhasil Update user');
+    router.push('/admin/users');
   } catch (error) {
     console.error('Error updating user:', error);
+  }
+};
+
+const handleImageChange = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    profileImage.value = file;
+  }
+};
+
+const uploadImage = async () => {
+  if (!profileImage.value) {
+    alert('Silakan pilih gambar terlebih dahulu.');
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('foto', profileImage.value);
+
+  try {
+    const token = document.cookie
+      .split('; ')
+      .find(row => row.startsWith('token='))
+      ?.split('=')[1];
+
+    const response = await axios.put(`http://localhost:8080/admin/users/${userId}/foto`, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    console.log(response.data)
+    alert('Gambar berhasil diunggah.');
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    alert('Gagal mengunggah gambar.');
   }
 };
 

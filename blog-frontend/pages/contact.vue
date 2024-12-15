@@ -2,7 +2,7 @@
     <LoginNavbar v-if="isLoggedIn"/>
     <Navbar v-else />
     <div class="container mt-5 mb-5">
-      <h1 class="mb-4">Contact Us</h1>
+      <h1 class="mb-4" style="color: #1D2B53;">Contact Us</h1>
       <form>
         <div class="mb-3">
           <label for="name" class="form-label">Name</label>
@@ -49,5 +49,16 @@ const getTokenFromCookies = () => {
   color: #FF004D;
   background-color: #1D2B53;
   border-color: #FF004D;
+}
+label{
+  color: #1D2B53;;
+}
+
+input::placeholder{
+  color: #FF004D;
+}
+
+textarea::placeholder{
+  color: #FF004D;
 }
 </style>

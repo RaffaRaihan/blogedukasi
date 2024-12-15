@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container mt-5">
     <h2>Add New User</h2>
     <form @submit.prevent="addUser">
       <div class="mb-3">
@@ -80,7 +80,11 @@ const addUser = async () => {
       await handleImageUpload(file, newProfileId.value);
     }
     
-    alert('Berhail menambah user');
+    if (role == "admin"){
+      alert('Berhail menambah admin');  
+    } else {
+      alert('Berhail menambah user');
+    }
     router.push('/admin/users'); // Kembali ke halaman utama setelah berhasil
   } catch (error) {
     console.error('Error adding user:', error);

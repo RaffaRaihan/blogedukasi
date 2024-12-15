@@ -1,8 +1,9 @@
 <template>
   <div class="container mt-5">
+    <NuxtLink :to="`/user/profile/${user_id}`" class="text-decoration-none" style="color: #1D2B53;"><i class="bi bi-arrow-left"></i>  Back</NuxtLink>
     <div class="card mx-auto" style="max-width: 600px;">
-      <div class="card-header bg-primary text-white">
-        <h3 class="mb-0">Edit Profil</h3>
+      <div class="card-header" style="background-color: #1D2B53;">
+        <h3 class="mb-0" style="color: #FF004D;">Edit Profil</h3>
       </div>
       <div class="card-body">
         <form @submit.prevent="updateUserProfile">
@@ -41,9 +42,9 @@
 
           <!-- Tombol -->
           <div class="text-center">
-            <button type="submit" class="btn btn-success">Simpan Perubahan</button>
-            <button type="button" class="btn btn-secondary ms-2" @click="cancelEdit">
-              Batal
+            <button type="submit" class="btn btn-outline-success"><i class="bi bi-check2-circle"></i>  Simpan Perubahan</button>
+            <button type="button" class="btn btn-outline-danger ms-2" @click="cancelEdit">
+              <i class="bi bi-x-circle"></i>  Batal
             </button>
           </div>
         </form>
@@ -67,6 +68,7 @@ const user = ref({
 });
 const fotoFile = ref(null);
 const error = ref(null);
+const user_id = route.params.id;
 
 // Fungsi untuk mendapatkan token
 const getTokenFromCookies = () => {
