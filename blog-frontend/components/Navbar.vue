@@ -49,16 +49,17 @@ const isLoggedIn = ref(false);
 
 <style scoped>
 .navbar {
-  background-color: #1D2B53; /* Warna gelap */
+  background-color: #1D2B53;
   position: sticky;
-  top: 1px;
+  top: 0px;
   z-index: 2;
 }
 .navbar .nav-link {
-  color: #FF004D; /* Warna teks */
+  color: #F9F6E6;
 }
 .navbar .nav-link:hover {
-  color: #FFFFFF; /* Warna teks saat hover */
+  color: #FF004D;
+  transition: 0.3s;
 }
 .profile-img {
   width: 30px;
@@ -66,29 +67,32 @@ const isLoggedIn = ref(false);
   border-radius: 50%;
 }
 .logo{
-  color: #FF004D;
+  color: #F9F6E6;
 }
 .logo:hover{
-  color: #FFFFFF;
+  color: #FF004D;
+  transition: 0.3s;
 }
 .btn{
   color: #1D2B53;
-  background-color: #FF004D;
+  background-color: #F9F6E6;
   border-color: #1D2B53;
 }
 .btn:hover{
-  color: #FF004D;
+  color: #F9F6E6;
   background-color: #1D2B53;
-  border-color: #FF004D;
+  border-color: #F9F6E6;
+  transition: 0.3s;
 }
 .dropdown-menu{
   background: #1D2B53;
 }
 .dropdown-item {
-  color: #FF004D;
+  color: #F9F6E6;
 }
 .dropdown-item:hover{
   color: #1D2B53;
-  background-color: #FF004D;
+  background-color: #F9F6E6;
+  transition: 0.3s;
 }
 </style>

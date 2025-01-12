@@ -27,7 +27,7 @@
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
-                    <span class="me-2" style="color: #FF004D;">
+                    <span class="me-2" style="color: #F9F6E6;">
                       <i class="bi bi-chevron-down"></i> {{ users.name }}
                     </span>
                     <img
@@ -137,7 +137,7 @@ onMounted(() => {
   background-color: #1D2B53; /* Warna gelap */
 }
 .navbar .nav-link {
-  color: #FF004D; /* Warna teks */
+  color: #F9F6E6; /* Warna teks */
 }
 .navbar .nav-link:hover {
   color: #FFFFFF; /* Warna teks saat hover */
@@ -148,36 +148,36 @@ onMounted(() => {
   border-radius: 50%;
 }
 .logo{
-  color: #FF004D;
+  color: #F9F6E6;
 }
 .logo:hover{
   color: #FFFFFF;
 }
 .btn{
   color: #1D2B53;
-  background-color: #FF004D;
+  background-color: #F9F6E6;
   border-color: #1D2B53;
 }
 .btn:hover{
-  color: #FF004D;
+  color: #F9F6E6;
   background-color: #1D2B53;
-  border-color: #FF004D;
+  border-color: #F9F6E6;
 }
 .dropdown-menu{
   background: #1D2B53;
 }
 .dropdown-item {
-  color: #FF004D;
+  color: #F9F6E6;
 }
 .dropdown-item:hover{
   color: #1D2B53;
-  background-color: #FF004D;
+  background-color: #F9F6E6;
 }
 .input{
-  color: #FF004D;
-  border-color: #FF004D;
+  color: #F9F6E6;
+  border-color: #F9F6E6;
 }
 .hr{
-  color: #FF004D;
+  color: #F9F6E6;
 }
 </style>

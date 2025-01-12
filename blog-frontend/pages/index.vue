@@ -5,24 +5,19 @@
       <div class="col-lg-8">
         <!-- Carousel -->
         <div class="card mb-4">
-          <div
-            id="carouselExampleSlidesOnly"
-            class="carousel slide"
-            data-bs-ride="carousel" 
-            data-bs-interval="3000"
-          >
+          <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
             <div class="carousel-inner">
               <div class="carousel-item active">
-                <img src="/assets/img/Shinobu.jpg" class="d-block w-100" alt="Shinobu">
+                <img src="/assets/img/Shinobu.jpg" class="d-block w-100" alt="...">
               </div>
               <div class="carousel-item">
-                <img src="/assets/img/Gojo-lanscape.jpeg" class="d-block w-100" alt="Gojo">
+                <img src="/assets/img/Gojo-lanscape.jpeg" class="d-block w-100" alt="...">
               </div>
               <div class="carousel-item">
-                <img src="/assets/img/tanjiro.jpeg" class="d-block w-100" alt="Tanjiro">
+                <img src="/assets/img/tanjiro.jpeg" class="d-block w-100" alt="...">
               </div>
               <div class="carousel-item">
-                <img src="/assets/img/Tanjiro-2.jpeg" class="d-block w-100" alt="Tanjiro 2">
+                <img src="/assets/img/Tanjiro-2.jpeg" class="d-block w-100" alt="...">
               </div>
             </div>
           </div>
@@ -172,9 +167,8 @@ body {
   border-color: #1D2B53;
 }
 .btn:hover{
-  color: #FF004D;
+  color: #F9F6E6;
   background-color: #1D2B53;
-  border-color: #FF004D;
 }
 .brutalist-container {
   position: relative;

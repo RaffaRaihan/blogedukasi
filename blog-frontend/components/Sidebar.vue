@@ -13,13 +13,21 @@
         </li>
       </ul>
     </div>
-    <div>
-      <h5>Kategori</h5>
+    <div class="mb-4">
+      <h5 style="color: #1D2B53;">Kategori</h5>
       <Loading v-if="loadingArticles" />
       <ul v-for="category in category" :key="category.id" class="list-group" v-else>
         <li class="category list-group-item mb-2">
           <NuxtLink class="text-decoration-none" style="color: #1D2B53;" :to="`/category/${category.ID}`">#{{ category.name }}</NuxtLink>
         </li>
+      </ul>
+    </div>
+    <div class="mb-4">
+      <h5 style="color: #1D2B53;">Service</h5>
+      <ul class="list-unstyled d-flex jutify-content-between">
+        <li class="service me-2"><NuxtLink class="text-decoration-none" style="color: #1D2B53;" to="/">Hubungi Admin</NuxtLink></li>
+        <li class="service me-2"><NuxtLink class="text-decoration-none" style="color: #1D2B53;" to="/">Laporkan Bug</NuxtLink></li>
+        <li class="service me-2"><NuxtLink class="text-decoration-none" style="color: #1D2B53;" to="/">Kritik Dan Saran</NuxtLink></li>
       </ul>
     </div>
   </div>
@@ -85,9 +93,9 @@ onMounted(() => {
   border-color: #1D2B53;
 }
 .btn:hover{
-  color: #FF004D;
+  color: #F9F6E6;
   background-color: #1D2B53;
-  border-color: #FF004D;
+  transition: 0.3s;
 }
 
 .category{
@@ -100,5 +108,10 @@ onMounted(() => {
 .category:hover {
   background-color: #FF004D;
   color: #1D2B53;
+  transition: 0.3s;
+}
+.service:hover{
+  text-decoration: underline;
+  transition: 0.3s;
 }
 </style>
