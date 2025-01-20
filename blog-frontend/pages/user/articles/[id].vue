@@ -194,8 +194,8 @@ onMounted(() => {
   border-color: #1D2B53;
 }
 .btn:hover{
-  color: #FF004D;
+  color: #F9F6E6;
   background-color: #1D2B53;
-  border-color: #FF004D;
+  transition: 0.3s;
 }
 </style>

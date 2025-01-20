@@ -5,22 +5,16 @@
             <h3 class="fw-bold">Raffa Mr.</h3>
         </div>
         <nav class="nav flex-column">
-            <NuxtLink to="/admin/dashboard" class="nav-link">
+            <NuxtLink to="/author/dashboard" class="nav-link">
                 <i class="bi bi-house"></i> Dashboard
             </NuxtLink>
-            <NuxtLink to="/admin/users" class="nav-link">
-              <i class="bi bi-people"></i> Users
-            </NuxtLink>
-            <NuxtLink to="/admin/articles" class="nav-link">
+            <NuxtLink to="/author/articles" class="nav-link">
                 <i class="bi bi-book"></i> Articles
             </NuxtLink>
-            <NuxtLink to="/admin/category" class="nav-link">
+            <NuxtLink to="/author/category" class="nav-link">
                 <i class="bi bi-card-list"></i> Categories
             </NuxtLink>
-            <NuxtLink to="/admin/message" class="nav-link">
-                <i class="bi bi-envelope"></i> Message
-            </NuxtLink>
-            <NuxtLink :to="`/admin/profile/${user_id}`" class="nav-link">
+            <NuxtLink :to="`/author/profile/${user_id}`" class="nav-link">
               <i class="bi bi-person"></i> Profile
             </NuxtLink>
             <hr>

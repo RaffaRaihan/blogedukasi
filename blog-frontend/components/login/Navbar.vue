@@ -37,10 +37,10 @@
                     />
                   </a>
                   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                    <li><NuxtLink class="dropdown-item" :to="`/user/profile/${user_id}`">Profile</NuxtLink></li>
-                    <li><a class="dropdown-item" href="#">Settings</a></li>
-                    <li><hr class="hr" /></li>
-                    <li><button class="dropdown-item" @click="handleLogout">Logout</button></li>
+                    <li><NuxtLink class="dropdown-item" :to="`/user/profile/${user_id}`"><i class="bi bi-person"></i>  Profile</NuxtLink></li>
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i>  Settings</a></li>
+                    <li><hr class="hr"/></li>
+                    <li><button class="dropdown-item" @click="handleLogout"><i class="bi bi-box-arrow-left"></i>  Logout</button></li>
                   </ul>
                 </div>
                 <li class="nav-link" v-else><NuxtLink class="btn" to="/login">Login</NuxtLink></li>
@@ -135,12 +135,15 @@ onMounted(() => {
 <style scoped>
 .navbar {
   background-color: #1D2B53; /* Warna gelap */
+  position: sticky;
+  top: 0px;
+  z-index: 2;
 }
 .navbar .nav-link {
   color: #F9F6E6; /* Warna teks */
 }
 .navbar .nav-link:hover {
-  color: #FFFFFF; /* Warna teks saat hover */
+  color: #FF004D; /* Warna teks saat hover */
 }
 .profile-img {
   width: 30px;
@@ -151,7 +154,7 @@ onMounted(() => {
   color: #F9F6E6;
 }
 .logo:hover{
-  color: #FFFFFF;
+  color: #FF004D;
 }
 .btn{
   color: #1D2B53;
@@ -172,6 +175,7 @@ onMounted(() => {
 .dropdown-item:hover{
   color: #1D2B53;
   background-color: #F9F6E6;
+  transition: 0.3s;
 }
 .input{
   color: #F9F6E6;

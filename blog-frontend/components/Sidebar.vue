@@ -25,9 +25,9 @@
     <div class="mb-4">
       <h5 style="color: #1D2B53;">Service</h5>
       <ul class="list-unstyled d-flex jutify-content-between">
-        <li class="service me-2"><NuxtLink class="text-decoration-none" style="color: #1D2B53;" to="/">Hubungi Admin</NuxtLink></li>
-        <li class="service me-2"><NuxtLink class="text-decoration-none" style="color: #1D2B53;" to="/">Laporkan Bug</NuxtLink></li>
-        <li class="service me-2"><NuxtLink class="text-decoration-none" style="color: #1D2B53;" to="/">Kritik Dan Saran</NuxtLink></li>
+        <li class="service me-2"><NuxtLink class="text-decoration-none" style="color: #1D2B53;" to="/user/send-message">Hubungi Admin</NuxtLink></li>
+        <li class="service me-2"><NuxtLink class="text-decoration-none" style="color: #1D2B53;" to="/user/send-message">Laporkan Bug</NuxtLink></li>
+        <li class="service me-2"><NuxtLink class="text-decoration-none" style="color: #1D2B53;" to="/user/send-message">Kritik Dan Saran</NuxtLink></li>
       </ul>
     </div>
   </div>

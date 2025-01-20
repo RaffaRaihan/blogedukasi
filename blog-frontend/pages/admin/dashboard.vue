@@ -5,7 +5,7 @@
       <AdminSidebar />
       <!-- Main Content -->
       <main class="p-4 col-md-12 col-md-9 col-lg-10">
-        <h2>Workspace admins</h2>
+        <h1>Workspace admins</h1>
 
         <!-- Filters -->
         <div class="d-flex align-items-center mb-4 mt-4">

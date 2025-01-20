@@ -53,12 +53,4 @@ const getTokenFromCookies = () => {
 label{
   color: #1D2B53;;
 }
-
-input::placeholder{
-  color: #FF004D;
-}
-
-textarea::placeholder{
-  color: #FF004D;
-}
 </style>

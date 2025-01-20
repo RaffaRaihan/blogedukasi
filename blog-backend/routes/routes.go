@@ -59,6 +59,10 @@ func SetupRoutes(r *gin.Engine) {
 		adminRoutes.PUT("/category/:id", controllers.UpdateCategory)
 		adminRoutes.DELETE("/category/:id", controllers.DeleteCategory)
 
+		// Admin Messages
+		adminRoutes.GET("/messages", controllers.GetAllMessages)
+		adminRoutes.POST("/send-message", controllers.SendMessage)
+
 	}
 
 	// Group User (dengan middleware Auth)
@@ -73,5 +77,6 @@ func SetupRoutes(r *gin.Engine) {
 		userRoutes.PUT("/:id", controllers.UpdateUser)
 		userRoutes.POST("/:id/foto", controllers.UploadProfilePhoto)
 		userRoutes.PUT("/:id/foto", controllers.UpdateProfilePhoto)
+		userRoutes.POST("/send-message", controllers.SendMessage)
 	}
 }
