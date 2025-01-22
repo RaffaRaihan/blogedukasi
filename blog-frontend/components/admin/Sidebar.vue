@@ -1,38 +1,78 @@
 <template>
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="logo">
-            <h3 class="fw-bold">Raffa Mr.</h3>
-        </div>
-        <nav class="nav flex-column">
-            <NuxtLink to="/admin/dashboard" class="nav-link">
-                <i class="bi bi-house"></i> Dashboard
-            </NuxtLink>
-            <NuxtLink to="/admin/users" class="nav-link">
-              <i class="bi bi-people"></i> Users
-            </NuxtLink>
-            <NuxtLink to="/admin/articles" class="nav-link">
-                <i class="bi bi-book"></i> Articles
-            </NuxtLink>
-            <NuxtLink to="/admin/category" class="nav-link">
-                <i class="bi bi-card-list"></i> Categories
-            </NuxtLink>
-            <NuxtLink to="/admin/message" class="nav-link">
-                <i class="bi bi-envelope"></i> Message
-            </NuxtLink>
-            <NuxtLink :to="`/admin/profile/${user_id}`" class="nav-link">
-              <i class="bi bi-person"></i> Profile
-            </NuxtLink>
-            <hr>
-            <button @click="handleLogout" class="btn btn-outline-danger">
-              <i class="bi bi-box-arrow-left"></i> Logout
-            </button>
-        </nav>
+  <!-- Sidebar -->
+  <div class="sidebar d-none d-md-flex flex-column">
+    <div class="logo">
+      <h3 class="fw-bold">Raffa Mr.</h3>
     </div>
+    <nav class="nav flex-column">
+      <NuxtLink to="/admin/dashboard" class="nav-link">
+        <i class="bi bi-house"></i> Dashboard
+      </NuxtLink>
+      <NuxtLink to="/admin/users" class="nav-link">
+        <i class="bi bi-people"></i> Users
+      </NuxtLink>
+      <NuxtLink to="/admin/articles" class="nav-link">
+        <i class="bi bi-book"></i> Articles
+      </NuxtLink>
+      <NuxtLink to="/admin/category" class="nav-link">
+        <i class="bi bi-card-list"></i> Categories
+      </NuxtLink>
+      <NuxtLink to="/admin/message" class="nav-link">
+        <i class="bi bi-envelope"></i> Message
+      </NuxtLink>
+      <NuxtLink :to="`/admin/profile/${user_id}`" class="nav-link">
+        <i class="bi bi-person"></i> Profile
+      </NuxtLink>
+      <hr>
+      <button @click="handleLogout" class="btn btn-outline-danger">
+        <i class="bi bi-box-arrow-left"></i> Logout
+      </button>
+    </nav>
+  </div>
+
+  <!-- Sidebar untuk mobile -->
+  <div class="d-md-none">
+    <button class="btn btn-primary mb-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar" aria-controls="mobileSidebar">
+      <i class="bi bi-list"></i> Menu
+    </button>
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="mobileSidebarLabel">Raffa Mr.</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <nav class="nav flex-column">
+          <NuxtLink to="/admin/dashboard" class="nav-link">
+            <i class="bi bi-house"></i> Dashboard
+          </NuxtLink>
+          <NuxtLink to="/admin/users" class="nav-link">
+            <i class="bi bi-people"></i> Users
+          </NuxtLink>
+          <NuxtLink to="/admin/articles" class="nav-link">
+            <i class="bi bi-book"></i> Articles
+          </NuxtLink>
+          <NuxtLink to="/admin/category" class="nav-link">
+            <i class="bi bi-card-list"></i> Categories
+          </NuxtLink>
+          <NuxtLink to="/admin/message" class="nav-link">
+            <i class="bi bi-envelope"></i> Message
+          </NuxtLink>
+          <NuxtLink :to="`/admin/profile/${user_id}`" class="nav-link">
+            <i class="bi bi-person"></i> Profile
+          </NuxtLink>
+          <hr>
+          <button @click="handleLogout" class="btn btn-outline-danger">
+            <i class="bi bi-box-arrow-left"></i> Logout
+          </button>
+        </nav>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
-import Cookies from 'js-cookie' // Pastikan library js-cookie sudah diinstal
+import Cookies from 'js-cookie'; // Pastikan library js-cookie sudah diinstal
 import { jwtDecode } from 'jwt-decode';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
@@ -66,17 +106,17 @@ const decodeToken = () => {
 const handleLogout = () => {
   try {
     // Hapus token dari cookies
-    Cookies.remove('token')
+    Cookies.remove('token');
 
-    alert('Logout berhasil!')
+    alert('Logout berhasil!');
 
     // Redirect ke halaman login
-    window.location.href = '/login'
+    window.location.href = '/login';
   } catch (error) {
-    console.error('Terjadi kesalahan saat logout:', error)
-    alert('Logout gagal. Silakan coba lagi.')
+    console.error('Terjadi kesalahan saat logout:', error);
+    alert('Logout gagal. Silakan coba lagi.');
   }
-}
+};
 
 onMounted(() => {
   decodeToken();
@@ -93,7 +133,7 @@ onMounted(() => {
   padding: 1rem;
   border-right: 1px solid #e0e0e0;
   position: sticky;
-  top: 1px;
+  top: 0;
 }
 .sidebar .logo {
   display: flex;
@@ -126,7 +166,7 @@ onMounted(() => {
   border-radius: 50%;
   padding: 0.25rem 0.5rem;
 }
-.sidebar hr{
+.sidebar hr {
   color: #F9F6E6;
 }
 .btn {
@@ -134,7 +174,7 @@ onMounted(() => {
   border-color: #F9F6E6;
   background-color: #1D2B53;
 }
-.btn:hover{
+.btn:hover {
   color: #1D2B53;
   border-color: #1D2B53;
   background-color: #F9F6E6;

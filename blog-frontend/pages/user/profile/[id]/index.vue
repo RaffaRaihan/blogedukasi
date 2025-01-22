@@ -68,8 +68,8 @@ const fetchUsers = async (id) => {
       },
     });
 
-    console.log('Respons API:', response.data);
-    users.value = response.data;
+    console.log('Respons API:', response.data.data);
+    users.value = response.data.data;
   } catch (err) {
     error.value = err.response?.data?.message || err.message;
     console.error('Error fetching users:', err);

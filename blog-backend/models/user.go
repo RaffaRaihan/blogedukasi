@@ -10,4 +10,5 @@ type User struct {
 	Comments []Comment `json:"comments"`
 	Foto     string    `json:"foto"`
 	Role     string    `json:"role" gorm:"default:user"` // "admin" atau "user"
+	Messages []Message `json:"pesan"`
 }

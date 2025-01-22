@@ -61,7 +61,7 @@ func SetupRoutes(r *gin.Engine) {
 
 		// Admin Messages
 		adminRoutes.GET("/messages", controllers.GetAllMessages)
-		adminRoutes.POST("/send-message", controllers.SendMessage)
+		adminRoutes.POST("/:id/reply-message", controllers.ReplyToMessage)
 
 	}
 
@@ -78,5 +78,7 @@ func SetupRoutes(r *gin.Engine) {
 		userRoutes.POST("/:id/foto", controllers.UploadProfilePhoto)
 		userRoutes.PUT("/:id/foto", controllers.UpdateProfilePhoto)
 		userRoutes.POST("/send-message", controllers.SendMessage)
+		userRoutes.GET("/messages/users/:id", controllers.GetMessagesByUserID)
+		userRoutes.GET("/:id/messages", controllers.GetReply)
 	}
 }

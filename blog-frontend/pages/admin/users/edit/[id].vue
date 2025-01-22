@@ -62,7 +62,7 @@ const fetchUser = async () => {
       },
     });
 
-    editUser.value = response.data;
+    editUser.value = response.data.data;
   } catch (error) {
     console.error('Error fetching user:', error);
   }

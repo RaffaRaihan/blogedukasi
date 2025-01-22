@@ -41,7 +41,7 @@ definePageMeta({
 
 // Data untuk form
 const formData = ref({
-  sender_id: '',
+  user_id: '',
   name: '',
   content: '',
 });
@@ -66,7 +66,7 @@ const sendMessage = async () => {
     const userId = decodedToken.user_id; // Sesuaikan dengan struktur payload token Anda
 
     // Tambahkan sender_id ke formData
-    formData.value.sender_id = userId;
+    formData.value.user_id = userId;
 
     // Kirim data menggunakan Axios
     const response = await axios.post('http://localhost:8080/user/send-message',

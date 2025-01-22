@@ -50,16 +50,22 @@ func GetUserByID(c *gin.Context) {
 	id := c.Param("id")
 
 	var user models.User
-	// Cari user berdasarkan ID
-	if err := config.GetDB().First(&user, id).Error; err != nil {
+	// Cari user berdasarkan ID dengan preload untuk comments
+	if err := config.GetDB().Preload("Comments").Preload("Messages").First(&user, id).Error; err != nil {
 		// Jika tidak ditemukan, kembalikan pesan error
-		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		c.JSON(http.StatusNotFound, gin.H{
+			"error":   "User not found",
+			"message": "The user with the specified ID does not exist",
+		})
 		return
 	}
 
-	// Jika ditemukan, kembalikan data user
-	c.JSON(http.StatusOK, user)
+	// Jika ditemukan, kembalikan data user dan comments
+	c.JSON(http.StatusOK, gin.H{
+		"data":    user,
+	})
 }
+
 
 func UpdateUser(c *gin.Context) {
     // Ambil ID dari parameter URL

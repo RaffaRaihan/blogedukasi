@@ -38,7 +38,7 @@
                   </a>
                   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                     <li><NuxtLink class="dropdown-item" :to="`/user/profile/${user_id}`"><i class="bi bi-person"></i>  Profile</NuxtLink></li>
-                    <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i>  Settings</a></li>
+                    <li><NuxtLink class="dropdown-item" to="/user/message/"><i class="bi bi-envelope"></i>  Mail</NuxtLink></li>
                     <li><hr class="hr"/></li>
                     <li><button class="dropdown-item" @click="handleLogout"><i class="bi bi-box-arrow-left"></i>  Logout</button></li>
                   </ul>
@@ -87,8 +87,8 @@ const fetchUsers = async (id) => {
       },
     });
 
-    console.log('Respons API:', response.data);
-    users.value = response.data;
+    console.log('Respons API:', response.data.data);
+    users.value = response.data.data;
     errorMessage.value = ''; // Reset pesan error jika berhasil
   } catch (err) {
     console.error('Error fetching users:', err);
