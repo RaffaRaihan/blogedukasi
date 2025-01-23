@@ -179,7 +179,7 @@ body {
 }
 
 .btn{
-  color: #1D2B53;
+  color: #F9F6E6;
   background-color: #FF004D;
   border-color: #1D2B53;
 }

@@ -49,16 +49,16 @@ const isLoggedIn = ref(false);
 
 <style scoped>
 .navbar {
-  background-color: #1D2B53;
+  background-color: #211951;
   position: sticky;
   top: 0px;
   z-index: 2;
 }
 .navbar .nav-link {
-  color: #F9F6E6;
+  color: #F0F3FF;
 }
 .navbar .nav-link:hover {
-  color: #FF004D;
+  color: #15F5BA;
   transition: 0.3s;
 }
 .profile-img {
@@ -67,32 +67,32 @@ const isLoggedIn = ref(false);
   border-radius: 50%;
 }
 .logo{
-  color: #F9F6E6;
+  color: #F0F3FF;
 }
 .logo:hover{
-  color: #FF004D;
+  color: #15F5BA;
   transition: 0.3s;
 }
 .btn{
-  color: #1D2B53;
-  background-color: #F9F6E6;
-  border-color: #1D2B53;
+  color: #211951;
+  background-color: #15F5BA;
+  border-color: #211951;
 }
 .btn:hover{
-  color: #F9F6E6;
-  background-color: #1D2B53;
-  border-color: #F9F6E6;
+  color: #F0F3FF;
+  background-color: #211951;
+  border-color: #F0F3FF;
   transition: 0.3s;
 }
 .dropdown-menu{
-  background: #1D2B53;
+  background: #211951;
 }
 .dropdown-item {
-  color: #F9F6E6;
+  color: #F0F3FF;
 }
 .dropdown-item:hover{
-  color: #1D2B53;
-  background-color: #F9F6E6;
+  color: #27005D;
+  background-color: #15F5BA;
   transition: 0.3s;
 }
 </style>

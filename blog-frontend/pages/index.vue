@@ -162,13 +162,13 @@ body {
 }
 
 .btn{
-  color: #1D2B53;
-  background-color: #FF004D;
-  border-color: #1D2B53;
+  color: #F0F3FF;
+  background-color: #211951;
+  border-color: #211951;
 }
 .btn:hover{
-  color: #F9F6E6;
-  background-color: #1D2B53;
+  color: #211951;
+  background-color: #F0F3FF;
 }
 .brutalist-container {
   position: relative;
@@ -178,15 +178,15 @@ body {
   padding: 15px;
   font-size: 18px;
   font-weight: bold;
-  color: #1D2B53;
+  color: #211951;
   background-color: #fff;
-  border: 4px solid #1D2B53;
+  border: 4px solid #211951;
   position: relative;
   overflow: hidden;
   border-radius: 0;
   outline: none;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  box-shadow: 5px 5px 0 #1D2B53, 10px 10px 0 #FF004D;
+  box-shadow: 5px 5px 0 #211951;
   margin-bottom: 2rem;
   margin-top: 3rem;
 }
@@ -231,7 +231,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: #1D2B53;
+  background: #211951;
   z-index: -2;
   clip-path: inset(0 100% 0 0);
   animation: glitch-slice 4s steps(2, end) infinite;
@@ -278,7 +278,7 @@ body {
   font-size: 14px;
   font-weight: bold;
   color: #fff;
-  background-color: #1D2B53;
+  background-color: #211951;
   padding: 5px 10px;
   transform: rotate(-1deg);
   z-index: 1;
@@ -287,7 +287,7 @@ body {
 }
 .brutalist-input:focus + .brutalist-label {
   transform: rotate(0deg) scale(1.05);
-  background-color: #FF004D;
+  background-color: #211951;
 }
 .smooth-type {
   position: relative;
@@ -330,17 +330,24 @@ body {
 @keyframes focus-pulse {
   0%,
   100% {
-    border-color: #1D2B53;
+    border-color: #211951;
   }
   50% {
-    border-color: #FF004D;
+    border-color: #211951;
   }
 }
 
-.page-link {
-  color: #1D2B53;
+.pagination .page-item.active .page-link {
+  background-color: #FF004D;
+  border-color: #FF004D;
+  color: #F9F6E6;
 }
-.page-item{
+.pagination .page-link {
   color: #FF004D;
 }
+.pagination .page-link:hover {
+  color: #F9F6E6;
+  background-color: #FF004D;
+}
+
 </style>

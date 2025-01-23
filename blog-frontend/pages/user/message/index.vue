@@ -42,7 +42,11 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 
-// Data pesan dummy
+definePageMeta({
+  middleware: 'auth',
+});
+
+// Data pesan
 const messages = ref([]);
 const isLoggedIn = computed(() => {
   const token = getTokenFromCookies();
