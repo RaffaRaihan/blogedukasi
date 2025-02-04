@@ -64,9 +64,11 @@ const handleLogin = async () => {
 
     // Redirect ke halaman sesuai role
     if (response.data.role === 'admin') {
-      window.location.href = '/admin/dashboard'
+      window.location.href = '/admin/dashboard';
+    } else if (response.data.role === 'author') {
+      window.location.href = '/author/dashboard';
     } else {
-      window.location.href = '/user/dashboard'
+      window.location.href = '/user/dashboard';
     }
   } catch (error) {
     alert(error.response?.data?.error || 'Login Gagal. Periksa kembali data Anda.')

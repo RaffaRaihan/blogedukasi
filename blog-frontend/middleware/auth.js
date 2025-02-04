@@ -16,6 +16,11 @@ export default defineNuxtRouteMiddleware((to, from) => {
     if (to.meta.requiresAdmin && decoded.role !== 'admin') {
       return navigateTo('/forbidden');
     }
+
+    // Jika route membutuhkan admin, pastikan peran adalah admin
+    if (to.meta.requiresAuthor && decoded.role !== 'author') {
+      return navigateTo('/forbidden');
+    }
   } catch (error) {
     // Jika token tidak valid, redirect ke login
     return navigateTo('/login');

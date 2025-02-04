@@ -44,7 +44,7 @@ func Login(c *gin.Context) {
 	}
 
 	// Periksa role (misalnya: "admin" atau "user")
-	if user.Role != "admin" && user.Role != "user" {
+	if user.Role != "admin" && user.Role != "user" && user.Role != "author" {
 		c.JSON(http.StatusForbidden, gin.H{"error": "Access denied"})
 		return
 	}

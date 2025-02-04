@@ -71,6 +71,11 @@ import axios from 'axios';
 import { useRoute, useRouter } from 'vue-router';  // Pastikan mengimpor useRouter
 import QuillEditor from '@/components/QuillEditor.vue';
 
+definePageMeta({
+  middleware: 'auth',
+  requiresAuthor: true,
+});
+
 const editArticle = ref({
   label: '',
   title: '',

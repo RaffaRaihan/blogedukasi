@@ -66,6 +66,11 @@ import { useRouter } from 'vue-router';
 import axios from 'axios';
 import DOMPurify from "dompurify";
 
+definePageMeta({
+  middleware: 'auth',
+  requiresAuthor: true,
+});
+
 const router = useRouter();
 const articles = ref([]);
 const categories = ref([]);
