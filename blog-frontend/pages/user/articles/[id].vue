@@ -183,19 +183,19 @@ onMounted(() => {
 }
 .breadcrumb-item a {
   text-decoration: none;
-  color: #FF004D;
+  color: #15F5BA;
 }
 .breadcrumb-item.active {
-  color: #1D2B53;
+  color: #211951;
 }
 .btn{
-  color: #1D2B53;
-  background-color: #FF004D;
-  border-color: #1D2B53;
+  color: #F0F3FF;
+  background-color: #211951;
+  border-color: #211951;
 }
 .btn:hover{
-  color: #F9F6E6;
-  background-color: #1D2B53;
+  color: #211951;
+  background-color: #F0F3FF;
   transition: 0.3s;
 }
 </style>

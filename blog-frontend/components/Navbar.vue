@@ -75,13 +75,13 @@ const isLoggedIn = ref(false);
 }
 .btn{
   color: #211951;
-  background-color: #15F5BA;
+  background-color: #F0F3FF;
   border-color: #211951;
 }
 .btn:hover{
-  color: #F0F3FF;
+  color: #15F5BA;
   background-color: #211951;
-  border-color: #F0F3FF;
+  border-color: #15F5BA;
   transition: 0.3s;
 }
 .dropdown-menu{

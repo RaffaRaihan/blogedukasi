@@ -38,20 +38,20 @@
             />
             <label class="brutalist-label text-uppercase">Cari Artikel</label>
           </div>
-          <h5 style="color: #1D2B53;">Postingan Terbaru</h5>
+          <h5>Postingan Terbaru</h5>
           <div class="row">
           <!-- Tampilkan pesan jika tidak ada artikel -->
           <div v-if="paginatedArticles.length === 0" class="text-center">
-            <p style="color: #1D2B53;">Tidak ada artikel yang ditemukan.</p>
+            <p>Tidak ada artikel yang ditemukan.</p>
           </div>
             <div v-else v-for="articlesItem in paginatedArticles" :key="articlesItem.ID" class="col-md-6 mb-3">
               <div class="card">
                 <img :src="`http://localhost:8080/uploads/${articlesItem.file_name}`" class="card-img-top" alt="...">
                 <div class="card-body">
-                  <h6 class="text-muted" style="color: #1D2B53;">{{ articlesItem.label }}</h6>
-                  <h5 class="card-title" style="color: #1D2B53;">{{ articlesItem.title }}</h5>
-                  <p class="card-text" style="color: #1D2B53;" v-html="getTruncatedContent(articlesItem.content)"></p>
-                  <p class="text-muted" style="color: #1D2B53;">Dibuat : {{ formatDate(articlesItem.CreatedAt) }}</p>
+                  <h6 class="text-muted">{{ articlesItem.label }}</h6>
+                  <h5 class="card-title">{{ articlesItem.title }}</h5>
+                  <p class="card-text" v-html="getTruncatedContent(articlesItem.content)"></p>
+                  <p class="text-muted">Dibuat : {{ formatDate(articlesItem.CreatedAt) }}</p>
                   <NuxtLink :to="`/user/articles/${articlesItem.ID}`" class="btn">Baca Selengkapnya   <i class="bi bi-arrow-right-circle"></i></NuxtLink>
                 </div>
               </div>
@@ -338,16 +338,15 @@ body {
 }
 
 .pagination .page-item.active .page-link {
-  background-color: #FF004D;
-  border-color: #FF004D;
+  background-color: #211951;
+  border-color: #211951;
   color: #F9F6E6;
 }
 .pagination .page-link {
-  color: #FF004D;
+  color: #211951;
 }
 .pagination .page-link:hover {
   color: #F9F6E6;
-  background-color: #FF004D;
+  background-color: #211951;
 }
-
 </style>

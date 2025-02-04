@@ -81,4 +81,24 @@ func SetupRoutes(r *gin.Engine) {
 		userRoutes.GET("/messages/users/:id", controllers.GetMessagesByUserID)
 		userRoutes.GET("/:id/messages", controllers.GetReply)
 	}
+
+	// Grup Author (dengan middleware Auth)
+	authorRoutes := r.Group("/author")
+	authorRoutes.Use(middlewares.AuthMiddleware(), middlewares.AuthorMiddleware())
+	{
+		authorRoutes.GET("/articles", controllers.GetAll)
+		authorRoutes.GET("/articles/:id", controllers.GetArticleByID)
+		authorRoutes.POST("/articles", controllers.CreateArticle)
+		authorRoutes.PUT("/articles/:id", controllers.UpdateArticle)
+		authorRoutes.DELETE("/articles/:id", controllers.Delete)
+
+		// Author File Management
+		authorRoutes.POST("/articles/:id/uploads", controllers.UploadFile)
+		authorRoutes.PUT("/articles/:id/uploads", controllers.UpdateFile)
+
+		// Author Categories
+		authorRoutes.POST("/category", controllers.CreateCategory)
+		authorRoutes.PUT("/category/:id", controllers.UpdateCategory)
+		authorRoutes.DELETE("/category/:id", controllers.DeleteCategory)
+	}
 }

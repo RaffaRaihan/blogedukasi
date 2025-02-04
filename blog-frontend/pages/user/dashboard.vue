@@ -39,20 +39,20 @@
             />
             <label class="brutalist-label text-uppercase">Cari Artikel</label>
           </div>
-          <h5 style="color: #1D2B53;">Postingan Terbaru</h5>
+          <h5>Postingan Terbaru</h5>
           <div class="row">
           <!-- Tampilkan pesan jika tidak ada artikel -->
           <div v-if="paginatedArticles.length === 0" class="text-center">
-            <p style="color: #1D2B53;">Tidak ada artikel yang ditemukan.</p>
+            <p>Tidak ada artikel yang ditemukan.</p>
           </div>
             <div v-else v-for="articlesItem in paginatedArticles" :key="articlesItem.ID" class="col-md-6 mb-3">
               <div class="card">
                 <img :src="`http://localhost:8080/uploads/${articlesItem.file_name}`" class="card-img-top" alt="...">
                 <div class="card-body">
-                  <h6 class="text-muted" style="color: #1D2B53;">{{ articlesItem.label }}</h6>
-                  <h5 class="card-title" style="color: #1D2B53;">{{ articlesItem.title }}</h5>
-                  <p class="card-text" style="color: #1D2B53;" v-html="getTruncatedContent(articlesItem.content)"></p>
-                  <p class="text-muted" style="color: #1D2B53;">Dibuat : {{ formatDate(articlesItem.CreatedAt) }}</p>
+                  <h6 class="text-muted">{{ articlesItem.label }}</h6>
+                  <h5 class="card-title">{{ articlesItem.title }}</h5>
+                  <p class="card-text" v-html="getTruncatedContent(articlesItem.content)"></p>
+                  <p class="text-muted">Dibuat : {{ formatDate(articlesItem.CreatedAt) }}</p>
                   <NuxtLink :to="`/user/articles/${articlesItem.ID}`" class="btn">Baca Selengkapnya   <i class="bi bi-arrow-right-circle"></i></NuxtLink>
                 </div>
               </div>
@@ -179,13 +179,13 @@ body {
 }
 
 .btn{
-  color: #F9F6E6;
-  background-color: #FF004D;
-  border-color: #1D2B53;
+  color: #F0F3FF;
+  background-color: #211951;
+  border-color: #211951;
 }
 .btn:hover{
-  color: #F9F6E6;
-  background-color: #1D2B53;
+  color: #211951;
+  background-color: #F0F3FF;
 }
 .brutalist-container {
   position: relative;
@@ -195,15 +195,15 @@ body {
   padding: 15px;
   font-size: 18px;
   font-weight: bold;
-  color: #1D2B53;
+  color: #211951;
   background-color: #fff;
-  border: 4px solid #1D2B53;
+  border: 4px solid #211951;
   position: relative;
   overflow: hidden;
   border-radius: 0;
   outline: none;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  box-shadow: 5px 5px 0 #1D2B53, 10px 10px 0 #FF004D;
+  box-shadow: 5px 5px 0 #211951;
   margin-bottom: 2rem;
   margin-top: 3rem;
 }
@@ -248,7 +248,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: #1D2B53;
+  background: #211951;
   z-index: -2;
   clip-path: inset(0 100% 0 0);
   animation: glitch-slice 4s steps(2, end) infinite;
@@ -295,7 +295,7 @@ body {
   font-size: 14px;
   font-weight: bold;
   color: #fff;
-  background-color: #1D2B53;
+  background-color: #211951;
   padding: 5px 10px;
   transform: rotate(-1deg);
   z-index: 1;
@@ -304,7 +304,7 @@ body {
 }
 .brutalist-input:focus + .brutalist-label {
   transform: rotate(0deg) scale(1.05);
-  background-color: #FF004D;
+  background-color: #211951;
 }
 .smooth-type {
   position: relative;
@@ -347,17 +347,23 @@ body {
 @keyframes focus-pulse {
   0%,
   100% {
-    border-color: #1D2B53;
+    border-color: #211951;
   }
   50% {
-    border-color: #FF004D;
+    border-color: #211951;
   }
 }
 
-.page-link {
-  color: #1D2B53;
+.pagination .page-item.active .page-link {
+  background-color: #211951;
+  border-color: #211951;
+  color: #F9F6E6;
 }
-.page-item{
-  color: #FF004D;
+.pagination .page-link {
+  color: #211951;
+}
+.pagination .page-link:hover {
+  color: #F9F6E6;
+  background-color: #211951;
 }
 </style>

@@ -72,11 +72,6 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 
-definePageMeta({
-  middleware: 'auth',
-  requiresAdmin: true,
-});
-
 const router = useRouter();
 const newArticle = ref({
   label: '',

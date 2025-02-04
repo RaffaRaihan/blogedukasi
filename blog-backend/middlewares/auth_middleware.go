@@ -66,3 +66,16 @@ func AdminMiddleware() gin.HandlerFunc {
 		c.Next()
 	}
 }
+
+// AuthorMiddleware memastikan hanya author yang bisa mengakses
+func AuthorMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		role, exists := c.Get("role")
+		if !exists || role != "author" {
+			c.JSON(http.StatusForbidden, gin.H{"error": "Forbidden: Author access only"})
+			c.Abort()
+			return
+		}
+		c.Next()
+	}
+}

@@ -84,14 +84,14 @@ const getTokenFromCookies = () => {
 footer {
   width: 100%;
   background-color: #211951;
-  color: #F9F6E6;
+  color: #F0F3FF;
   text-align: center;
 }
 
 .link {
-  color: #F9F6E6;
+  color: #F0F3FF;
 }
 .link:hover {
-  color: #FF004D;
+  color: #15F5BA;
 }
 </style>

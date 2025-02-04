@@ -82,10 +82,6 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
-definePageMeta({
-  middleware: 'auth',
-  requiresAdmin: true,
-});
 
 const category = ref([]);
 const showModal = ref(false);

@@ -16,16 +16,16 @@
             </li>
           </ol>
         </nav>
-        <h5 style="color: #1D2B53;">Menampilkan Hasil dari #{{ category.name }}</h5>
+        <h5 style="color: #211951;">Menampilkan Hasil dari #{{ category.name }}</h5>
         <div class="row">
           <div v-for="article in category.articles" :key="article.ID" class="col-md-6 mb-3">
             <div class="card">
               <img :src="`http://localhost:8080/uploads/${article.file_name}`" class="img-top" alt="img-artikel">
               <div class="card-body">
-                <h6 class="text-muted" style="color: #1D2B53;">{{ article.label }}</h6>
-                <h5 class="card-title" style="color: #1D2B53;">{{ article.title }}</h5>
-                <p class="card-text" style="color: #1D2B53;" v-html="getTruncatedContent(article.content)"></p>
-                <p class="text-muted" style="color: #1D2B53;">Dibuat : {{ formatDate(article.CreatedAt) }}</p>
+                <h6 class="text-muted" style="color: #211951;">{{ article.label }}</h6>
+                <h5 class="card-title" style="color: #211951;">{{ article.title }}</h5>
+                <p class="card-text" style="color: #211951;" v-html="getTruncatedContent(article.content)"></p>
+                <p class="text-muted" style="color: #211951;">Dibuat : {{ formatDate(article.CreatedAt) }}</p>
                 <NuxtLink :to="`/user/articles/${article.ID}`" class="btn">Baca Selengkapnya   <i class="bi bi-arrow-right-circle"></i></NuxtLink>
               </div>
             </div>
@@ -104,19 +104,19 @@ body {
 }
 .breadcrumb-item a {
   text-decoration: none;
-  color: #FF004D;
+  color: #15F5BA;
 }
 .breadcrumb-item.active {
   color: #1D2B53;
 }
 .btn{
-  color: #1D2B53;
-  background-color: #FF004D;
-  border-color: #1D2B53;
+  color: #F0F3FF;
+  background-color: #211951;
+  border-color: #211951;
 }
 .btn:hover{
-  color: #FF004D;
-  background-color: #1D2B53;
-  border-color: #FF004D;
+  color: #211951;
+  background-color: #F0F3FF;
+  border-color: #211951;
 }
 </style>

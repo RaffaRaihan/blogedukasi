@@ -14,6 +14,7 @@
         <label for="role" class="form-label">Role</label>
         <select class="form-select" id="role" v-model="editUser.role" required>
           <option value="user">User</option>
+          <option value="author">Author</option>
           <option value="admin">Admin</option>
         </select>
       </div>

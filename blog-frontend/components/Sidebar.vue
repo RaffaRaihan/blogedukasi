@@ -2,7 +2,7 @@
   <!-- Sidebar -->
   <div class="col-lg-4 mb-3">
     <div class="mb-4">
-      <h5 style="color: #211951;">Paling Populer</h5>
+      <h5>Paling Populer</h5>
       <!-- Loading Indicator -->
       <Loading v-if="loadingArticles" />
       <ul v-for="article in popularArticles" :key="article.id" class="list-group" v-else>
@@ -14,7 +14,7 @@
       </ul>
     </div>
     <div class="mb-4">
-      <h5 style="color: #211951;">Kategori</h5>
+      <h5>Kategori</h5>
       <Loading v-if="loadingArticles" />
       <ul v-for="category in category" :key="category.id" class="list-group" v-else>
         <li class="category list-group-item mb-2">
@@ -23,7 +23,7 @@
       </ul>
     </div>
     <div class="mb-4">
-      <h5 style="color: #211951;">Service</h5>
+      <h5>Services</h5>
       <ul class="list-unstyled d-flex jutify-content-between">
         <li class="service me-2"><NuxtLink class="text-decoration-none" style="color: #211951;" to="/user/send-message">Hubungi Admin</NuxtLink></li>
         <li class="service me-2"><NuxtLink class="text-decoration-none" style="color: #211951;" to="/user/send-message">Laporkan Bug</NuxtLink></li>

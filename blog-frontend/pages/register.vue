@@ -2,7 +2,7 @@
   <div class="min-vh-100 d-flex align-items-center justify-content-center bg-light">
     <div class="card shadow border-0" style="width: 100%; max-width: 400px;">
       <div class="card-body">
-        <h2 class="text-center fw-bold mb-4" style="color: #1D2B53;">Create your account</h2>
+        <h2 class="text-center fw-bold mb-4" style="color: #211951;">Create your account</h2>
         <form @submit.prevent="handleRegister">
           <!-- Input Full Name -->
           <div class="mb-3">
@@ -108,13 +108,13 @@ const handleRegister = async () => {
 
 <style scoped>
 .btn{
-  color: #1D2B53;
-  background-color: #FF004D;
-  border-color: #1D2B53;
+  color: #F0F3FF;
+  background-color: #211951;
+  border-color: #211951;
 }
 .btn:hover{
-  color: #FF004D;
-  background-color: #1D2B53;
-  border-color: #FF004D;
+  color: #211951;
+  background-color: #F0F3FF;
+  border-color: #211951;
 }
 </style>

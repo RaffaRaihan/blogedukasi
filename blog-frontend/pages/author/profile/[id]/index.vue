@@ -31,11 +31,6 @@
 import { ref } from "vue";
 import axios from "axios";
 
-definePageMeta({
-  middleware: 'auth',
-  requiresAdmin: true,
-});
-
 const users = ref([])
 const error = ref([])
 const router = useRouter();
