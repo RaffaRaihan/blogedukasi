@@ -1,26 +1,28 @@
 <template>
-  <div class="container mt-5">
-    <NuxtLink to="/author/dashboard" class="text-decoration-none" style="color: #1D2B53;"><i class="bi bi-arrow-left"></i>  Back</NuxtLink>
-    <div class="card mx-auto" style="max-width: 400px;">
-      <div class="card-header" style="background-color: #1D2B53; color: #FF004D;">
+  <div class="container mt-4">
+    <NuxtLink to="/author/dashboard" class="text-decoration-none" style="color: #211951;"><i class="bi bi-arrow-left"></i>  Kembali</NuxtLink>
+    <div class="card mx-auto mt-3">
+      <div class="card-header" style="background-color: #211951; color: #F9F6E6;">
         <h3 class="mb-0">Profil Pengguna</h3>
       </div>
       <div class="card-body">
-        <div class="text-center">
+        <div class="d-flex">
           <img
             :src="`http://localhost:8080/uploads/${users.foto}`"
             alt="Foto Profil"
-            class="rounded-circle mb-3"
-            style="width: 120px; height: 120px; object-fit: cover;"
+            class="rounded-1"
+            style="width: 500px; height: 500px;"
           />
-        </div>
-        <div class="mb-3">
-          <label class="form-label fw-bold" style="color: #FF004D;">Nama:</label>
-          <p class="form-control-plaintext" style="color: #1D2B53;">{{ users.name }}</p>
-        </div>
-        <div class="mb-3">
-          <label class="form-label fw-bold" style="color: #FF004D;">Email:</label>
-          <p class="form-control-plaintext" style="color: #1D2B53;">{{ users.email }}</p>
+          <div class="text-start ms-5 mt-5">
+            <div class="d-flex mb-3">
+            <h2 class="fw-bold" style="color: #211951;">Nama:</h2>
+            <h2 class="ms-2" style="color: #1D2B53;">{{ users.name }}</h2>
+          </div>
+          <div class="d-flex mb-3">
+            <h2 class="fw-bold" style="color: #211951;">Email:</h2>
+            <h2 class="ms-2" style="color: #1D2B53;">{{ users.email }}</h2>
+          </div>
+          </div>
         </div>
       </div>
     </div>
@@ -33,7 +35,6 @@ import axios from "axios";
 
 definePageMeta({
   middleware: 'auth',
-  requiresAdmin: true,
   requiresAuthor: true,
 });
 
@@ -56,14 +57,14 @@ const fetchUsers = async (id) => {
     const token = getTokenFromCookies();
     if (!token) throw new Error('Token tidak ditemukan. Harap login terlebih dahulu.');
 
-    const response = await axios.get(`http://localhost:8080/admin/users/${id}`, {
+    const response = await axios.get(`http://localhost:8080/author/users/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
 
     console.log('Respons API:', response.data);
-    users.value = response.data;
+    users.value = response.data.data;
   } catch (err) {
     error.value = err.response?.data?.message || err.message;
     console.error('Error fetching users:', err);

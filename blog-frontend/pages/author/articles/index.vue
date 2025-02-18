@@ -155,11 +155,11 @@ const filterArticles = () => {
 };
 
 const navigateToAddArticle = () => {
-  router.push('/admin/articles/add-articles');
+  router.push('/author/articles/add-articles');
 };
 
 const navigateToEditArticle = (id) => {
-  router.push(`/admin/articles/edit/${id}`);
+  router.push(`/author/articles/edit/${id}`);
 };
 
 // Truncate konten artikel

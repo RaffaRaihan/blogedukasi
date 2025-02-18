@@ -22,7 +22,7 @@
         <!-- Article -->
         <div v-if="articles">
           <h2>{{ articles.title }}</h2>
-          <p class="text-muted">By {{ articles.author }} - {{ formatDate(articles.CreatedAt) }}</p>        
+          <p class="text-muted">By {{ articles?.Author?.name || "Belum di input" }} - {{ formatDate(articles.CreatedAt) }}</p>        
           <h4>Apa itu {{ articles.title }}?</h4>
           <p v-html="articles.content"></p><br>     
           <img :src="`http://localhost:8080/uploads/${articles.file_name}`" class="card-img-top" alt="...">
@@ -110,6 +110,7 @@ const decodeToken = () => {
 const fetchArticle = async (id) => {
   try {
     const response = await axios.get(`http://localhost:8080/articles/${id}`);
+    console.log(response)
     articles.value = response.data.data;
   } catch (err) {
     error.value = err.response?.data?.message || err.message;

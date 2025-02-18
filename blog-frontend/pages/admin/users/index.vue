@@ -59,7 +59,6 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
 import axios from 'axios';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';

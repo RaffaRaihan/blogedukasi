@@ -1,9 +1,9 @@
 <template>
   <div class="container mt-5">
-    <NuxtLink :to="`/user/profile/${user_id}`" class="text-decoration-none" style="color: #1D2B53;"><i class="bi bi-arrow-left"></i>  Back</NuxtLink>
+    <NuxtLink :to="`/user/profile/${user_id}`" class="text-decoration-none" style="color: #1D2B53;"><i class="bi bi-arrow-left"></i>  Kembali</NuxtLink>
     <div class="card mx-auto" style="max-width: 600px;">
       <div class="card-header" style="background-color: #1D2B53;">
-        <h3 class="mb-0" style="color: #FF004D;">Edit Profil</h3>
+        <h3 class="mb-0" style="color: #F9F6E6;">Edit Profil</h3>
       </div>
       <div class="card-body">
         <form @submit.prevent="updateUserProfile">
@@ -63,8 +63,8 @@ import { useRoute, useRouter } from "vue-router";
 const route = useRoute();
 const router = useRouter();
 const user = ref({
-  name: "",
-  email: "",
+  name: '',
+  email: '',
 });
 const fotoFile = ref(null);
 const error = ref(null);
@@ -80,12 +80,13 @@ const getTokenFromCookies = () => {
 const fetchUserDetails = async () => {
   try {
     const token = getTokenFromCookies();
-    const response = await axios.get(`http://localhost:8080/user/${route.params.id}`, {
+    const response = await axios.get(`http://localhost:8080/user/${user_id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
     user.value = response.data;
+    console.log(response)
   } catch (err) {
     error.value = err.response?.data?.message || err.message;
     console.error("Error fetching user details:", err);
@@ -104,7 +105,7 @@ const updateUserProfile = async () => {
 
     // 1. Perbarui Data (Nama dan Email)
     await axios.put(
-      `http://localhost:8080/user/${route.params.id}`,
+      `http://localhost:8080/user/${user_id}`,
       {
         name: user.value.name,
         email: user.value.email,
@@ -122,7 +123,7 @@ const updateUserProfile = async () => {
       formData.append("foto", fotoFile.value);
 
       await axios.put(
-        `http://localhost:8080/user/${route.params.id}/foto`,
+        `http://localhost:8080/user/${user_id}/foto`,
         formData,
         {
           headers: {

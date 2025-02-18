@@ -1,29 +1,29 @@
 <template>
-  <div class="container mt-5">
-    <NuxtLink to="/user/dashboard" class="text-decoration-none" style="color: #211951;"><i class="bi bi-arrow-left"></i>  Back</NuxtLink>
-    <div class="card mx-auto" style="max-width: 600px;">
+  <div class="container mt-4">
+    <NuxtLink to="/user/dashboard" class="text-decoration-none" style="color: #211951;"><i class="bi bi-arrow-left"></i>  Kembali</NuxtLink>
+    <div class="card mx-auto mt-3">
       <div class="card-header" style="background-color: #211951; color: #F0F3FF;">
         <h3 class="mb-0">Profil Pengguna</h3>
       </div>
       <div class="card-body">
-        <div class="text-center">
+        <div class="d-flex">
           <img
             :src="`http://localhost:8080/uploads/${users.foto}`"
             alt="Foto Profil"
-            class="rounded-circle mb-3"
-            style="width: 120px; height: 120px; object-fit: cover;"
+            class="rounded-1"
+            style="width: 500px; height: 500px;"
           />
-        </div>
-        <div class="mb-3">
-          <label class="form-label fw-bold">Nama:</label>
-          <p class="form-control-plaintext">{{ users.name }}</p>
-        </div>
-        <div class="mb-3">
-          <label class="form-label fw-bold">Email:</label>
-          <p class="form-control-plaintext">{{ users.email }}</p>
-        </div>
-        <div class="text-center">
-          <button class="btn btn-outline-warning" @click="navigateToEditProfile"><i class="bi bi-pencil"></i>  Edit Profil</button>
+          <div class="text-start ms-5 mt-5">
+            <div class="mb-3 d-flex">
+              <h2 class="fw-bold">Nama:</h2>
+              <h2 class="ms-3">{{ users.name }}</h2>
+            </div>
+            <div class="mb-3 d-flex">
+              <h2 class="fw-bold">Email:</h2>
+              <h2 class="ms-3">{{ users.email }}</h2>
+            </div>
+            <button class="btn btn-outline-warning" @click="navigateToEditProfile"><i class="bi bi-pencil"></i>  Edit Profil</button>
+          </div>
         </div>
       </div>
     </div>

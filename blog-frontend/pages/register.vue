@@ -1,4 +1,6 @@
 <template>
+  <!-- Alert Message -->
+  <div v-if="alertMessage" class="alert" :class="alertClass" role="alert">{{ alertMessage }}</div>
   <div class="min-vh-100 d-flex align-items-center justify-content-center bg-light">
     <div class="card shadow border-0" style="width: 100%; max-width: 400px;">
       <div class="card-body">
@@ -61,12 +63,15 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router'; // Import Vue Router
 import axios from 'axios';
+import { set } from 'date-fns';
 
 // State untuk form
 const name = ref('');
 const email = ref('');
 const password = ref('');
 const confirmPassword = ref('');
+const alertMessage = ref('');
+const alertClass = ref('');
 
 // Inisialisasi router
 const router = useRouter();
@@ -74,7 +79,8 @@ const router = useRouter();
 const handleRegister = async () => {
   // Validasi password
   if (password.value !== confirmPassword.value) {
-    alert('Passwords do not match!');
+    alertMessage.value = 'Passwords tidak sesuai!'
+    alertClass.value = 'alert alert-danger'
     return;
   }
 
@@ -88,20 +94,28 @@ const handleRegister = async () => {
 
     // Cek status respons
     if (response.status === 201) {
-      alert('Registration Successful!');
+      // Tampilkan alert sukses
+      alertMessage.value = 'Registrasi Berhasil!'
+      alertClass.value = 'alert alert-success'
       // Reset form
       name.value = '';
       email.value = '';
       password.value = '';
       confirmPassword.value = '';
       // Redirect ke halaman login
-      router.push('/login');
+      setTimeout(() =>{
+        router.push('/login');
+      }, 1500)
+      
     } else {
-      alert('Registration failed. Please try again.');
+      alertMessage.value = 'Registration gagal. Coba lagi.'
+      alertClass.value = 'alert alert-danger'
+      
     }
   } catch (error) {
     console.error('Error during registration:', error);
-    alert('An error occurred during registration. Please check your input or try again later.');
+    alertMessage.value = 'An error occurred during registration. Please check your input or try again later.'
+    alertClass.value = 'alert alert-danger'
   }
 };
 </script>
@@ -116,5 +130,11 @@ const handleRegister = async () => {
   color: #211951;
   background-color: #F0F3FF;
   border-color: #211951;
+}
+.alert {
+  position: absolute;
+  z-index: 1;
+  width: 400px;
+  margin-left: 600px;
 }
 </style>

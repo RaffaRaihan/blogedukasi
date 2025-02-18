@@ -13,6 +13,7 @@
           <select class="form-select me-2" v-model="selectedRole">
             <option value="">All</option>
             <option value="admin">Admin</option>
+            <option value="author">Author</option>
             <option value="user">User</option>
           </select>
         </div>
@@ -22,8 +23,8 @@
 
         <!-- Admin Cards -->
         <div class="mb-4" v-else>
-          <div class="row d-flex">
-            <div v-for="user in filteredUsers" :key="user.id" class="card me-2 mb-2" style="width: 170px;">
+          <div class="row d-flex justify-content-between ms-1 me-2">
+            <div v-for="user in filteredUsers" :key="user.id" class="card mb-2" style="width: 170px;">
               <div class="card-body text-center">
                 <img
                   :src="`http://localhost:8080/uploads/${user.foto}`"

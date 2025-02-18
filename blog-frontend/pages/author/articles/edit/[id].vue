@@ -102,7 +102,7 @@ const fetchArticle = async () => {
     if (!token) {
       throw new Error('Token tidak ditemukan. Harap login terlebih dahulu.');
     }
-    const response = await axios.get(`http://localhost:8080/admin/articles/${articleId}`,
+    const response = await axios.get(`http://localhost:8080/author/articles/${articleId}`,
     {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -174,7 +174,7 @@ const updateArticle = async () => {
     }
 
     alert('Artikel berhasil diubah.');
-    router.push('/admin/articles'); // Pastikan penggunaan router.push
+    router.push('/author/articles'); // Pastikan penggunaan router.push
   } catch (error) {
     console.error('Error updating article:', error);
   }

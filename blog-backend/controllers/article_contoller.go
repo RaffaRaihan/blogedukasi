@@ -34,7 +34,7 @@ func CreateArticle(c *gin.Context) {
 	}
 
 	// Ambil artikel yang baru dibuat dengan preload relasi Category
-	if err := config.GetDB().Preload("Category").First(&article, article.ID).Error; err != nil {
+	if err := config.GetDB().Preload("Category").Preload("Author").First(&article, article.ID).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": "Failed to preload category", "error": err.Error()})
 		return
 	}
@@ -42,7 +42,6 @@ func CreateArticle(c *gin.Context) {
 	// Kirim response sukses dengan artikel yang sudah memiliki relasi Category
 	c.JSON(http.StatusCreated, gin.H{"status": "success", "data": article})
 }
-
 
 // Get All Articles
 func GetAll(c *gin.Context) {
@@ -84,7 +83,7 @@ func GetArticleByID(c *gin.Context) {
 	var article models.Article
 
 	// Mencari artikel berdasarkan ID
-	if err := config.GetDB().Preload("Category").First(&article, id).Error; err != nil {
+	if err := config.GetDB().Preload("Category").Preload("Author").First(&article, id).Error; err != nil {
 		if err.Error() == "record not found" {
 			c.JSON(http.StatusNotFound, gin.H{"status": "error", "message": "Article not found"})
 		} else {

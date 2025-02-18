@@ -16,6 +16,10 @@ func Register(c *gin.Context) {
 		return
 	}
 
+	if user.Role != "admin" && user.Role != "author" {
+		user.Role = "user"
+	}
+
 	// Hash password
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {

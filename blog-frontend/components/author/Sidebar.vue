@@ -11,9 +11,6 @@
             <NuxtLink to="/author/articles" class="nav-link">
                 <i class="bi bi-book"></i> Articles
             </NuxtLink>
-            <NuxtLink to="/author/category" class="nav-link">
-                <i class="bi bi-card-list"></i> Categories
-            </NuxtLink>
             <NuxtLink :to="`/author/profile/${user_id}`" class="nav-link">
               <i class="bi bi-person"></i> Profile
             </NuxtLink>

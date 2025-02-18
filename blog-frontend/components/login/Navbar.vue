@@ -1,6 +1,8 @@
 <template>
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg">
+    <!-- Alert Message -->
+    <div v-if="alertMessage" class="alert" :class="alertClass" role="alert">{{ alertMessage }}</div>
         <div class="container">
             <NuxtLink class="logo navbar-brand" to="/user/dashboard">Raffa Mr.</NuxtLink>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,8 +65,8 @@ const users = ref([]);
 const user_id = ref('');
 
 const errorMessage = ref(''); // Inisialisasi errorMessage dengan ref
-
-
+const alertMessage = ref('');
+const alertClass = ref('');
 
 // Fungsi untuk mengambil token dari cookies
 const getTokenFromCookies = () => {
@@ -116,13 +118,18 @@ const handleLogout = () => {
     // Hapus token dari cookies
     Cookies.remove('token');
 
-    alert('Logout berhasil!');
+    confirm('apakah yakin ingin logout')
+    alertMessage.value = 'Logout Berhasil!'
+    alertClass.value = 'alert alert-success'
 
     // Redirect ke halaman login
-    window.location.href = '/login';
+    setTimeout(() => {
+      window.location.href = '/login';
+    }, 1500)
   } catch (error) {
     console.error('Terjadi kesalahan saat logout:', error);
-    alert('Logout gagal. Silakan coba lagi.');
+    alertMessage.value = 'Logout gagal. Silakan coba lagi.'
+    alertClass.value = 'alert alert-danger'
   }
 };
 
@@ -186,5 +193,11 @@ onMounted(() => {
 }
 .hr{
   color: #AED2FF;
+}
+.alert {
+  position: absolute;
+  z-index: 0;
+  width: 400px;
+  margin-left: 600px;
 }
 </style>

@@ -96,9 +96,7 @@ func SetupRoutes(r *gin.Engine) {
 		authorRoutes.POST("/articles/:id/uploads", controllers.UploadFile)
 		authorRoutes.PUT("/articles/:id/uploads", controllers.UpdateFile)
 
-		// Author Categories
-		authorRoutes.POST("/category", controllers.CreateCategory)
-		authorRoutes.PUT("/category/:id", controllers.UpdateCategory)
-		authorRoutes.DELETE("/category/:id", controllers.DeleteCategory)
+		// Users Profile
+		authorRoutes.GET("/users/:id", controllers.GetUserByID)
 	}
 }

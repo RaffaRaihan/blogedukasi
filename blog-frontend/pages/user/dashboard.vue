@@ -121,7 +121,7 @@ const getTokenFromCookies = () => {
 const fetchArticles = async () => {
   try {
     const response = await axios.get('http://localhost:8080/articles');
-    articles.value = response.data.sort((a, b) => new Date(b.CreatedAt) - new Date(a.CreatedAt));
+    articles.value = response.data.filter(article => article.status === "sesuai").sort((a, b) => new Date(b.CreatedAt) - new Date(a.CreatedAt));
   } catch (error) {
     console.error('Error fetching articles:', error);
   } finally {
