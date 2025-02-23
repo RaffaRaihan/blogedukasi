@@ -41,14 +41,11 @@
         </select>
       </div>
       <div class="mb-3">
-        <label for="editAuthor" class="form-label">Author</label>
-        <input
-          type="text"
-          id="editAuthor"
-          class="form-control"
-          v-model="editArticle.author"
-          required
-        />
+        <label for="editTitle" class="form-label">Status</label>
+        <select class="form-select" v-model="editArticle.status">
+          <option value="Sesuai">Sesuai</option>
+          <option value="Belum Sesuai">Belum Sesuai</option>
+        </select>
       </div>
       <!-- Input untuk upload gambar -->
       <div class="mb-3">
@@ -82,6 +79,7 @@ const editArticle = ref({
   content: '',
   category_id: null,
   author: '',
+  status: '',
   file: null, // Tambahkan properti file untuk menyimpan file gambar
 });
 const categories = ref([]);
@@ -116,6 +114,7 @@ const fetchArticle = async () => {
       content: articleData.content,
       category_id: articleData.category_id,
       author: articleData.author,
+      status: articleData.status,
       file: null, // Reset file karena ini hanya untuk upload baru
     };
   } catch (error) {
@@ -156,6 +155,7 @@ const updateArticle = async () => {
       content: editArticle.value.content,
       category_id: editArticle.value.category_id,
       author: editArticle.value.author,
+      status: editArticle.value.status,
     };
 
     await axios.put(

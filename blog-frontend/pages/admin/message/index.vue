@@ -4,16 +4,17 @@
       <!-- Sidebar -->
       <AdminSidebar />
       <div class="col-md-9 col-lg-10 p-4">
-        <h1 class="mb-4">Halaman Admin - Report</h1>
+        <h1 class="mb-4">Halaman Admin - Laporan</h1>
+        <hr>
         <!-- Tabel Kategori -->
         <table class="table table-hover align-middle mt-3">
           <thead>
             <tr>
               <th scope="col">No</th>
-              <th scope="col">Sender_Id</th>
+              <th scope="col">ID Pengirim</th>
               <th scope="col">Nama</th>
               <th scope="col">Pesan</th>
-              <th scope="col">Reply</th>
+              <th scope="col">Balasan</th>
               <th scope="col">Aksi</th>
             </tr>
           </thead>

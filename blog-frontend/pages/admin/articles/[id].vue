@@ -8,7 +8,7 @@
         <nav aria-label="breadcrumb" v-if="articles?.category?.name">
           <ol class="breadcrumb">
             <li class="breadcrumb-item">
-              <NuxtLink to="/user/dashboard" v-if="isLoggedIn">Beranda</NuxtLink>
+              <NuxtLink to="/admin/dashboard" v-if="isLoggedIn">Dashboard</NuxtLink>
               <NuxtLink to="/" v-else>Beranda</NuxtLink>
             </li>
             <li class="breadcrumb-item">
@@ -29,7 +29,7 @@
           <!-- Alert Message -->
           <div v-if="alertMessage" class="alert" :class="alertClass" role="alert">{{ alertMessage }}</div>
           <!-- Comments Section -->
-          <div class="mt-5">
+          <div class="mt-5" v-if="articles.status === 'Sesuai'">
             <h4>Komentar</h4>
             <ul class="list-group" v-if="comments.length > 0">
               <li class="list-group-item" v-for="comment in comments" :key="comment.id">

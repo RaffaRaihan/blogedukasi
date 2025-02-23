@@ -5,8 +5,9 @@
       <AdminSidebar />
       <div class="col-md-9 col-lg-10 p-4">
         <h1 class="mb-4">Halaman Admin - Kelola Kategori</h1>
+        <hr>
         <!-- Tombol untuk menambah kategori baru -->
-        <button class="btn btn-outline-primary" @click="showModal = true">+ Add Categories</button>
+        <button class="btn btn-outline-primary" @click="showModal = true">+ Tambah Kategori</button>
 
         <!-- Loading Indicator -->
         <Loading v-if="loadingCategory" />
@@ -26,8 +27,8 @@
               <th scope="row">{{ index + 1 }}</th>
               <td>{{ category.name }}</td>
               <td>
-                <button class="btn btn-outline-warning btn-sm me-2" @click="openModal('edit', category)"><i class="bi bi-pencil"></i> Edit</button>
-                <button @click="removeCategory(category.ID)" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i> Hapus</button>
+                <button class="btn btn-outline-warning me-2" @click="openModal('edit', category)"><i class="bi bi-pencil"></i> Edit</button>
+                <button @click="removeCategory(category.ID)" class="btn btn-outline-danger"><i class="bi bi-trash"></i> Hapus</button>
               </td>
             </tr>
           </tbody>
@@ -39,7 +40,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Add Categories</h5>
+            <h5 class="modal-title">Tambah Kategori</h5>
             <button type="button" class="btn-close" @click="showModal = false"></button>
           </div>
           <div class="modal-body">
@@ -48,7 +49,7 @@
                 <label for="name" class="form-label">Name</label>
                 <input type="text" class="form-control" id="name" v-model="newCategory.name" required />
               </div>
-              <button type="submit" class="btn btn-outline-primary">+ Add Categories</button>
+              <button type="submit" class="btn btn-outline-primary">Tambah Kategori</button>
             </form>
           </div>
         </div>
@@ -60,16 +61,16 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Edit Categories</h5>
+            <h5 class="modal-title">Edit Kategori</h5>
             <button type="button" class="btn-close" @click="showEditModal = false"></button>
           </div>
           <div class="modal-body">
             <form @submit.prevent="updateCategory">
               <div class="mb-3">
-                <label for="name" class="form-label">Name</label>
+                <label for="name" class="form-label">Nama</label>
                 <input type="text" class="form-control" id="name" v-model="editCategory.name" required />
               </div>
-              <button type="submit" class="btn btn-primary">Save Changes</button>
+              <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
             </form>
           </div>
         </div>
@@ -195,7 +196,7 @@ const openModal = (type, category) => {
 };
 
 const removeCategory = async (id) => {
-  if (!confirm('Apakah Anda yakin ingin menghapus pengguna ini?')) {
+  if (!confirm('Apakah Anda yakin ingin menghapus Kategori ini?')) {
     return;
   }
 

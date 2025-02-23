@@ -87,7 +87,7 @@ const sendMessage = async () => {
     };
 
     alert('Pesan berhasil dikirim!');
-    router.push('/user/dashboard');
+    router.push('/user/dashboard/messsage');
   } catch (error) {
     console.error('Error sending message:', error);
     alert('Gagal mengirim pesan. Periksa koneksi atau coba lagi.');

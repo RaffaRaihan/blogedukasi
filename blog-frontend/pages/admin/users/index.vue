@@ -4,17 +4,19 @@
       <AdminSidebar />
       <main class="col-md-9 col-lg-10 p-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
-          <h1 class="fw-bold">Users</h1>
+          <h1>Halaman Admin - Kelola Users</h1>
           <router-link to="users/add-user" class="btn btn-outline-primary">
-            <i class="bi bi-person-plus"></i> Invite
+            <i class="bi bi-person-plus"></i> Undang
           </router-link>
         </div>
+        <hr>
         <!-- Filters -->
         <div class="d-flex align-items-center mb-4 mt-4">
-          <input type="text" class="form-control me-2" placeholder="Search by email" v-model="searchQuery" />
+          <input type="text" class="form-control me-2" placeholder="Cari Berdasarkan Email" v-model="searchQuery" />
           <select class="form-select me-2" v-model="selectedRole" @change="filteredUsers">
-            <option value="">All</option>
+            <option value="">Semua</option>
             <option value="admin">Admin</option>
+            <option value="author">Author</option>
             <option value="user">User</option>
           </select>
         </div>
@@ -26,19 +28,19 @@
           <thead>
             <tr>
               <th scope="col">No</th>
-              <th scope="col">Name</th>
+              <th scope="col">Nama</th>
               <th scope="col">Email</th>
               <th scope="col">Role</th>
               <th scope="col">Waktu Pembuatan</th>
               <th scope="col">Update Terakhir</th>
-              <th scope="col">Action</th>
+              <th scope="col">Aksi</th>
             </tr>
           </thead>
           <tbody>
             <tr v-if="users.length === 0">
               <td colspan="7" class="text-center">No users found</td>
             </tr>
-            <tr v-for="(user, index) in filteredUsers" :key="user.ID">
+            <tr v-for="(user, index) in sortedUsers" :key="user.ID">
               <td>{{ index + 1 }}</td>
               <td>{{ user.name }}</td>
               <td>{{ user.email }}</td>
@@ -46,8 +48,10 @@
               <td>{{ formatDate(user.CreatedAt) }}</td>
               <td>{{ formatDate(user.UpdatedAt) }}</td>
               <td>
-                <router-link :to="`users/edit/${user.ID}`" class="btn btn-outline-warning btn-sm me-2"><i class="bi bi-pencil"></i></router-link>
-                <button @click="removeUser(user.ID)" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                <NuxtLink :to="`users/edit/${user.ID}`" class="btn btn-outline-warning me-2"><i class="bi bi-pencil"></i>  Edit</NuxtLink>
+                <button v-if="user.role !== 'admin'" @click="removeUser(user.ID)" class="btn btn-outline-danger">
+                  <i class="bi bi-person-dash"></i> Hapus
+                </button>
               </td>
             </tr>
           </tbody>
@@ -99,6 +103,10 @@ const filteredUsers = computed(() => {
     const matchesSearch = user.email && user.email.toLowerCase().includes(searchQuery.value.toLowerCase());
     return matchesRole && matchesSearch;
   });
+});
+
+const sortedUsers = computed(() => {
+  return [...filteredUsers.value].sort((a, b) => a.role.localeCompare(b.role));
 });
 
 const removeUser = async (id) => {

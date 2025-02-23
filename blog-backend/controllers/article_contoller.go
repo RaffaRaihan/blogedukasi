@@ -20,6 +20,10 @@ func CreateArticle(c *gin.Context) {
 		return
 	}
 
+	if article.Status != "Sesuai" {
+		article.Status = "Belum Sesuai"
+	}
+
 	// Validasi kategori
 	var category models.Category
 	if err := config.GetDB().First(&category, article.CategoryID).Error; err != nil {
@@ -298,4 +302,25 @@ func UpdateFile(c *gin.Context) {
 		"message": "File updated successfully",
 		"data":    article,
 	})
+}
+
+// Get Articles By Author
+func GetArticlesByAuthor(c *gin.Context) {
+    authorID := c.Param("id")
+    var articles []models.Article
+
+    // Mencari artikel berdasarkan AuthorID
+    if err := config.GetDB().Preload("Category").Preload("Author").Where("author_id = ?", authorID).Find(&articles).Error; err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": "Failed to retrieve articles", "error": err.Error()})
+        return
+    }
+
+    // Jika tidak ada artikel yang ditemukan
+    if len(articles) == 0 {
+        c.JSON(http.StatusNotFound, gin.H{"status": "error", "message": "No articles found for this author"})
+        return
+    }
+
+    // Jika artikel ditemukan, kembalikan data artikel
+    c.JSON(http.StatusOK, gin.H{"status": "success", "data": articles})
 }

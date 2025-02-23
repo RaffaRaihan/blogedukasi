@@ -40,16 +40,6 @@
           </option>
         </select>
       </div>
-      <div class="mb-3">
-        <label for="editAuthor" class="form-label">Author</label>
-        <input
-          type="text"
-          id="editAuthor"
-          class="form-control"
-          v-model="editArticle.author"
-          required
-        />
-      </div>
       <!-- Input untuk upload gambar -->
       <div class="mb-3">
         <label for="editImage" class="form-label">Gambar Artikel</label>
@@ -159,7 +149,7 @@ const updateArticle = async () => {
     };
 
     await axios.put(
-      `http://localhost:8080/admin/articles/${articleId}`,
+      `http://localhost:8080/author/articles/${articleId}`,
       updatedArticle,
       {
         headers: {
@@ -192,7 +182,7 @@ const uploadImage = async () => {
     }
 
     const response = await axios.post(
-      `http://localhost:8080/admin/articles/${articleId}/uploads`,
+      `http://localhost:8080/author/articles/${articleId}/uploads`,
       formData,
       {
         headers: {

@@ -9,13 +9,13 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <NuxtLink class="nav-link" to="/">Home</NuxtLink>
+                        <NuxtLink class="nav-link" to="/">Beranda</NuxtLink>
                     </li>
                     <li class="nav-item">
-                        <NuxtLink class="nav-link" to="/about">About</NuxtLink>
+                        <NuxtLink class="nav-link" to="/about">Tentang</NuxtLink>
                     </li>
                     <li class="nav-item">
-                        <NuxtLink class="nav-link" to="/contact">Contact</NuxtLink>
+                        <NuxtLink class="nav-link" to="/contact">Kontak</NuxtLink>
                     </li>
                 </ul>
               <div class="d-flex" v-if="isLoggedIn">

@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container mb-4">
     <h1 class="my-4">Tambah Artikel Baru</h1>
     <form @submit.prevent="submitArticle">
       <div class="mb-3">
@@ -43,17 +43,6 @@
         </select>
       </div>
       <div class="mb-3">
-        <label for="articleAuthor" class="form-label">Author</label>
-        <input
-          type="text"
-          id="articleAuthor"
-          class="form-control"
-          v-model="newArticle.author"
-          required
-          placeholder="Masukkan author"
-        />
-      </div>
-      <div class="mb-3">
         <label for="articleImage" class="form-label">Gambar Artikel</label>
         <input
           type="file"
@@ -83,10 +72,38 @@ const newArticle = ref({
   title: '',
   content: '',
   category_id: null,
-  author: '',
+  author_id: '',
 });
 const categories = ref([]);
 const newArticleId = ref(null); // Untuk menyimpan ID artikel yang baru dibuat
+
+const getTokenFromCookies = () => {
+  return document.cookie
+    .split('; ')
+    .find(row => row.startsWith('token='))?.split('=')[1];
+};
+
+// Fungsi untuk mendekode payload token JWT
+const parseJwt = (token) => {
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    return JSON.parse(atob(base64));
+  } catch (error) {
+    console.error('Gagal mendekode token:', error);
+    return null;
+  }
+};
+
+const setUserIdFromToken = () => {
+  const token = getTokenFromCookies();
+  if (token) {
+    const decodedToken = parseJwt(token);
+    if (decodedToken?.user_id) {
+      newArticle.value.author_id = decodedToken.user_id; // Set ID user sebagai author
+    }
+  }
+};
 
 const fetchCategories = async () => {
   try {
@@ -108,6 +125,10 @@ const submitArticle = async () => {
     if (!token) {
       alert('Token tidak ditemukan. Pastikan Anda sudah login.');
       return;
+    }
+
+    if (!newArticle.value.author_id) {
+      setUserIdFromToken();
     }
 
     // Kirim artikel pertama
@@ -177,5 +198,8 @@ const handleImageUpload = async (file, articleId) => {
   }
 };
 
-onMounted(fetchCategories);
+onMounted(() => {
+  fetchCategories();
+  setUserIdFromToken(); // Ambil ID user saat komponen dimuat
+});
 </script>

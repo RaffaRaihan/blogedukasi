@@ -19,6 +19,7 @@
         <select class="form-select" id="role" v-model="newUser.role" required>
           <option value="user">User</option>
           <option value="admin">Admin</option>
+          <option value="author">Author</option>
         </select>
       </div>
       <div class="mb-3">

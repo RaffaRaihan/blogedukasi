@@ -12,67 +12,46 @@
         <i class="bi bi-people"></i> Users
       </NuxtLink>
       <NuxtLink to="/admin/articles" class="nav-link">
-        <i class="bi bi-book"></i> Articles
+        <i class="bi bi-book"></i> Artikel
       </NuxtLink>
       <NuxtLink to="/admin/category" class="nav-link">
-        <i class="bi bi-card-list"></i> Categories
+        <i class="bi bi-card-list"></i> Kategori
       </NuxtLink>
       <NuxtLink to="/admin/message" class="nav-link">
-        <i class="bi bi-envelope"></i> Message
+        <i class="bi bi-envelope"></i> Pesan
       </NuxtLink>
       <NuxtLink :to="`/admin/profile/${user_id}`" class="nav-link">
-        <i class="bi bi-person"></i> Profile
+        <i class="bi bi-person"></i> Profil
       </NuxtLink>
       <hr>
-      <button @click="handleLogout" class="btn btn-outline-danger">
-        <i class="bi bi-box-arrow-left"></i> Logout
+      <button data-bs-toggle="modal" data-bs-target="#logoutModal" class="btn-2">
+        <i class="bi bi-box-arrow-left"></i> Keluar
       </button>
     </nav>
+    <div v-if="alertMessage" class="alert mt-2" :class="alertClass" role="alert">{{ alertMessage }}</div>
   </div>
 
-  <!-- Sidebar untuk mobile -->
-  <div class="d-md-none">
-    <button class="btn btn-primary mb-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar" aria-controls="mobileSidebar">
-      <i class="bi bi-list"></i> Menu
-    </button>
-
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel">
-      <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="mobileSidebarLabel">Raffa Mr.</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-      </div>
-      <div class="offcanvas-body">
-        <nav class="nav flex-column">
-          <NuxtLink to="/admin/dashboard" class="nav-link">
-            <i class="bi bi-house"></i> Dashboard
-          </NuxtLink>
-          <NuxtLink to="/admin/users" class="nav-link">
-            <i class="bi bi-people"></i> Users
-          </NuxtLink>
-          <NuxtLink to="/admin/articles" class="nav-link">
-            <i class="bi bi-book"></i> Articles
-          </NuxtLink>
-          <NuxtLink to="/admin/category" class="nav-link">
-            <i class="bi bi-card-list"></i> Categories
-          </NuxtLink>
-          <NuxtLink to="/admin/message" class="nav-link">
-            <i class="bi bi-envelope"></i> Message
-          </NuxtLink>
-          <NuxtLink :to="`/admin/profile/${user_id}`" class="nav-link">
-            <i class="bi bi-person"></i> Profile
-          </NuxtLink>
-          <hr>
-          <button @click="handleLogout" class="btn btn-outline-danger">
-            <i class="bi bi-box-arrow-left"></i> Logout
-          </button>
-        </nav>
+  <!-- Logout Modal -->
+  <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="logoutModalLabel">Konfirmasi Logout</h5>
+          </div>
+          <div class="modal-body">
+            Apakah Anda yakin ingin logout?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+            <button type="button" class="btn btn-danger" @click="handleLogout" data-bs-dismiss="modal">Logout</button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script setup>
-import Cookies from 'js-cookie'; // Pastikan library js-cookie sudah diinstal
+import useHandleLogout from '~/composables/api/useHandleLogout';
 import { jwtDecode } from 'jwt-decode';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
@@ -103,20 +82,7 @@ const decodeToken = () => {
   }
 };
 
-const handleLogout = () => {
-  try {
-    // Hapus token dari cookies
-    Cookies.remove('token');
-
-    alert('Logout berhasil!');
-
-    // Redirect ke halaman login
-    window.location.href = '/login';
-  } catch (error) {
-    console.error('Terjadi kesalahan saat logout:', error);
-    alert('Logout gagal. Silakan coba lagi.');
-  }
-};
+const { alertMessage, alertClass, handleLogout } = useHandleLogout();
 
 onMounted(() => {
   decodeToken();
@@ -169,14 +135,23 @@ onMounted(() => {
 .sidebar hr {
   color: #F9F6E6;
 }
-.btn {
+.btn-2 {
+  padding: 0.5rem;
+  border-radius: 5px;
   color: #F9F6E6;
-  border-color: #F9F6E6;
+  border: solid 1px;
   background-color: #1D2B53;
 }
-.btn:hover {
+.btn-2:hover{
   color: #1D2B53;
   border-color: #1D2B53;
   background-color: #F9F6E6;
+  transition: 0.3s;
+}
+.alert {
+  position: absolute;
+  z-index: 0;
+  width: 400px;
+  margin-left: 600px;
 }
 </style>

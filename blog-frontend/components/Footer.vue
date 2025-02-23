@@ -4,7 +4,7 @@
     <div class="container p-4">
       <div class="row">
         <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
-          <h5 class="text-uppercase">Contact</h5>
+          <h5 class="text-uppercase">Kontak Saya</h5>
           <ul class="list-unstyled mb-0">
             <li>
               <p><i class="bi bi-envelope"></i> raffamraihan580@gmail.com</p>
@@ -20,16 +20,16 @@
           </ul>
         </div>
         <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-          <h5 class="text-uppercase">Navigation</h5>
+          <h5 class="text-uppercase">Navigasi</h5>
           <ul class="list-unstyled mb-0">
             <li>
-              <NuxtLink to="/" class="link text-decoration-none">Home</NuxtLink>
+              <NuxtLink to="/" class="link text-decoration-none">Beranda</NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/about" class="link text-decoration-none">About Us</NuxtLink>
+              <NuxtLink to="/about" class="link text-decoration-none">Tentang Saya</NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/contact" class="link text-decoration-none">Contact</NuxtLink>
+              <NuxtLink to="/contact" class="link text-decoration-none">Kontak</NuxtLink>
             </li>
             <!-- Hanya tampilkan tombol Login jika pengguna belum login -->
             <li v-if="!isLoggedIn">
@@ -38,7 +38,7 @@
           </ul>
         </div>
         <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-          <h5 class="text-uppercase">My Sosmed</h5>
+          <h5 class="text-uppercase">Sosmed Saya</h5>
           <ul class="list-unstyled mb-0">
             <li>
               <NuxtLink to="/" target="_black" class="link text-decoration-none"><i class="bi bi-facebook"></i> Raffa Raihan</NuxtLink>

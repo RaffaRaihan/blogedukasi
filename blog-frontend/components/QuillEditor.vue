@@ -21,7 +21,6 @@ onMounted(() => {
   const { $quill } = useNuxtApp();
 
   if (editorContainer.value) {
-    // Inisialisasi editor Quill jika belum ada
     editor = new $quill(editorContainer.value, {
       placeholder: 'Masukan Content',
       theme: 'snow',
@@ -35,14 +34,16 @@ onMounted(() => {
       },
     });
 
-    // Gunakan props untuk mengatur nilai awal editor
     if (props.modelValue) {
       editor.clipboard.dangerouslyPasteHTML(props.modelValue);
     }
 
-    // Emit perubahan konten ke parent
+    // Tambahkan class 'img-fluid' ke semua gambar dalam Quill
     editor.on('text-change', () => {
       const content = editor.root.innerHTML;
+      editor.root.querySelectorAll('img').forEach((img: { classList: { add: (arg0: string) => void; }; }) => {
+        img.classList.add('img-fluid');
+      });
       emit('update:modelValue', content);
     });
   }
@@ -62,5 +63,15 @@ watch(
 <style scoped>
 .quill-editor {
   height: 300px;
+}
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+.ql-editor p:has(img) {
+  margin: 0;
+  padding: 0;
 }
 </style>

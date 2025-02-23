@@ -5,30 +5,46 @@
       <AdminSidebar />
       <div class="col-md-9 col-lg-10 p-4">
         <h1 class="mb-4">Halaman Admin - Kelola Artikel</h1>
+        <hr>
         <!-- Filters -->
-        <div class="d-flex align-items-center mb-4 mt-4">
-          <!-- Search by Title -->
-          <input 
-            type="text" 
-            class="form-control me-2" 
-            placeholder="Search by Title" 
-            v-model="searchQuery"
-            @input="filterArticles"
-          />
-          <!-- Kategori Filter -->
-          <select 
-            class="form-select me-2" 
-            v-model="selectedCategory" 
-            @change="filterArticles"
-          >
-            <option disabled>Pilih Kategori</option>
-            <option value="">Semua Kategori</option>
-            <option v-for="category in categories" :key="category.id" :value="category.ID">
-              {{ category.name }}
-            </option>
-          </select>
+        <div class=" row d-flex align-items-center mb-4 mt-4">
+          <div class=" col-4 d-block">
+            <!-- Search by Title -->
+            <label for="search" class="form-label">Cari</label>
+            <input 
+              type="text" 
+              class="form-control me-2" 
+              placeholder="Cari Berdasarkan Judul" 
+              v-model="searchQuery"
+              @input="filterArticles"
+            />
+          </div>
+          <div class="col-4 d-block">
+            <!-- Kategori Filter -->
+            <label for="category" class="form-label">Kategori</label>
+            <select 
+              class="form-select me-2" 
+              v-model="selectedCategory" 
+              @change="filterArticles"
+            >
+              <option disabled>Pilih Kategori</option>
+              <option value="">Semua Kategori</option>
+              <option v-for="category in categories" :key="category.id" :value="category.ID">
+                {{ category.name }}
+              </option>
+            </select>
+          </div>
+          <div class="col-4 d-block">
+            <!-- Status Filter -->
+            <label for="status" class="form-label">Status</label>
+            <select class="form-select me-2" v-model="selectedStatus" @change="filterArticles">
+              <option value="">Semua</option>
+              <option value="Belum Sesuai">Belum Sesuai</option>
+              <option value="Sesuai">Sesuai</option>
+            </select>
+          </div>
         </div>
-        <button class="btn btn-outline-primary mb-4" @click="navigateToAddArticle"><i class="bi bi-plus"></i>Tambah</button>
+        <button class="btn btn-outline-primary mb-4" @click="navigateToAddArticle"><i class="bi bi-plus"></i> Tambah</button>
 
         <!-- Loading Indicator -->
         <Loading v-if="loadingArticles" />
@@ -49,8 +65,10 @@
               <div class="card-body">
                 <h5 class="card-title">{{ article.title }}</h5>
                 <p class="card-text" v-html="getTruncatedContent(article.content)"></p>
-                <button class="btn btn-outline-warning" @click="navigateToEditArticle(article.ID)"><i class="bi bi-pencil"></i></button>
-                <button @click="removeArticles(article.ID)"  class="btn btn-outline-danger ms-2"><i class="bi bi-trash"></i></button>
+                <NuxtLink :to="`/admin/articles/${article.ID}`" class="btn btn-outline-info"><i class="bi bi-eye"></i> Lihat</NuxtLink>
+                <button class="btn btn-outline-warning ms-2" @click="navigateToEditArticle(article.ID)"><i class="bi bi-pencil"></i> Edit</button>
+                <button @click="removeArticles(article.ID)" class="btn btn-outline-danger ms-2"><i class="bi bi-trash"></i> Hapus</button>
+                <h1 class="badge bg-info p-2 ms-2">{{ article.status || "Belum Sesuai" }}</h1>
               </div>
             </div>
           </div>
@@ -75,8 +93,9 @@ const router = useRouter();
 const articles = ref([]);
 const categories = ref([]);
 const selectedCategory = ref(null);
+const selectedStatus = ref("");
 const searchQuery = ref('');
-const loadingArticles = ref(true)
+const loadingArticles = ref(true);
 
 const getTokenFromCookies = () => {
   const token = document.cookie
@@ -85,7 +104,7 @@ const getTokenFromCookies = () => {
   return token;
 };
 
-const fetchArticles = async (categoryId = null, search = '') => {
+const fetchArticles = async (categoryId = null, search = '', status = '') => {
   try {
     const token = getTokenFromCookies();
     if (!token) {
@@ -99,6 +118,7 @@ const fetchArticles = async (categoryId = null, search = '') => {
       params: {
         categoryId,
         search,
+        status,
       },
     });
     articles.value = response.data;
@@ -135,10 +155,10 @@ const removeArticles = async (id) => {
       },
     });
 
-    articles.value = articles.value.filter(articles => articles.ID !== id);
-    console.log(`artikel dengan ID ${id} berhasil dihapus.`);
+    articles.value = articles.value.filter(article => article.ID !== id);
+    console.log(`Artikel dengan ID ${id} berhasil dihapus.`);
   } catch (error) {
-    console.error('Error removing user:', error);
+    console.error('Error removing article:', error);
   }
 };
 
@@ -146,12 +166,13 @@ const filteredArticles = computed(() => {
   return articles.value.filter(article => {
     const matchesCategory = selectedCategory.value ? article.category.ID === selectedCategory.value : true;
     const matchesSearch = article.title.toLowerCase().includes(searchQuery.value.toLowerCase());
-    return matchesCategory && matchesSearch;
+    const matchesStatus = selectedStatus.value ? article.status === selectedStatus.value : article.status !== "sesuai";
+    return matchesCategory && matchesSearch && matchesStatus;
   });
 });
 
 const filterArticles = () => {
-  fetchArticles(selectedCategory.value, searchQuery.value);
+  fetchArticles(selectedCategory.value, searchQuery.value, selectedStatus.value);
 };
 
 const navigateToAddArticle = () => {

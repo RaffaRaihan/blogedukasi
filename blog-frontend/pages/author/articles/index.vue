@@ -32,25 +32,35 @@
 
         <!-- Loading Indicator -->
         <Loading v-if="loadingArticles" />
-
+              
         <!-- Daftar Artikel -->
-        <div class="row" v-else>
-          <div
-            v-for="article in filteredArticles"
-            :key="article.id"
-            class="col-md-4 mb-4"
-          >
-            <div class="card">
-              <img
-                :src="`http://localhost:8080/uploads/${article.file_name}`"
-                class="card-img-top"
-                alt="..."
-              />
-              <div class="card-body">
-                <h5 class="card-title">{{ article.title }}</h5>
-                <p class="card-text" v-html="getTruncatedContent(article.content)"></p>
-                <button class="btn btn-outline-warning" @click="navigateToEditArticle(article.ID)"><i class="bi bi-pencil"></i></button>
-                <button @click="removeArticles(article.ID)"  class="btn btn-outline-danger ms-2"><i class="bi bi-trash"></i></button>
+        <div v-else>
+          <div v-if="filteredArticles.length === 0" class="text-center py-5">
+            <p class="text-muted">Belum ada artikel yang dibuat.</p>
+          </div>
+          <div class="row" v-else>
+            <div
+              v-for="article in filteredArticles"
+              :key="article.id"
+              class="col-md-4 mb-4"
+            >
+              <div class="card">
+                <img
+                  :src="`http://localhost:8080/uploads/${article.file_name}`"
+                  class="card-img-top"
+                  alt="..."
+                />
+                <div class="card-body">
+                  <h5 class="card-title">{{ article.title }}</h5>
+                  <p class="card-text" v-html="getTruncatedContent(article.content)"></p>
+                  <NuxtLink :to="`/author/articles/${article.ID}`" class="btn btn-outline-info"><i class="bi bi-eye"></i> Lihat</NuxtLink>
+                  <button class="btn btn-outline-warning ms-2" @click="navigateToEditArticle(article.ID)">
+                    <i class="bi bi-pencil"></i>  Edit
+                  </button>
+                  <button @click="removeArticles(article.ID)" class="btn btn-outline-danger ms-2">
+                    <i class="bi bi-trash"></i>  Hapus
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -76,13 +86,23 @@ const articles = ref([]);
 const categories = ref([]);
 const selectedCategory = ref(null);
 const searchQuery = ref('');
-const loadingArticles = ref(true)
+const loadingArticles = ref(true);
 
 const getTokenFromCookies = () => {
   const token = document.cookie
     .split('; ')
     .find(row => row.startsWith('token='))?.split('=')[1];
   return token;
+};
+
+const decodeToken = (token) => {
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload;
+  } catch (error) {
+    console.error('Error decoding token:', error);
+    return null;
+  }
 };
 
 const fetchArticles = async (categoryId = null, search = '') => {
@@ -92,7 +112,12 @@ const fetchArticles = async (categoryId = null, search = '') => {
       throw new Error('Token tidak ditemukan. Harap login terlebih dahulu.');
     }
 
-    const response = await axios.get('http://localhost:8080/articles', {
+    const decoded = decodeToken(token);
+    if (!decoded || !decoded.user_id) {
+      throw new Error('User ID tidak ditemukan dalam token.');
+    }
+
+    const response = await axios.get(`http://localhost:8080/author/${decoded.user_id}/articles`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -101,9 +126,10 @@ const fetchArticles = async (categoryId = null, search = '') => {
         search,
       },
     });
-    articles.value = response.data;
+    articles.value = Array.isArray(response.data.data) ? response.data.data : [];
   } catch (error) {
     console.error('Error fetching articles:', error);
+    articles.value = [];
   } finally {
     loadingArticles.value = false;
   }
@@ -112,9 +138,10 @@ const fetchArticles = async (categoryId = null, search = '') => {
 const fetchCategories = async () => {
   try {
     const response = await axios.get('http://localhost:8080/category');
-    categories.value = response.data;
+    categories.value = Array.isArray(response.data) ? response.data : [];
   } catch (error) {
     console.error('Error fetching categories:', error);
+    categories.value = [];
   }
 };
 
@@ -135,17 +162,18 @@ const removeArticles = async (id) => {
       },
     });
 
-    articles.value = articles.value.filter(articles => articles.ID !== id);
-    console.log(`artikel dengan ID ${id} berhasil dihapus.`);
+    articles.value = articles.value.filter(article => article.ID !== id);
+    console.log(`Artikel dengan ID ${id} berhasil dihapus.`);
   } catch (error) {
-    console.error('Error removing user:', error);
+    console.error('Error removing article:', error);
   }
 };
 
 const filteredArticles = computed(() => {
+  if (!Array.isArray(articles.value)) return [];
   return articles.value.filter(article => {
-    const matchesCategory = selectedCategory.value ? article.category.ID === selectedCategory.value : true;
-    const matchesSearch = article.title.toLowerCase().includes(searchQuery.value.toLowerCase());
+    const matchesCategory = selectedCategory.value ? article.category?.ID === selectedCategory.value : true;
+    const matchesSearch = article.title?.toLowerCase().includes(searchQuery.value.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 });

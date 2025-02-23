@@ -5,125 +5,57 @@
       <AdminSidebar />
       <!-- Main Content -->
       <main class="p-4 col-md-12 col-md-9 col-lg-10">
-        <h1>Workspace admins</h1>
-
-        <!-- Filters -->
-        <div class="d-flex align-items-center mb-4 mt-4">
-          <input type="text" class="form-control me-2" placeholder="Search by email" v-model="searchQuery" />
-          <select class="form-select me-2" v-model="selectedRole">
-            <option value="">All</option>
-            <option value="admin">Admin</option>
-            <option value="author">Author</option>
-            <option value="user">User</option>
-          </select>
-        </div>
-
-        <!-- Loading Indicators -->
-        <Loading v-if="loadingUsers" />
-
-        <!-- Admin Cards -->
-        <div class="mb-4" v-else>
-          <div class="row d-flex justify-content-between ms-1 me-2">
-            <div v-for="user in filteredUsers" :key="user.id" class="card mb-2" style="width: 170px;">
-              <div class="card-body text-center">
-                <img
-                  :src="`http://localhost:8080/uploads/${user.foto}`"
-                  alt="Foto Profil"
-                  class="rounded-circle mb-3"
-                  style="width: 120px; height: 120px; object-fit: cover;"
-                />
-                <h6 class="card-title">{{ user.name }}</h6>
-                <p class="text-muted">{{ user.email }}</p>
-                <p class="text-muted">{{ user.role }}</p>
-                <button @click="removeUser(user.ID)" class="btn btn-outline-danger"><i class="bi bi-person-dash"></i>  Remove</button>
-              </div>
+        <h1 class="mb-3">Halaman Dashboard - Admin</h1>
+        <div class="card mb-3">
+          <div class="card-header text-center">Data User</div>
+          <div class="card-body">
+            <p class="mb-0">Admin</p>
+            <div class="progress mb-2" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="height: 20px;">
+              <div class="progress-bar bg-info" style="width: 25%">25%</div>
             </div>
+            <p class="mb-0">Author</p>
+            <div class="progress mb-2" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="height: 20px;">
+              <div class="progress-bar bg-warning" style="width: 15%">35%</div>
+            </div>
+            <p class="mb-0">User</p>
+            <div class="progress mb-2" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="height: 20px;">
+              <div class="progress-bar" style="width: 35%">15%</div>
+            </div>
+            <NuxtLink to="/admin/users" class="btn btn-outline-primary btn-md mt-2">Lihat</NuxtLink>
+          </div>
+        </div>
+        <div class="card mb-3">
+          <div class="card-header text-center">Data Artikel</div>
+          <div class="card-body">
+            <p class="mb-0">Artikel dibuat</p>
+            <div class="progress mb-2" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="height: 20px;">
+              <div class="progress-bar" style="width: 25%">25%</div>
+            </div>
+            <p class="mb-0">Artikel yang sesuai</p>
+            <div class="progress mb-2" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="height: 20px;">
+              <div class="progress-bar bg-success" style="width: 35%">35%</div>
+            </div>
+            <p class="mb-0">Artikel yang belum sesuai</p>
+            <div class="progress mb-2" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="height: 20px;">
+              <div class="progress-bar bg-danger" style="width: 15%">15%</div>
+            </div>
+            <NuxtLink to="/admin/articles" class="btn btn-outline-primary btn-md mt-2">Lihat</NuxtLink>
+          </div>
+        </div>
+        <div class="card mb-3">
+          <div class="card-header text-center">Data Kategori</div>
+          <div class="card-body">
+            <p class="mb-0">Masukan Kategori</p>
+            <div class="progress mb-2" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="height: 20px;">
+              <div class="progress-bar" style="width: 25%">25%</div>
+            </div>
+            <NuxtLink to="/admin/category" class="btn btn-outline-primary btn-md mt-2">Lihat</NuxtLink>
           </div>
         </div>
       </main>
     </div>
   </div>
 </template>
-
-<script setup>
-import { ref, onMounted, computed } from 'vue';
-import axios from 'axios';
-import 'bootstrap-icons/font/bootstrap-icons.css';
-
-definePageMeta({
-  middleware: 'auth',
-  requiresAdmin: true,
-});
-
-const users = ref([]);
-const searchQuery = ref('');
-const selectedRole = ref('');
-const loadingUsers = ref(true);
-
-const getTokenFromCookies = () => {
-  const token = document.cookie
-    .split('; ')
-    .find(row => row.startsWith('token='))?.split('=')[1];
-  
-  return token;
-};
-
-const fetchUsers = async () => {
-  try {
-    const token = getTokenFromCookies();
-    if (!token) {
-      throw new Error('Token tidak ditemukan. Harap login terlebih dahulu.');
-    }
-
-    const response = await axios.get('http://localhost:8080/admin/users', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    users.value = response.data;
-  } catch (error) {
-    console.error('Error fetching users:', error);
-  } finally {
-    loadingUsers.value = false
-  }
-};
-
-const removeUser = async (id) => {
-  if (!confirm('Apakah Anda yakin ingin menghapus pengguna ini?')) {
-    return;
-  }
-
-  try {
-    const token = getTokenFromCookies();
-    if (!token) {
-      throw new Error('Token tidak ditemukan. Harap login terlebih dahulu.');
-    }
-
-    await axios.delete(`http://localhost:8080/admin/users/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    users.value = users.value.filter(user => user.ID !== id);
-  } catch (error) {
-    console.error('Error removing user:', error);
-  }
-};
-
-const filteredUsers = computed(() => {
-  return users.value.filter(user => {
-    const matchesRole = selectedRole.value ? user.role === selectedRole.value : true;
-    const matchesSearch = user.email && user.email.toLowerCase().includes(searchQuery.value.toLowerCase());
-    return matchesRole && matchesSearch;
-  });
-});
-
-onMounted(() => {
-  fetchUsers();
-});
-</script>
 
 <style scoped>
 main {

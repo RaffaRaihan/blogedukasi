@@ -6,7 +6,7 @@
       <div class="col-lg-8">
         <!-- Carousel -->
         <div class="card mb-4">
-          <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+          <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel" data-bs-interval="1500">
             <div class="carousel-inner">
               <div class="carousel-item active">
                 <img src="/assets/img/Shinobu.jpg" class="d-block w-100" alt="...">
@@ -83,18 +83,17 @@
 </template>
 
 <script setup>
+import useAuth from '@/composables/api/token/useAuth';
+import useArticles from '@/composables/api/useArticles';
 import { ref, computed, onMounted } from 'vue';
-import axios from 'axios';
 import { format } from 'date-fns'; // Format tanggal
 import { id } from 'date-fns/locale'; // Locale Indonesia
 import DOMPurify from "dompurify";
 
 // State untuk artikel dan pencarian
-const articles = ref([]);
 const searchQuery = ref('');
 const currentPage = ref(1); // Halaman saat ini
 const articlesPerPage = 4; // Jumlah artikel per halaman
-const loadingArticles = ref(true);
 const isLoggedIn = computed(() => {
   const token = getTokenFromCookies();
   return !!token; // Return true jika token ada, false jika tidak ada
@@ -109,25 +108,11 @@ const formatDate = (date) => {
   return format(new Date(date), 'dd MMMM yyyy', { locale: id });
 };
 
-const getTokenFromCookies = () => {
-  const token = document.cookie
-    .split('; ')
-    .find(row => row.startsWith('token='))
-    ?.split('=')[1];
-  return token;
-};
+const { getTokenFromCookies } = useAuth();
 
 // Ambil artikel dari backend
-const fetchArticles = async () => {
-  try {
-    const response = await axios.get('http://localhost:8080/articles');
-    articles.value = response.data.filter(article => article.status === "sesuai").sort((a, b) => new Date(b.CreatedAt) - new Date(a.CreatedAt));
-  } catch (error) {
-    console.error('Error fetching articles:', error);
-  } finally {
-    loadingArticles.value = false;
-  }
-};
+const { articles, loadingArticles } = useArticles();
+useArticles();
 
 // Filter artikel berdasarkan pencarian
 const filteredArticles = computed(() => {
@@ -166,11 +151,6 @@ function getTruncatedContent(content) {
   const truncated = content.split(" ").slice(0, 50).join(" ") + "...";
   return DOMPurify.sanitize(truncated); // Aman untuk dirender
 }
-
-// Fetch data saat komponen di-mount
-onMounted(() => {
-  fetchArticles();
-});
 </script>
 
 <style scoped>

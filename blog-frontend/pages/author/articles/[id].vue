@@ -8,7 +8,7 @@
         <nav aria-label="breadcrumb" v-if="articles?.category?.name">
           <ol class="breadcrumb">
             <li class="breadcrumb-item">
-              <NuxtLink to="/user/dashboard" v-if="isLoggedIn">Beranda</NuxtLink>
+              <NuxtLink to="/author/dashboard" v-if="isLoggedIn">Dashboard</NuxtLink>
               <NuxtLink to="/" v-else>Beranda</NuxtLink>
             </li>
             <li class="breadcrumb-item">
@@ -27,9 +27,9 @@
           <div v-html="formattedContent"></div><br>     
           <hr>
           <!-- Alert Message -->
-          <div v-if="alertMessage" class="alert" :class="alertClass" role="alert">{{ alertMessage }}</div>
+          <div v-if="alertMessage" class="alert" :class="alertClass" role="alert">{{ alertMessage }}</div>                 
           <!-- Comments Section -->
-          <div class="mt-5">
+          <div class="mt-5" v-if="articles.status === 'Sesuai'">
             <h4>Komentar</h4>
             <ul class="list-group" v-if="comments.length > 0">
               <li class="list-group-item" v-for="comment in comments" :key="comment.id">
@@ -51,14 +51,13 @@
               </li>
             </ul>
             <p v-else>Belum ada komentar.</p>
-
+          
             <!-- Add Comment Form -->
-            <div class=" mt-3 mb-3">
+            <div class="mt-3 mb-3">
               <h5>Tambah Komentar</h5>
               <form @submit.prevent="submitComment(articles.ID)">
                 <div>
                   <textarea v-model="newComment" class="form-control" placeholder="Tulis komentar..."></textarea>
-                  <!-- Pastikan articleId dikirim dengan benar -->
                   <button type="submit" class="btn btn-outline-primary mt-3">Comment</button>
                 </div>
               </form>

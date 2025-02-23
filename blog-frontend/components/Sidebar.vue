@@ -23,7 +23,7 @@
       </ul>
     </div>
     <div class="mb-4">
-      <h5>Services</h5>
+      <h5>Pelayanan</h5>
       <ul class="list-unstyled d-flex jutify-content-between">
         <li class="service me-2"><NuxtLink class="text-decoration-none" style="color: #211951;" to="/user/send-message">Hubungi Admin</NuxtLink></li>
         <li class="service me-2"><NuxtLink class="text-decoration-none" style="color: #211951;" to="/user/send-message">Laporkan Bug</NuxtLink></li>
@@ -34,14 +34,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
-import axios from 'axios';
+import useArticles from '@/composables/api/useArticles';
+import useCategory from '@/composables/api/useCategory';
+import { onMounted, computed } from 'vue';
 import { format } from 'date-fns'; // Untuk memformat tanggal
 import { id } from 'date-fns/locale'; // Locale Indonesia
-
-const category = ref([]);
-const articles = ref([]);
-const loadingArticles = ref(true);
 
 // Fungsi untuk memformat tanggal
 const formatDate = (date) => {
@@ -49,28 +46,9 @@ const formatDate = (date) => {
 };
 
 // Fungsi untuk mendapatkan data artikel
-const fetchArticles = async () => {
-  try {
-    const response = await axios.get('http://localhost:8080/articles'); // Ganti dengan URL backend Anda
-    articles.value = response.data;
-  } catch (error) {
-    console.error('Error fetching articles:', error);
-  } finally {
-    loadingArticles.value = false;
-  }
-};
+const { articles, loadingArticles, errorArticles } = useArticles();
 
-// Fungsi untuk mendapatkan data kategori
-const fetchCategory = async () => {
-  try {
-    const response = await axios.get('http://localhost:8080/category'); // Ganti dengan URL backend Anda
-    category.value = response.data;
-  } catch (error) {
-    console.error('Error fetching category:', error);
-  } finally {
-    loadingArticles.value = false;
-  }
-};
+const { category, loadingCategory, fetchCategory } = useCategory();
 
 // Mengambil 3 artikel secara acak
 const popularArticles = computed(() => {
@@ -82,7 +60,7 @@ const popularArticles = computed(() => {
 // Panggil API saat komponen dimuat
 onMounted(() => {
   fetchCategory();
-  fetchArticles();
+  useArticles();
 });
 </script>
 

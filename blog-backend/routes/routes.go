@@ -71,6 +71,7 @@ func SetupRoutes(r *gin.Engine) {
 	{
 		// User Comment Management
 		userRoutes.POST("/articles/:id/comments", controllers.CreateComment)
+		userRoutes.POST("/reply-comment", controllers.ReplyToComment)
 		userRoutes.GET("/articles/search", controllers.SearchArticles)
 		userRoutes.GET("/articles/:id", controllers.GetArticleByID)
 		userRoutes.GET("/:id", controllers.GetUserByID)
@@ -78,7 +79,7 @@ func SetupRoutes(r *gin.Engine) {
 		userRoutes.POST("/:id/foto", controllers.UploadProfilePhoto)
 		userRoutes.PUT("/:id/foto", controllers.UpdateProfilePhoto)
 		userRoutes.POST("/send-message", controllers.SendMessage)
-		userRoutes.GET("/messages/users/:id", controllers.GetMessagesByUserID)
+		userRoutes.GET("/messages/:id", controllers.GetMessagesByUserID)
 		userRoutes.GET("/:id/messages", controllers.GetReply)
 	}
 
@@ -86,7 +87,7 @@ func SetupRoutes(r *gin.Engine) {
 	authorRoutes := r.Group("/author")
 	authorRoutes.Use(middlewares.AuthMiddleware(), middlewares.AuthorMiddleware())
 	{
-		authorRoutes.GET("/articles", controllers.GetAll)
+		authorRoutes.GET("/:id/articles", controllers.GetArticlesByAuthor)
 		authorRoutes.GET("/articles/:id", controllers.GetArticleByID)
 		authorRoutes.POST("/articles", controllers.CreateArticle)
 		authorRoutes.PUT("/articles/:id", controllers.UpdateArticle)
@@ -98,5 +99,10 @@ func SetupRoutes(r *gin.Engine) {
 
 		// Users Profile
 		authorRoutes.GET("/users/:id", controllers.GetUserByID)
+
+		// Messages
+		authorRoutes.POST("/send-message", controllers.SendMessage)
+		authorRoutes.GET("/messages/:id", controllers.GetMessagesByUserID)
+		authorRoutes.GET("/:id/messages", controllers.GetReply)
 	}
 }

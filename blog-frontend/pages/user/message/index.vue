@@ -38,51 +38,22 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
-import { jwtDecode } from 'jwt-decode';
+import useAuth from '~/composables/api/token/useAuth';
+import useMessages from '~/composables/api/token/useMessages';
 
 definePageMeta({
   middleware: 'auth',
 });
 
-// Data pesan
-const messages = ref([]);
+const { getTokenFromCookies } = useAuth();
+
 const isLoggedIn = computed(() => {
   const token = getTokenFromCookies();
   return !!token; // Return true jika token ada, false jika tidak ada
 });
 
-const getTokenFromCookies = () => {
-  const token = document.cookie
-    .split('; ')
-    .find(row => row.startsWith('token='))?.split('=')[1];
-  
-  return token;
-};
+const { messages, fetchMessage } = useMessages();
+fetchMessage();
 
-const fetchMessage = async () => {
-  try {
-    const token = getTokenFromCookies();
-    if (!token) throw new Error('Token tidak ditemukan. Harap login terlebih dahulu.');
-
-    // Decode token untuk mendapatkan userId
-    const decoded = jwtDecode(token);
-    const userId = decoded.user_id; // Pastikan nama field sesuai dengan isi payload token Anda
-
-    const response = await axios.get(`http://localhost:8080/user/messages/users/${userId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    console.log(response.data)
-    messages.value = response.data.data;
-  } catch (error) {
-    console.error('Error fetching messages:', error);
-  }
-};
-
-// Ambil data pesan saat komponen dimuat
-onMounted(() => {
-  fetchMessage();
-});
 </script>
 
