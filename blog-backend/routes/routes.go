@@ -27,6 +27,8 @@ func SetupRoutes(r *gin.Engine) {
 	r.GET("/articles/:id", controllers.GetArticleByID)
 	r.GET("/category/:id", controllers.GetCategoryByID)
 	r.GET("/articles/:id/comments", controllers.GetByArticle)
+	r.GET("/popular-articles", controllers.GetPopularArticles)
+	r.POST("/track-view", controllers.TrackView)
 
 	// Uploads
 	r.Static("/uploads", "./uploads")
@@ -71,7 +73,6 @@ func SetupRoutes(r *gin.Engine) {
 	{
 		// User Comment Management
 		userRoutes.POST("/articles/:id/comments", controllers.CreateComment)
-		userRoutes.POST("/reply-comment", controllers.ReplyToComment)
 		userRoutes.GET("/articles/search", controllers.SearchArticles)
 		userRoutes.GET("/articles/:id", controllers.GetArticleByID)
 		userRoutes.GET("/:id", controllers.GetUserByID)

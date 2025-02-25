@@ -28,6 +28,7 @@
           <thead>
             <tr>
               <th scope="col">No</th>
+              <th scope="col">Foto</th>
               <th scope="col">Nama</th>
               <th scope="col">Email</th>
               <th scope="col">Role</th>
@@ -42,6 +43,7 @@
             </tr>
             <tr v-for="(user, index) in sortedUsers" :key="user.ID">
               <td>{{ index + 1 }}</td>
+              <td><img :src="`http://localhost:8080/uploads/${user.foto}`" alt="Profile" class="img-fluid" style="width: 5rem; height: 5rem;"/></td>
               <td>{{ user.name }}</td>
               <td>{{ user.email }}</td>
               <td>{{ user.role }}</td>

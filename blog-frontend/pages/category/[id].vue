@@ -40,41 +40,24 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
+import useFetchCategory from '~/composables/api/useCategoryById';
 import { format } from 'date-fns'; // Format tanggal
 import { id } from 'date-fns/locale'; // Locale Indonesia
 import DOMPurify from 'dompurify';
+import useAuth from '~/composables/api/token/useAuth';
 
 const isLoggedIn = computed(() => {
   const token = getTokenFromCookies();
   return !!token; // Return true jika token ada, false jika tidak ada
 });
-const category = ref({});
-const error = ref('');
 
-const getTokenFromCookies = () => {
-  const token = document.cookie
-    .split('; ')
-    .find(row => row.startsWith('token='))
-    ?.split('=')[1];
-  return token;
-};
+const { getTokenFromCookies } = useAuth()
+
+const { category } = useFetchCategory();
 
 // Format tanggal
 const formatDate = (date) => {
   return format(new Date(date), 'dd MMMM yyyy', { locale: id });
-};
-
-const fetchCategory = async (id)=>{
-  try{
-    const response = await axios.get(`http://localhost:8080/category/${id}`)
-    console.log('Respons API:', response.data);
-    category.value = response.data.data;
-  } catch(err) {
-    error.value = err.response?.data?.message || err.message;
-    console.error('Error fetching category:', err);
-  }
 };
 
 // Truncate konten artikel
@@ -83,13 +66,6 @@ function getTruncatedContent(content) {
   const truncated = content.split(" ").slice(0, 50).join(" ") + "...";
   return DOMPurify.sanitize(truncated); // Aman untuk dirender
 }
-
-// Mengambil ID dari URL
-const route = useRoute();
-onMounted(() => {
-  const categoryId = route.params.id;
-  fetchCategory(categoryId);
-});
 </script>
 
 <style scoped>

@@ -160,4 +160,7 @@ const formattedContent = computed(() => {
   margin: 0;
   padding: 0;
 }
+.ql-editor p{
+  background-color: transparent;
+}
 </style>

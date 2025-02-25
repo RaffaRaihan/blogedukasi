@@ -32,7 +32,7 @@
           <div class="mt-5">
             <h4>Komentar</h4>
             <ul class="list-group" v-if="comments.length > 0">
-              <li class="list-group-item" v-for="comment in comments" :key="comment.id">
+              <li class="list-group-item" v-for="comment in comments" :key="comment.id" style="border-color:#211951;">
                 <div class="d-flex mt-2">
                   <img 
                     :src="comment.user.foto ? `http://localhost:8080/uploads/${comment.user.foto}` : '../../../assets/img/windah senyum Roblox.jpg'" 
@@ -59,7 +59,7 @@
                 <div>
                   <textarea v-model="newComment" class="form-control" placeholder="Tulis komentar..."></textarea>
                   <!-- Pastikan articleId dikirim dengan benar -->
-                  <button type="submit" class="btn btn-outline-primary mt-3">Comment</button>
+                  <button type="submit" class="btn btn-outline-primary mt-3">Komentar</button>
                 </div>
               </form>
             </div>
@@ -159,5 +159,8 @@ const formattedContent = computed(() => {
   justify-content: center;
   margin: 0;
   padding: 0;
+}
+.ql-editor p{
+  background-color: transparent;
 }
 </style>

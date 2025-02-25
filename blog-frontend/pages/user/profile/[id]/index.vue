@@ -10,8 +10,8 @@
           <img
             :src="`http://localhost:8080/uploads/${users?.foto}`"
             alt="Foto Profil"
-            class="rounded-1"
-            style="width: 500px; height: 500px;"
+            class="rounded-1 img-fluid"
+            style="width: 500px; height: auto;"
           />
           <div class="text-start ms-5 mt-5">
             <div class="mb-3 d-flex">
@@ -21,6 +21,10 @@
             <div class="mb-3 d-flex">
               <h2 class="fw-bold">Email:</h2>
               <h2 class="ms-3">{{ users?.email }}</h2>
+            </div>
+            <div class="mb-3 d-flex">
+              <h2 class="fw-bold">Bio:</h2>
+              <h2 class="ms-3">{{ users?.bio || "N/A"}}</h2>
             </div>
             <button class="btn btn-outline-warning" @click="navigateToEditProfile"><i class="bi bi-pencil"></i>  Edit Profil</button>
           </div>

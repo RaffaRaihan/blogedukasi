@@ -3,20 +3,21 @@
   <div class="col-lg-4 mb-3">
     <div class="mb-4">
       <h5>Paling Populer</h5>
-      <!-- Loading Indicator -->
-      <Loading v-if="loadingArticles" />
-      <ul v-for="article in popularArticles" :key="article.id" class="list-group" v-else>
-        <li class="category-1 list-group-item mb-3" style="color: #211951;">
-          {{ article.title }} <br>
-          <span class="text-muted" style="color: #211951;">{{ formatDate(article.CreatedAt) }}</span><br>
-          <NuxtLink :to="`/user/articles/${article.ID}`" class="btn btn-sm mt-2 mb-2"><i class="bi bi-eye"></i>  Lihat</NuxtLink>
+      <ul v-if="popularArticles.length > 0" class="list-group">
+        <li v-for="article in popularArticles.slice(0, 3)" :key="article.article_id" class="category list-group-item">
+          <strong>{{ article.title }}</strong> <br>
+          <span class="text-muted">{{ formatDate(article.created_at) }}</span><br>
+          <span class="text-muted"><i class="bi bi-eye"></i> {{ article.views }} views</span><br>
+          <NuxtLink :to="`/user/articles/${article.article_id}`" class="btn btn-sm mt-2 mb-2" @click="trackArticleView(article.article_id)">
+            Lihat
+          </NuxtLink>
         </li>
       </ul>
+      <p v-else>Tidak ada artikel populer.</p>
     </div>
     <div class="mb-4">
       <h5>Kategori</h5>
-      <Loading v-if="loadingArticles" />
-      <ul v-for="category in category" :key="category.id" class="list-group" v-else>
+      <ul v-for="category in category" :key="category.id" class="list-group">
         <li class="category list-group-item mb-2">
           <NuxtLink class="text-decoration-none" style="color: #211951;" :to="`/category/${category.ID}`">#{{ category.name }}</NuxtLink>
         </li>
@@ -34,34 +35,41 @@
 </template>
 
 <script setup>
-import useArticles from '@/composables/api/useArticles';
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
 import useCategory from '@/composables/api/useCategory';
-import { onMounted, computed } from 'vue';
-import { format } from 'date-fns'; // Untuk memformat tanggal
-import { id } from 'date-fns/locale'; // Locale Indonesia
+import useArticles from '~/composables/api/useArticles';
+
+const popularArticles = ref([])
+const errorArticles = ref(null)
+
+const{ articles, trackArticleView } = useArticles()
 
 // Fungsi untuk memformat tanggal
-const formatDate = (date) => {
-  return format(new Date(date), 'dd MMMM yyyy', { locale: id });
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('id-ID', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
 };
 
-// Fungsi untuk mendapatkan data artikel
-const { articles, loadingArticles, errorArticles } = useArticles();
+const fetchPopularArticles = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/popular-articles');
+      console.log("Popular Articles Response:", response.data);
+      popularArticles.value = response.data // Jika response.data undefined, set array kosong
+    } catch (error) {
+      console.error("Error fetching popular articles:", error);
+      errorArticles.value = error;
+    } 
+  };
 
-const { category, loadingCategory, fetchCategory } = useCategory();
+const { category, fetchCategory } = useCategory();
+fetchCategory();
 
-// Mengambil 3 artikel secara acak
-const popularArticles = computed(() => {
-  if (articles.value.length <= 3) return articles.value; // Jika artikel kurang dari atau sama dengan 3
-  const shuffled = [...articles.value].sort(() => 0.5 - Math.random());
-  return shuffled.slice(0, 3); // Ambil 3 artikel pertama setelah diacak
-});
-
-// Panggil API saat komponen dimuat
-onMounted(() => {
-  fetchCategory();
-  useArticles();
-});
+onMounted(fetchPopularArticles);
 </script>
 
 <style scoped>
@@ -75,7 +83,6 @@ onMounted(() => {
   background-color: #F0F3FF;
   transition: 0.2s;
 }
-
 .category{
   border-color: #211951;
 }

@@ -24,9 +24,7 @@
               <td>{{ msg.user_id }}</td>
               <td>{{ msg.name }}</td>
               <td>{{ msg.content }}</td>
-              <td>
-                {{ msg.reply }}
-              </td>
+              <td>{{ msg.reply }}</td>
               <td>
                 <button
                   v-if="!msg.reply"
@@ -61,12 +59,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                <textarea
-                  v-model="replyMessage.reply"
-                  class="form-control"
-                  rows="4"
-                  placeholder="Tulis balasan Anda di sini"
-                ></textarea>
+                <QuillEditor v-model="replyMessage.reply"/>
               </div>
               <div class="modal-footer">
                 <button

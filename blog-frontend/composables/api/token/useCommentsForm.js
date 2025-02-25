@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router';
 import useAuth from '@/composables/api/token/useAuth';
 import useComments from '@/composables/api/useComments';
 import useArticle from '~/composables/api/useArticlesById';
+import { jwtDecode } from 'jwt-decode';
 
 export default function useCommentForm() {
   const { getTokenFromCookies } = useAuth();
@@ -15,6 +16,17 @@ export default function useCommentForm() {
   const alertMessage = ref('');
   const alertClass = ref('');
   const route = useRoute();
+
+  const decodeToken = () => {
+    try {
+      const token = getTokenFromCookies();
+      if (!token) throw new Error('Token tidak ditemukan. Harap login terlebih dahulu.');
+      const decoded = jwtDecode(token);
+      user_id.value = decoded.user_id;
+    } catch (error) {
+      console.error('Error decoding token:', error);
+    }
+  };
 
   const submitComment = async (articleId) => {
     try {
@@ -63,6 +75,7 @@ export default function useCommentForm() {
 
   onMounted(() => {
     const articleId = route.params.id;
+    decodeToken();
     fetchArticle(articleId);
     fetchComments(articleId);
   });

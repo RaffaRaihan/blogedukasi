@@ -14,7 +14,7 @@ func main() {
 	// connect database
 	config.Connect()
 
-    config.GetDB().AutoMigrate(&models.Article{}, &models.Comment{}, &models.Category{}, &models.User{}, &models.Message{})
+    config.GetDB().AutoMigrate(&models.Article{}, &models.Comment{}, &models.Category{}, &models.User{}, &models.Message{},&models.ArticleView{})
 
     r := gin.Default()
     routes.SetupRoutes(r)

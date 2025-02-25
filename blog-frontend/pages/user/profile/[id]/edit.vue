@@ -27,7 +27,17 @@
               placeholder="Masukkan email"
             />
           </div>
-
+          <div class="mb-3">
+            <label for="email" class="form-label fw-bold">Bio:</label>
+            <textarea
+             class="form-control" 
+             id="exampleFormControlTextarea1" 
+             v-model="users.bio"
+             rows="3"
+             placeholder="Masukan bio">
+            </textarea>
+          </div>
+          
           <!-- Form untuk Foto -->
           <div class="mb-3">
             <label for="foto" class="form-label fw-bold">Foto Profil:</label>
@@ -41,10 +51,8 @@
 
           <!-- Tombol -->
           <div class="text-center">
-            <button type="submit" class="btn btn-outline-success"><i class="bi bi-check2-circle"></i>  Simpan Perubahan</button>
-            <button type="button" class="btn btn-outline-danger ms-2" @click="cancelEdit">
-              <i class="bi bi-x-circle"></i>  Batal
-            </button>
+            <button type="submit" class="btn btn-success">Simpan Perubahan</button>
+            <button type="button" class="btn btn-danger ms-2" @click="cancelEdit">Batal</button>
           </div>
         </form>
       </div>

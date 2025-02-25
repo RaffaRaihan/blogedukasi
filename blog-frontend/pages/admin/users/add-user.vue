@@ -31,7 +31,7 @@
           ref="fileInput"
         />
       </div>
-      <button type="submit" class="btn btn-primary">Add User</button>
+      <button type="submit" class="btn btn-primary">Tambah User</button>
     </form>
   </div>
 </template>

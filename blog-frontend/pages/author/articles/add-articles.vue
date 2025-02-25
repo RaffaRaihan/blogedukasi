@@ -51,7 +51,8 @@
           ref="fileInput"
         />
       </div>
-      <button type="submit" class="btn btn-primary">Tambah Artikel</button>
+      <button type="submit" class="btn btn-primary me-2">Tambah Artikel</button>
+      <NuxtLink to="/author/articles" class="btn btn-danger">Batal</NuxtLink>
     </form>
   </div>
 </template>

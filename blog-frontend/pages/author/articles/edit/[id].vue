@@ -50,7 +50,8 @@
           @change="handleImageChange"
         />
       </div>
-      <button type="submit" class="btn btn-primary">Update Artikel</button>
+      <button type="submit" class="btn btn-primary me-2">Update Artikel</button>
+      <NuxtLink to="/author/articles" class="btn btn-danger">Batal</NuxtLink>
     </form>
   </div>
 </template>

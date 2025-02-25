@@ -6,20 +6,34 @@
       <div class="col-lg-8">
         <!-- Carousel -->
         <div class="card mb-4">
-          <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel" data-bs-interval="1500">
+          <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+              <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+              <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+              <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+              <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="3" aria-label="Slide 4"></button>
+            </div>
             <div class="carousel-inner">
-              <div class="carousel-item active">
-                <img src="/assets/img/Shinobu.jpg" class="d-block w-100" alt="...">
+              <div class="carousel-item active" data-bs-interval="2000">
+                <img src="/assets/img/Inumaki.jpg" class="d-block w-100 img-fluid" alt="...">
+              </div>
+              <div class="carousel-item" data-bs-interval="2000">
+                <img src="/assets/img/Gojo-lanscape.jpeg" class="d-block w-100 img-fluid" alt="...">
+              </div>
+              <div class="carousel-item" data-bs-interval="2000">
+                <img src="/assets/img/tanjiro.jpeg" class="d-block w-100 img-fluid" alt="...">
               </div>
               <div class="carousel-item">
-                <img src="/assets/img/Gojo-lanscape.jpeg" class="d-block w-100" alt="...">
+                <img src="/assets/img/Tanjiro-2.jpeg" class="d-block w-100 img-fluid" alt="...">
               </div>
-              <div class="carousel-item">
-                <img src="/assets/img/tanjiro.jpeg" class="d-block w-100" alt="...">
-              </div>
-              <div class="carousel-item">
-                <img src="/assets/img/Tanjiro-2.jpeg" class="d-block w-100" alt="...">
-              </div>
+              <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
             </div>
           </div>
         </div>
@@ -53,7 +67,7 @@
                   <h5 class="card-title">{{ articlesItem.title }}</h5>
                   <p class="card-text" v-html="getTruncatedContent(articlesItem.content)"></p>
                   <p class="text-muted">Dibuat : {{ formatDate(articlesItem.CreatedAt) }}</p>
-                  <NuxtLink :to="`/user/articles/${articlesItem.ID}`" class="btn">Baca Selengkapnya   <i class="bi bi-arrow-right-circle"></i></NuxtLink>
+                  <NuxtLink :to="`/user/articles/${articlesItem.ID}`" @click="trackArticleView(articlesItem.ID)" class="btn">Baca Selengkapnya   <i class="bi bi-arrow-right-circle"></i></NuxtLink>
                 </div>
               </div>
             </div>
@@ -85,7 +99,7 @@
 <script setup>
 import useAuth from '@/composables/api/token/useAuth';
 import useArticles from '@/composables/api/useArticles';
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed } from 'vue';
 import { format } from 'date-fns'; // Format tanggal
 import { id } from 'date-fns/locale'; // Locale Indonesia
 import DOMPurify from "dompurify";
@@ -111,7 +125,7 @@ const formatDate = (date) => {
 const { getTokenFromCookies } = useAuth();
 
 // Ambil artikel dari backend
-const { articles, loadingArticles } = useArticles();
+const { articles, loadingArticles, trackArticleView } = useArticles();
 useArticles();
 
 // Filter artikel berdasarkan pencarian
