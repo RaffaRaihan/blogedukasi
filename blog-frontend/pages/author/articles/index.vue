@@ -156,7 +156,7 @@ const removeArticles = async (id) => {
       throw new Error('Token tidak ditemukan. Harap login terlebih dahulu.');
     }
 
-    await axios.delete(`http://localhost:8080/admin/articles/${id}`, {
+    await axios.delete(`http://localhost:8080/author/articles/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

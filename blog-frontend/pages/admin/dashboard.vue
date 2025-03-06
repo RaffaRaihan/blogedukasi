@@ -15,11 +15,11 @@
             </div>
             <p class="mb-0">Author</p>
             <div class="progress mb-2" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="height: 20px;">
-              <div class="progress-bar bg-warning" style="width: 15%">35%</div>
+              <div class="progress-bar bg-warning" style="width: 15%">15%</div>
             </div>
             <p class="mb-0">User</p>
             <div class="progress mb-2" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="height: 20px;">
-              <div class="progress-bar" style="width: 35%">15%</div>
+              <div class="progress-bar" style="width: 35%">35%</div>
             </div>
             <NuxtLink to="/admin/users" class="btn btn-outline-primary btn-md mt-2">Lihat</NuxtLink>
           </div>

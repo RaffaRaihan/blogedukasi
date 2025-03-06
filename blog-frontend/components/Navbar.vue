@@ -2,7 +2,9 @@
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <NuxtLink class="logo navbar-brand" to="/">Raffa Mr.</NuxtLink>
+            <NuxtLink class="logo navbar-brand" to="/">
+              <img src="/assets/img/logo.png" alt="Logo" class="img img-fluid" style="width: 100px; height: 40px;">
+            </NuxtLink>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -52,7 +54,7 @@ const isLoggedIn = ref(false);
   background-color: #211951;
   position: sticky;
   top: 0px;
-  z-index: 2;
+  z-index: 100;
 }
 .navbar .nav-link {
   color: #F0F3FF;
@@ -67,10 +69,12 @@ const isLoggedIn = ref(false);
   border-radius: 50%;
 }
 .logo{
-  color: #F0F3FF;
+  border-radius: 1rem;
+  background-color: transparent;
 }
 .logo:hover{
-  color: #15F5BA;
+  border-radius: 1rem;
+  background-color: #15F5BA;
   transition: 0.3s;
 }
 .btn{

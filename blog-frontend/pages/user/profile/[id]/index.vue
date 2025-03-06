@@ -10,7 +10,7 @@
           <img
             :src="`http://localhost:8080/uploads/${users?.foto}`"
             alt="Foto Profil"
-            class="rounded-1 img-fluid"
+            class="rounded-1 img img-fluid"
             style="width: 500px; height: auto;"
           />
           <div class="text-start ms-5 mt-5">

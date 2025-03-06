@@ -8,8 +8,8 @@
         <nav aria-label="breadcrumb" v-if="category.name">
           <ol class="breadcrumb">
             <li class="breadcrumb-item">
-              <NuxtLink to="/user/dashboard" v-if="isLoggedIn">Home</NuxtLink>
-              <NuxtLink to="/" v-else>Home</NuxtLink>
+              <NuxtLink to="/user/dashboard" v-if="isLoggedIn">Beranda</NuxtLink>
+              <NuxtLink to="/" v-else>Beranda</NuxtLink>
             </li>
             <li class="breadcrumb-item">
               <NuxtLink :to="`/category/${category.ID}`">{{ category.name }}</NuxtLink>

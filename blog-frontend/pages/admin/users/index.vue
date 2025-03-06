@@ -43,7 +43,7 @@
             </tr>
             <tr v-for="(user, index) in sortedUsers" :key="user.ID">
               <td>{{ index + 1 }}</td>
-              <td><img :src="`http://localhost:8080/uploads/${user.foto}`" alt="Profile" class="img-fluid" style="width: 5rem; height: 5rem;"/></td>
+              <td><img :src="`http://localhost:8080/uploads/${user.foto}`" alt="Profile" class="rounded img img-fluid" style="width: 5rem; height: 5rem;"/></td>
               <td>{{ user.name }}</td>
               <td>{{ user.email }}</td>
               <td>{{ user.role }}</td>

@@ -8,6 +8,7 @@ export default function useComments() {
     try {
       const response = await axios.get(`http://localhost:8080/articles/${articleId}/comments`);
       comments.value = response.data;
+      console.log("Response:", response);
     } catch (err) {
       console.error('Error fetching comments:', err);
     }

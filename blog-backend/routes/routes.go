@@ -73,6 +73,9 @@ func SetupRoutes(r *gin.Engine) {
 	{
 		// User Comment Management
 		userRoutes.POST("/articles/:id/comments", controllers.CreateComment)
+		userRoutes.POST("/reply", controllers.ReplyToComment)
+		userRoutes.PUT("/comments/:id", controllers.EditComment)
+		userRoutes.DELETE("/comments/:id", controllers.DeleteComment)	
 		userRoutes.GET("/articles/search", controllers.SearchArticles)
 		userRoutes.GET("/articles/:id", controllers.GetArticleByID)
 		userRoutes.GET("/:id", controllers.GetUserByID)

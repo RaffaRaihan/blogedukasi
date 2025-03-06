@@ -2,7 +2,9 @@
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <NuxtLink class="logo navbar-brand" to="/user/dashboard">Raffa Mr.</NuxtLink>
+            <NuxtLink class="logo navbar-brand" to="/user/dashboard">
+              <img src="/assets/img/logo.png" alt="Logo" class="img img-fluid" style="width: 100px; height: 40px;">
+            </NuxtLink>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -116,7 +118,7 @@ onMounted(() => {
   background-color: #211951;
   position: sticky;
   top: 0px;
-  z-index: 10;
+  z-index: 100;
 }
 .navbar .nav-link {
   color: #F0F3FF;
@@ -131,10 +133,12 @@ onMounted(() => {
   border-radius: 50%;
 }
 .logo{
-  color: #F0F3FF;
+  border-radius: 1rem;
+  background-color: transparent;
 }
 .logo:hover{
-  color: #15F5BA;
+  border-radius: 1rem;
+  background-color: #15F5BA;
   transition: 0.3s;
 }
 .dropdown-menu{
