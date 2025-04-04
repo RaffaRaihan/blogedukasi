@@ -1,6 +1,5 @@
 import { ref } from 'vue';
 import axios from 'axios';
-import { useRouter } from 'vue-router';
 import useAuth from '@/composables/api/token/useAuth';
 import useUsersById from '@/composables/api/token/useUsersById';
 
@@ -9,6 +8,8 @@ export default function useUpdateUserProfile() {
   const { users } = useUsersById();
   const fotoFile = ref(null);
   const error = ref(null);
+  const alertMessage = ref('');
+  const alertClass = ref('');
 
   // Fungsi untuk mengunggah file foto
   const handleFileUpload = (event) => {
@@ -26,6 +27,7 @@ export default function useUpdateUserProfile() {
         {
           name: users.value.name,
           email: users.value.email,
+          bio: users.value.bio,
         },
         {
           headers: {
@@ -51,8 +53,11 @@ export default function useUpdateUserProfile() {
         );
       }
 
-      alert("Profil berhasil diperbarui!");
-      window.location.href = `/user/profile/${users.value.ID}`;
+      alertMessage.value = `Profil berhasil diperbaharui!`;
+      alertClass.value = 'alert alert-success';
+      setTimeout(() => {
+        window.location.href =`/user/profile/${users.value.ID}`;
+      }, 3000);
     } catch (err) {
       error.value = err.response?.data?.message || err.message;
       console.error("Error updating profile:", err);
@@ -64,6 +69,8 @@ export default function useUpdateUserProfile() {
     fotoFile,
     users,
     error,
+    alertMessage,
+    alertClass,
     handleFileUpload,
     updateUserProfile,
   };

@@ -59,7 +59,7 @@
             <p>Tidak ada artikel yang ditemukan.</p>
           </div>
             <div v-else v-for="articlesItem in paginatedArticles" :key="articlesItem.ID" class="col-md-6 mb-3">
-              <div class="card">
+              <div class="card shadow bg-body-tertiary rounded">
                 <img :src="`http://localhost:8080/uploads/${articlesItem.file_name}`" class="card-img-top" alt="...">
                 <div class="card-body">
                   <h6 class="text-muted">{{ articlesItem.label }}</h6>

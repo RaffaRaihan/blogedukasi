@@ -55,7 +55,10 @@
                         style="width: 5rem; height: 5rem; border-radius: 50%;"
                       >
                       <div class="d-block ms-3">
-                        <h5 class="mb-0 fw-bold">{{ comment.user.name || 'user tidak ada' }}</h5>
+                        <div class="d-flex">
+                          <h5 class="mb-0 fw-bold">{{ comment.user.name || 'user tidak ada' }}</h5>
+                          <p class="ms-2 mb-1 text-muted">@{{ comment.user.email }}</p>
+                        </div>
                         <p class="mb-1">{{ comment.content }}</p>
                         <div class="d-flex">
                           <NuxtLink class="text-muted mt-2" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="setReplyComment(comment.ID)">Balas</NuxtLink>
@@ -90,7 +93,10 @@
                           style="width: 3rem; height: 3rem; border-radius: 50%;"
                         >
                         <div class="d-block ms-3">
-                          <h6 class="mb-0 fw-bold">{{ reply.user.name || 'user tidak ada' }}</h6>
+                          <div class="d-flex">
+                            <h6 class="mb-0 fw-bold">{{ reply.user.name || 'user tidak ada' }}</h6>
+                            <p class="ms-2 mb-0 text-muted">@{{ reply.user.email }}</p>
+                          </div>
                           <p class="mb-1">{{ reply.content }}</p>
                           <NuxtLink class="text-muted mt-2" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="setReplyComment(reply.ID)">Balas</NuxtLink>
                           <a class="text-decoration-none text-dark ms-2 mt-2" href="#" role="button" id="dropdown" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-three-dots-vertical"></i></a>
@@ -119,6 +125,10 @@
                   <button type="submit" class="btn-2 btn-outline-primary mt-3">Komentar</button>
                 </div>
               </form>
+            </div>
+            <div class="my-3">
+              <h5>Laporkan Artikel</h5>
+              <NuxtLink :to="`/user/articles/${articles.ID}/report`" class="text-muted">Laporkan Artikel</NuxtLink>
             </div>
           </div>
         </div>
@@ -245,7 +255,7 @@ const sendReplyComment = () => {
 };
 const sendEditComment = () => {
   if (selectedCommentId.value) {
-    EditComment(selectedCommentId.value);
+    EditComment(selectedCommentId.value, editComment.value);
   }
 };
 const sendHapusComment = () => {
@@ -256,12 +266,6 @@ const sendHapusComment = () => {
 </script>
 
 <style scoped>
-.text-muted{
-  text-decoration: none;
-}
-.text-muted:hover{
-  text-decoration: underline;
-}
 .breadcrumb {
   background-color: transparent;
   padding: 0;

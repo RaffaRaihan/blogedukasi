@@ -24,6 +24,15 @@
                     <div class="card-body">
                       <h5 class="card-title">{{ article.title }}</h5>
                       <p class="card-text" v-html="getTruncatedContent(article.content)"></p>
+                      <h5 class="text-muted">*Catatan dari admin</h5>
+                      <div class="card">
+                        <div class="card-body">
+                          <p class="card-text" v-html="article.note"></p>
+                        </div>
+                        <button class="btn btn-outline-warning mb-2 mx-2" @click="navigateToEditArticle(article.ID)">
+                          <i class="bi bi-pencil"></i>  Perbaiki
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -61,6 +70,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 import DOMPurify from "dompurify";
 
 definePageMeta({
@@ -128,7 +138,25 @@ function getTruncatedContent(content) {
   return DOMPurify.sanitize(truncated);
 }
 
+const router = useRouter()
+
+const navigateToEditArticle = (id) => {
+  router.push(`/author/articles/edit/${id}`);
+};
+
 onMounted(() => {
   fetchArticles();
 });
 </script>
+
+<style scoped>
+.ql-editor p:has(img) {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+.ql-editor p{
+  background-color: transparent;
+}
+</style>

@@ -3,7 +3,7 @@
   <nav class="navbar navbar-expand-lg">
         <div class="container">
             <NuxtLink class="logo navbar-brand" to="/user/dashboard">
-              <img src="/assets/img/logo.png" alt="Logo" class="img img-fluid" style="width: 100px; height: 40px;">
+              Raffa Mr.
             </NuxtLink>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -20,7 +20,7 @@
                         <NuxtLink class="nav-link" to="/contact">Kontak</NuxtLink>
                     </li>
                 </ul>
-                <div class="dropdown ms-2" v-if="isLoggedIn">
+                <div class="dropdown" v-if="isLoggedIn">
                   <a class="d-flex align-items-center text-decoration-none text-white" href="#" role="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     <span class="me-2" style="color: #F0F3FF;">
                       <i class="bi bi-chevron-down"></i> {{ users.name }}
@@ -133,12 +133,11 @@ onMounted(() => {
   border-radius: 50%;
 }
 .logo{
-  border-radius: 1rem;
+  color: #F0F3FF;
   background-color: transparent;
 }
 .logo:hover{
-  border-radius: 1rem;
-  background-color: #15F5BA;
+  color: #15F5BA;
   transition: 0.3s;
 }
 .dropdown-menu{

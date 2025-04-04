@@ -1,4 +1,5 @@
 <template>
+  <div v-if="alertMessage" class="alert" :class="alertClass" role="alert">{{ alertMessage }}</div>
   <div class="container mt-3 mb-3">
     <h1>Edit Artikel</h1>
     <form @submit.prevent="updateArticle">
@@ -47,6 +48,10 @@
           <option value="Belum Sesuai">Belum Sesuai</option>
         </select>
       </div>
+      <div class="mb-3">
+        <label for="editNote" class="form-label">Catatan</label>
+        <QuillEditor v-model="editArticle.note" />
+      </div>
       <!-- Input untuk upload gambar -->
       <div class="mb-3">
         <label for="editImage" class="form-label">Gambar Artikel</label>
@@ -66,7 +71,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
-import { useRoute, useRouter } from 'vue-router';  // Pastikan mengimpor useRouter
+import { useRoute } from 'vue-router';  // Pastikan mengimpor useRouter
 import QuillEditor from '@/components/QuillEditor.vue';
 
 definePageMeta({
@@ -81,12 +86,14 @@ const editArticle = ref({
   category_id: null,
   author: '',
   status: '',
+  note: '',
   file: null, // Tambahkan properti file untuk menyimpan file gambar
 });
 const categories = ref([]);
 const route = useRoute();
-const router = useRouter(); // Inisialisasi router untuk navigasi
 const articleId = route.params.id; // Assuming the article ID is passed as a URL param
+const alertMessage = ref('');
+const alertClass = ref('');
 
 const getTokenFromCookies = () => {
   const token = document.cookie
@@ -116,6 +123,7 @@ const fetchArticle = async () => {
       category_id: articleData.category_id,
       author: articleData.author,
       status: articleData.status,
+      note: articleData.note,
       file: null, // Reset file karena ini hanya untuk upload baru
     };
   } catch (error) {
@@ -144,7 +152,12 @@ const updateArticle = async () => {
   try {
     const token = getTokenFromCookies();
     if (!token) {
-      throw new Error('Token tidak ditemukan. Harap login terlebih dahulu.');
+      alertMessage.value = `Token tidak ditemukan. Pastikan Anda sudah login!!`;
+      alertClass.value = 'alert alert-danger';
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 3000);
+      return;
     }
 
     console.log('Artikel yang akan di-update:', editArticle.value);
@@ -157,6 +170,7 @@ const updateArticle = async () => {
       category_id: editArticle.value.category_id,
       author: editArticle.value.author,
       status: editArticle.value.status,
+      note: editArticle.value.note,
     };
 
     await axios.put(
@@ -174,10 +188,18 @@ const updateArticle = async () => {
       await uploadImage();
     }
 
-    alert('Artikel berhasil diubah.');
-    router.push('/admin/articles'); // Pastikan penggunaan router.push
+    alertMessage.value = `Artikel berhasil diubah.`;
+    alertClass.value = 'alert alert-success';
+    setTimeout(() => {
+      window.location.href = "/admin/articles";
+    }, 3000);
   } catch (error) {
     console.error('Error updating article:', error);
+    alertMessage.value = `Gagal mengubah artikel`;
+    alertClass.value = 'alert alert-danger';
+    setTimeout(() => {
+      window.location.href = "/admin/articles";
+    }, 3000);
   }
 };
 
@@ -189,7 +211,12 @@ const uploadImage = async () => {
   try {
     const token = getTokenFromCookies();
     if (!token) {
-      throw new Error('Token tidak ditemukan. Harap login terlebih dahulu.');
+      alertMessage.value = `Token tidak ditemukan. Pastikan Anda sudah login!!`;
+      alertClass.value = 'alert alert-danger';
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 3000);
+      return;
     }
 
     const response = await axios.post(
@@ -202,11 +229,11 @@ const uploadImage = async () => {
         },
       }
     );
-    alert('Gambar berhasil diunggah.');
     console.log(response.data)
   } catch (error) {
     console.error('Error uploading image:', error);
-    alert('Gagal mengunggah gambar.');
+    alertMessage.value = `Gagal menggungah gambar`;
+    alertClass.value = 'alert alert-danger';
   }
 };
 
@@ -215,3 +242,15 @@ onMounted(() => {
   fetchArticle();
 });
 </script>
+<style scoped>
+.alert {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 500px;
+  z-index: 1050;
+  text-align: center;
+}
+</style>

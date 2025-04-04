@@ -11,4 +11,5 @@ type User struct {
 	Foto     string    `json:"foto"`
 	Role     string    `json:"role"` // "admin" atau "user"
 	Messages []Message `json:"pesan"`
+	Bio		 string	   `json:"bio"`
 }

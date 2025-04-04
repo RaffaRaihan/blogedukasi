@@ -1,4 +1,5 @@
 <template>
+  <div v-if="alertMessage" class="alert" :class="alertClass" role="alert">{{ alertMessage }}</div>
   <div class="container mb-4">
     <h1 class="my-4">Tambah Artikel Baru</h1>
     <form @submit.prevent="submitArticle">
@@ -77,6 +78,8 @@ const newArticle = ref({
 });
 const categories = ref([]);
 const newArticleId = ref(null); // Untuk menyimpan ID artikel yang baru dibuat
+const alertMessage = ref('');
+const alertClass = ref('');
 
 const getTokenFromCookies = () => {
   return document.cookie
@@ -124,7 +127,11 @@ const submitArticle = async () => {
       ?.split('=')[1];
 
     if (!token) {
-      alert('Token tidak ditemukan. Pastikan Anda sudah login.');
+      alertMessage.value = `Token tidak ditemukan. Pastikan Anda sudah login!!`;
+      alertClass.value = 'alert alert-danger';
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 3000);
       return;
     }
 
@@ -158,11 +165,18 @@ const submitArticle = async () => {
       await handleImageUpload(file, newArticleId.value);
     }
 
-    alert('Artikel berhasil dibuat.');
-    router.push('/admin/articles');
+    alertMessage.value = `Artikel berhasil dibuat.`;
+    alertClass.value = 'alert alert-success';
+    setTimeout(() => {
+      window.location.href = "/admin/articles";
+    }, 3000);
   } catch (error) {
     console.error('Error submitting article:', error);
-    alert('Gagal membuat artikel');
+    alertMessage.value = `Gagal membuat artikel`;
+    alertClass.value = 'alert alert-danger';
+    setTimeout(() => {
+      window.location.href = "/admin/articles";
+    }, 3000);
   }
 };
 
@@ -178,7 +192,11 @@ const handleImageUpload = async (file, articleId) => {
       ?.split('=')[1];
 
     if (!token) {
-      alert('Token tidak ditemukan. Pastikan Anda sudah login.');
+      alertMessage.value = `Token tidak ditemukan. Pastikan Anda sudah login!!`;
+      alertClass.value = 'alert alert-danger';
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 3000);
       return;
     }
 
@@ -195,7 +213,8 @@ const handleImageUpload = async (file, articleId) => {
     console.log('File uploaded:', response.data);
   } catch (error) {
     console.error('Error uploading file:', error);
-    alert('Gagal mengunggah gambar');
+    alertMessage.value = `Gagal menggungah gambar`;
+    alertClass.value = 'alert alert-danger';
   }
 };
 
@@ -204,3 +223,16 @@ onMounted(() => {
   setUserIdFromToken(); // Ambil ID user saat komponen dimuat
 });
 </script>
+
+<style scoped>
+.alert {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 500px;
+  z-index: 1050;
+  text-align: center;
+}
+</style>

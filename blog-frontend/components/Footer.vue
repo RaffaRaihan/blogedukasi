@@ -23,7 +23,8 @@
           <h5 class="text-uppercase">Navigasi</h5>
           <ul class="list-unstyled mb-0">
             <li>
-              <NuxtLink to="/" class="link text-decoration-none">Beranda</NuxtLink>
+              <NuxtLink v-if="isLoggedIn" to="/user/dashboard" class="link text-decoration-none">Beranda</NuxtLink>
+              <NuxtLink v-else to="/" class="link text-decoration-none">Beranda</NuxtLink>
             </li>
             <li>
               <NuxtLink to="/about" class="link text-decoration-none">Tentang Saya</NuxtLink>

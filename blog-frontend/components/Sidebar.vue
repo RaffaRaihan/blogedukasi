@@ -27,7 +27,6 @@
       <h5>Pelayanan</h5>
       <ul class="list-unstyled d-flex jutify-content-between">
         <li class="service me-2"><NuxtLink class="text-decoration-none" style="color: #211951;" to="/user/send-message">Hubungi Admin</NuxtLink></li>
-        <li class="service me-2"><NuxtLink class="text-decoration-none" style="color: #211951;" to="/user/send-message">Laporkan Bug</NuxtLink></li>
         <li class="service me-2"><NuxtLink class="text-decoration-none" style="color: #211951;" to="/user/send-message">Kritik Dan Saran</NuxtLink></li>
       </ul>
     </div>

@@ -2,13 +2,14 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
 export default function useArticles() {
-  // State untuk artikel biasa
-  const articles = ref([]);
-  const errorArticles = ref(null);
 
   // State untuk artikel populer
   const popularArticles = ref([]);
   const errorPopular = ref(null);
+
+  // State untuk artikel biasa
+  const articles = ref([]);
+  const errorArticles = ref(null);
 
   // Fetch semua artikel
   const fetchArticles = async () => {

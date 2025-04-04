@@ -8,7 +8,7 @@
         <nav aria-label="breadcrumb" v-if="articles?.category?.name">
           <ol class="breadcrumb">
             <li class="breadcrumb-item">
-              <NuxtLink to="/admin/dashboard" v-if="isLoggedIn">Dashboard</NuxtLink>
+              <NuxtLink to="/admin/articles" v-if="isLoggedIn">Kembali</NuxtLink>
               <NuxtLink to="/" v-else>Beranda</NuxtLink>
             </li>
             <li class="breadcrumb-item">
@@ -64,6 +64,11 @@
               </form>
             </div>
           </div>
+          <form @submit.prevent="updateArticle" class="container mb-4 g-0" v-else>
+            <p class="text-muted mt-2">*Catatan untuk author</p>
+            <QuillEditor v-model="editArticle.note"/>
+            <button class="btn mt-2">Kirim</button>
+          </form>
         </div>
       </div>
       <!-- Sidebar -->
@@ -79,10 +84,15 @@ import useDecodeToken from '@/composables/api/token/useDecodeToken';
 import useArticlesById from '~/composables/api/useArticlesById';
 import useComments from '@/composables/api/useComments';
 import useCommentForm from '~/composables/api/token/useCommentsForm';
+import axios from 'axios';
 import { computed } from 'vue';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { useRoute } from 'vue-router';
+
+const editArticle = ref({
+  note: '',
+});
 
 const { getTokenFromCookies } = useAuth();
 
@@ -118,15 +128,50 @@ const formattedContent = computed(() => {
     .replace(/<img /g, '<img class="img-fluid" ')
     .replace(/style="[^"]*"/g, ''); // Hapus inline style
 });
+
+const updateArticle = async () => {
+  try {
+    const token = getTokenFromCookies();
+    if (!token) {
+      alertMessage.value = `Token tidak ditemukan. Pastikan Anda sudah login!!`;
+      alertClass.value = 'alert alert-danger';
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 3000);
+      return;
+    }
+
+    console.log('Artikel yang akan di-update:', editArticle.value);
+
+    // Pertama, update artikel
+    const updatedArticle = {
+      note: editArticle.value.note,
+    };
+
+    await axios.put(
+      `http://localhost:8080/admin/articles/${articleId}`,
+      updatedArticle,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    alertMessage.value = `Artikel berhasil diubah.`;
+    alertClass.value = 'alert alert-success';
+    setTimeout(() => {
+      window.location.href = "/admin/articles";
+    }, 3000);
+  } catch (error) {
+    console.error('Error updating article:', error);
+    alertMessage.value = `Gagal mengubah artikel`;
+    alertClass.value = 'alert alert-danger';
+  }
+};
 </script>
 
 <style scoped>
-.text-muted{
-  text-decoration: none;
-}
-.text-muted:hover{
-  text-decoration: underline;
-}
 .breadcrumb {
   background-color: transparent;
   padding: 0;

@@ -11,6 +11,9 @@
             <NuxtLink to="/author/articles" class="nav-link">
                 <i class="bi bi-book"></i> Artikel
             </NuxtLink>
+            <NuxtLink to="/author/message" class="nav-link">
+                <i class="bi bi-envelope"></i> Pesan
+            </NuxtLink>
             <NuxtLink :to="`/author/profile/${user_id}`" class="nav-link">
               <i class="bi bi-person"></i> Profil
             </NuxtLink>

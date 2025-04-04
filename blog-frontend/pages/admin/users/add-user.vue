@@ -126,4 +126,15 @@ const handleImageUpload = async (file, userId) => {
   }
 };
 </script>
-  
+<style scoped>
+.alert {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 500px;
+  z-index: 1050;
+  text-align: center;
+}
+</style>

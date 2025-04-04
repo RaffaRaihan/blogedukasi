@@ -9,7 +9,7 @@
         <i class="bi bi-house"></i> Dashboard
       </NuxtLink>
       <NuxtLink to="/admin/users" class="nav-link">
-        <i class="bi bi-people"></i> Users
+        <i class="bi bi-people"></i> Pengguna
       </NuxtLink>
       <NuxtLink to="/admin/articles" class="nav-link">
         <i class="bi bi-book"></i> Artikel
@@ -18,7 +18,10 @@
         <i class="bi bi-card-list"></i> Kategori
       </NuxtLink>
       <NuxtLink to="/admin/message" class="nav-link">
-        <i class="bi bi-envelope"></i> Pesan
+        <i class="bi bi-chat-left-text"></i> Pesan
+      </NuxtLink>
+      <NuxtLink to="/admin/report" class="nav-link">
+        <i class="bi bi-envelope"></i> Laporan
       </NuxtLink>
       <NuxtLink :to="`/admin/profile/${user_id}`" class="nav-link">
         <i class="bi bi-person"></i> Profil

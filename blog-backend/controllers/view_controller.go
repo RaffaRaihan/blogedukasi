@@ -54,3 +54,14 @@ func GetPopularArticles(c *gin.Context) {
 	// Kirim response ke frontend
 	c.JSON(http.StatusOK, results)
 }
+
+func GetArticleStats(c *gin.Context) {
+    var stats []models.ArticleStatus
+    config.GetDB().Model(&models.Article{}).
+        Select("status, COUNT(*) as count").
+        Group("status").
+        Find(&stats)
+
+    c.JSON(http.StatusOK, stats)
+}
+

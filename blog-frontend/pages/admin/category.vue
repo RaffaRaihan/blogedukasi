@@ -7,7 +7,7 @@
         <h1 class="mb-4">Halaman Admin - Kelola Kategori</h1>
         <hr>
         <!-- Tombol untuk menambah kategori baru -->
-        <button class="btn btn-outline-primary" @click="showModal = true">+ Tambah Kategori</button>
+        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">+ Tambah Kategori</button>
 
         <!-- Loading Indicator -->
         <Loading v-if="loadingCategory" />
@@ -22,55 +22,65 @@
             </tr>
           </thead>
           <tbody>
-            <!-- Loop untuk menampilkan kategori -->
             <tr v-for="(category, index) in category" :key="category.ID">
               <th scope="row">{{ index + 1 }}</th>
               <td>{{ category.name }}</td>
               <td>
-                <button class="btn btn-outline-warning me-2" @click="openModal('edit', category)"><i class="bi bi-pencil"></i> Edit</button>
-                <button @click="removeCategory(category.ID)" class="btn btn-outline-danger"><i class="bi bi-trash"></i> Hapus</button>
+                <!-- Set data sebelum menampilkan modal -->
+                <button 
+                  class="btn btn-outline-warning me-2" 
+                  data-bs-toggle="modal" 
+                  data-bs-target="#editModal"
+                  @click="setEditCategory(category)"
+                >
+                  <i class="bi bi-pencil"></i> Edit
+                </button>
+                <button @click="removeCategory(category.ID)" class="btn btn-outline-danger">
+                  <i class="bi bi-trash"></i> Hapus
+                </button>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-    <!-- Modal Add Categoris -->
-    <div class="modal fade" tabindex="-1" :class="{ 'show': showModal }" style="display: block;" v-if="showModal">
+
+    <!-- Modal Add Category -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Tambah Kategori</h5>
-            <button type="button" class="btn-close" @click="showModal = false"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <form @submit.prevent="addCategory">
               <div class="mb-3">
-                <label for="name" class="form-label">Name</label>
+                <label for="name" class="form-label">Nama</label>
                 <input type="text" class="form-control" id="name" v-model="newCategory.name" required />
               </div>
-              <button type="submit" class="btn btn-outline-primary">Tambah Kategori</button>
+              <button type="submit" class="btn btn-outline-primary" data-bs-dismiss="modal">Tambah Kategori</button>
             </form>
           </div>
         </div>
       </div>
     </div>
-    <div class="modal-backdrop fade" :class="{ 'show': showModal }" v-if="showModal" @click="showModal = false"></div>
-    <!-- Modal Edit Categoris -->
-    <div class="modal fade" tabindex="-1" :class="{ 'show': showEditModal }" style="display: block;" v-if="showEditModal">
+
+    <!-- Modal Edit Category -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Edit Kategori</h5>
-            <button type="button" class="btn-close" @click="showEditModal = false"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <form @submit.prevent="updateCategory">
               <div class="mb-3">
-                <label for="name" class="form-label">Nama</label>
-                <input type="text" class="form-control" id="name" v-model="editCategory.name" required />
+                <label for="edit-name" class="form-label">Nama</label>
+                <input type="text" class="form-control" id="edit-name" v-model="editCategory.name" required />
               </div>
-              <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+              <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Simpan Perubahan</button>
             </form>
           </div>
         </div>
@@ -89,15 +99,9 @@ definePageMeta({
 });
 
 const category = ref([]);
-const showModal = ref(false);
-const newCategory = ref({
-  name: '',
-})
-const showEditModal = ref(false);
-const editCategory = ref({
-  name: '',
-});
-const loadingCategory = ref(true)
+const newCategory = ref({ name: '' });
+const editCategory = ref({ ID: null, name: '' });
+const loadingCategory = ref(true);
 
 // Fungsi untuk mengambil token dari cookies
 const getTokenFromCookies = () => {
@@ -111,19 +115,17 @@ const getTokenFromCookies = () => {
 
 const fetchCategory = async () => {
   try {
-    // Ambil token dari cookies
     const token = getTokenFromCookies();
-
     if (!token) {
       throw new Error('Token tidak ditemukan. Harap login terlebih dahulu.');
     }
 
-    console.log('Token yang diambil:', token);  // Debugging token
     const response = await axios.get('http://localhost:8080/category', {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }); // Ganti dengan URL backend Anda
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
     category.value = response.data;
   } catch (error) {
     console.error('Error fetching category:', error);
@@ -132,7 +134,12 @@ const fetchCategory = async () => {
   }
 };
 
-// Fungsi untuk menambah admin
+// Set data kategori yang akan diedit
+const setEditCategory = (data) => {
+  editCategory.value = { ...data }; // Menyalin data agar tidak mengubah data asli langsung
+};
+
+// Fungsi untuk menambah kategori
 const addCategory = async () => {
   try {
     const token = getTokenFromCookies();
@@ -150,15 +157,14 @@ const addCategory = async () => {
       }
     );
 
-    // Refresh daftar users dari API
-    await fetchCategory(); // Tambahkan admin baru ke daftar
-    showModal.value = false; // Tutup modal setelah berhasil
-    newCategory.value = { name: ''}; // Reset form
+    await fetchCategory(); 
+    newCategory.value = { name: '' };
   } catch (error) {
-    console.error('Error adding admin:', error);
+    console.error('Error adding category:', error);
   }
 };
 
+// Fungsi untuk memperbarui kategori
 const updateCategory = async () => {
   try {
     const token = getTokenFromCookies();
@@ -166,7 +172,6 @@ const updateCategory = async () => {
       throw new Error('Token tidak ditemukan. Harap login terlebih dahulu.');
     }
 
-    // Kirim permintaan ke backend untuk memperbarui kategori
     await axios.put(
       `http://localhost:8080/admin/category/${editCategory.value.ID}`, 
       { name: editCategory.value.name },
@@ -177,26 +182,16 @@ const updateCategory = async () => {
       }
     );
 
-    // Perbarui daftar kategori
-    await fetchCategory()
-    // Tutup modal setelah berhasil
-    showEditModal.value = false;
-    console.log(`Category dengan ID ${editCategory.value.ID} berhasil diperbarui.`);
+    await fetchCategory();
+    console.log(`Kategori dengan ID ${editCategory.value.ID} berhasil diperbarui.`);
   } catch (error) {
     console.error('Error updating category:', error);
   }
 };
 
-// Fungsi untuk membuka modal edit
-const openModal = (type, category) => {
-  if (type === 'edit') {
-    editCategory.value = { ...category };
-    showEditModal.value = true;
-  }
-};
-
+// Fungsi untuk menghapus kategori
 const removeCategory = async (id) => {
-  if (!confirm('Apakah Anda yakin ingin menghapus Kategori ini?')) {
+  if (!confirm('Apakah Anda yakin ingin menghapus kategori ini?')) {
     return;
   }
 
@@ -212,10 +207,10 @@ const removeCategory = async (id) => {
       },
     });
 
-    category.value = category.value.filter(category => category.ID !== id);
-    console.log(`Categories dengan ID ${id} berhasil dihapus.`);
+    category.value = category.value.filter(cat => cat.ID !== id);
+    console.log(`Kategori dengan ID ${id} berhasil dihapus.`);
   } catch (error) {
-    console.error('Error removing categories:', error);
+    console.error('Error removing category:', error);
   }
 };
 

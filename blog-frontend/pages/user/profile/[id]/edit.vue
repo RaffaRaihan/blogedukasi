@@ -1,4 +1,5 @@
 <template>
+  <div v-if="alertMessage" class="alert" :class="alertClass" role="alert">{{ alertMessage }}</div>
   <div class="container mt-5">
     <div class="card mx-auto mt-2">
       <div class="card-header" style="background-color: #1D2B53;">
@@ -29,13 +30,14 @@
           </div>
           <div class="mb-3">
             <label for="email" class="form-label fw-bold">Bio:</label>
-            <textarea
+            <QuillEditor v-model="users.bio" />
+            <!-- <textarea
              class="form-control" 
              id="exampleFormControlTextarea1" 
              v-model="users.bio"
              rows="3"
              placeholder="Masukan bio">
-            </textarea>
+            </textarea> -->
           </div>
           
           <!-- Form untuk Foto -->
@@ -68,10 +70,23 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 
 // Fungsi untuk memperbarui data pengguna
-const { users, updateUserProfile, handleFileUpload } = useUpdateUserProfile();
+const { users, updateUserProfile, handleFileUpload, alertMessage, alertClass } = useUpdateUserProfile();
 
 // Fungsi untuk membatalkan pengeditan
 const cancelEdit = () => {
   router.push(`/user/profile/${users.value.ID}`);
 };
 </script>
+
+<style scoped>
+.alert {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 500px;
+  z-index: 1050;
+  text-align: center;
+}
+</style>

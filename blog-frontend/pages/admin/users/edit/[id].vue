@@ -11,6 +11,10 @@
         <input type="email" class="form-control" id="email" v-model="editUser.email" required />
       </div>
       <div class="mb-3">
+        <label for="bio" class="form-label">Bio</label>
+        <input type="text" class="form-control" id="bio" v-model="editUser.bio" required />
+      </div>
+      <div class="mb-3">
         <label for="role" class="form-label">Role</label>
         <select class="form-select" id="role" v-model="editUser.role" required>
           <option value="user">User</option>
@@ -27,7 +31,8 @@
           @change="handleImageChange"
         />
       </div>
-      <button type="submit" class="btn btn-primary">Simpan Perubaha</button>
+      <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+      <NuxtLink to="/admin/users" class="btn btn-danger ms-2">Batal</NuxtLink>
     </form>
   </div>
 </template>
@@ -45,6 +50,7 @@ const editUser = ref({
   id: null,
   name: '',
   email: '',
+  bio: '',
   role: '',
 });
 
@@ -80,6 +86,7 @@ const updateUser = async () => {
       name: editUser.value.name,
       email: editUser.value.email,
       role: editUser.value.role,
+      bio: editUser.value.bio,
     }, {
       headers: {
         Authorization: `Bearer ${token}`,

@@ -14,4 +14,10 @@ type Article struct {
 	FilePath    string    	`json:"file_path"` // Menyimpan path file yang diupload
     FileName    string    	`json:"file_name"` // Menyimpan nama file yang diupload
 	Status		string		`json:"status"`
+	Note		string		`json:"note"`
+}
+
+type ArticleStatus struct {
+    Status string `json:"status"`
+    Count  int64  `json:"count"`
 }

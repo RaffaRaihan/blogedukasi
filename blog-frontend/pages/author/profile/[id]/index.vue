@@ -24,7 +24,7 @@
             </div>
             <div class="mb-3 d-flex">
               <h2 class="fw-bold">Bio:</h2>
-              <h2 class="ms-3">{{ users?.bio || "N/A"}}</h2>
+              <h2 class="ms-3" v-html="users?.bio || 'N/A'"></h2>
             </div>
             <button class="btn btn-outline-warning" @click="navigateToEditProfile"><i class="bi bi-pencil"></i>  Edit Profil</button>
           </div>

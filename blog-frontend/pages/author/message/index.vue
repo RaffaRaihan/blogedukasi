@@ -1,8 +1,14 @@
 <template>
-  <LoginNavbar v-if="isLoggedIn" />
-  <Navbar v-else />
-  <div class="container mt-4">
-    <h1 class="mb-4">Pesan yang Diterima</h1>
+  <div class="container-fluid">
+  <div class="row">
+    <!-- Sidebar -->
+    <AuthorSidebar />
+    <div class="col-md-9 col-lg-10 p-4">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-4">Halaman Author - Pesan</h1>
+        <NuxtLink to="/author/message/send-message" class="btn btn-outline-primary">Kirim Pesan Ke Admin</NuxtLink>
+      </div>
+    <hr>
     <table class="table table-hover align-middle mt-3">
       <thead>
         <tr>
@@ -29,23 +35,15 @@
       </tbody>
     </table>
   </div>
-  <Footer />
+  </div>
+  </div>
 </template>
 
 <script setup>
-import useAuth from '~/composables/api/token/useAuth';
 import useMessages from '~/composables/api/token/useMessages';
-import { computed } from 'vue';
 
 definePageMeta({
   middleware: 'auth',
-});
-
-const { getTokenFromCookies } = useAuth();
-
-const isLoggedIn = computed(() => {
-  const token = getTokenFromCookies();
-  return !!token; // Return true jika token ada, false jika tidak ada
 });
 
 const { messages, fetchMessage } = useMessages();

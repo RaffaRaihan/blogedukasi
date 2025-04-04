@@ -5,9 +5,9 @@
       <main class="col-md-9 col-lg-10 p-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
           <h1>Halaman Admin - Kelola Users</h1>
-          <router-link to="users/add-user" class="btn btn-outline-primary">
+          <NuxtLink to="users/add-user" class="btn btn-outline-primary">
             <i class="bi bi-person-plus"></i> Undang
-          </router-link>
+          </NuxtLink>
         </div>
         <hr>
         <!-- Filters -->
@@ -69,11 +69,11 @@ import axios from 'axios';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 
-const users = ref([]);
 const searchQuery = ref('');
 const selectedRole = ref('');
 const loadingUsers = ref(true);
 
+const users = ref([]);
 const fetchUsers = async () => {
   try {
     const token = document.cookie

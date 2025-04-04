@@ -64,7 +64,14 @@ func SetupRoutes(r *gin.Engine) {
 		// Admin Messages
 		adminRoutes.GET("/messages", controllers.GetAllMessages)
 		adminRoutes.POST("/:id/reply-message", controllers.ReplyToMessage)
+		adminRoutes.POST("/send-message", controllers.SendMessage)
+		adminRoutes.GET("/:id/messages", controllers.GetReply)
 
+		//Stats
+		adminRoutes.GET("/article-stats", controllers.GetArticleStats)
+
+		//Report
+		adminRoutes.GET("/reports", controllers.GetAllReports)
 	}
 
 	// Group User (dengan middleware Auth)
@@ -85,6 +92,7 @@ func SetupRoutes(r *gin.Engine) {
 		userRoutes.POST("/send-message", controllers.SendMessage)
 		userRoutes.GET("/messages/:id", controllers.GetMessagesByUserID)
 		userRoutes.GET("/:id/messages", controllers.GetReply)
+		userRoutes.POST("/report", controllers.ReportArticle)
 	}
 
 	// Grup Author (dengan middleware Auth)

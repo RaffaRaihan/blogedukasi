@@ -26,7 +26,8 @@
           required
         ></textarea> -->
       </div>
-      <button type="submit" class="btn btn-primary w-100">Kirim Pesan</button>
+      <button type="submit" class="btn btn-primary">Kirim Pesan</button>
+      <NuxtLink to="/author/message" class="btn btn-danger ms-2">Batal</NuxtLink>
     </form>
   </div>
 </template>
@@ -72,7 +73,7 @@ const sendMessage = async () => {
     formData.value.user_id = userId;
 
     // Kirim data menggunakan Axios
-    const response = await axios.post('http://localhost:8080/user/send-message',
+    const response = await axios.post('http://localhost:8080/author/send-message',
       formData.value, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -92,7 +93,7 @@ const sendMessage = async () => {
     alertMessage.value = `Pesan berhasil dikirim!`;
     alertClass.value = 'alert alert-success';
     setTimeout(() => {
-      window.location.href = "/user/message";
+      window.location.href = "/author/message";
     }, 3000);
   } catch (error) {
     console.error('Error sending message:', error);

@@ -4,7 +4,7 @@
       <!-- Sidebar -->
       <AdminSidebar />
       <div class="col-md-9 col-lg-10 p-4">
-        <h1 class="mb-4">Halaman Admin - Laporan</h1>
+        <h1 class="mb-4">Halaman Admin - Pesan</h1>
         <hr>
         <!-- Tabel Kategori -->
         <table class="table table-hover align-middle mt-3">
@@ -23,8 +23,8 @@
               <th scope="row">{{ index + 1 }}</th>
               <td>{{ msg.user_id }}</td>
               <td>{{ msg.name }}</td>
-              <td>{{ msg.content }}</td>
-              <td>{{ msg.reply }}</td>
+              <td v-html="msg.content"></td>
+              <td v-html="msg.reply"></td>
               <td>
                 <button
                   v-if="!msg.reply"
@@ -117,7 +117,7 @@ const fetchMessage = async () => {
     const response = await axios.get('http://localhost:8080/admin/messages', {
       headers: { Authorization: `Bearer ${token}` },
     });
-    message.value = response.data.data;
+    message.value = response.data.data.sort((a, b) => (a.reply ? 1 : -1));;
   } catch (error) {
     console.error('Error fetching messages:', error);
   }
