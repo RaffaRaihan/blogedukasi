@@ -17,7 +17,7 @@ onMounted(() => {
         labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
         datasets: [{
           label: 'Traffic',
-          data: [2000, 2200, 2500, 3500, 2700, 2300, 1500],
+          data: [200, 220, 250, 350, 270, 230, 150],
           borderColor: 'blue',
           backgroundColor: 'rgba(0, 0, 255, 0.1)',
           pointBackgroundColor: 'blue',

@@ -29,6 +29,7 @@ func SetupRoutes(r *gin.Engine) {
 	r.GET("/articles/:id/comments", controllers.GetByArticle)
 	r.GET("/popular-articles", controllers.GetPopularArticles)
 	r.POST("/track-view", controllers.TrackView)
+	r.GET("/articles/like/:id", controllers.GetLikeArticleByID)
 
 	// Uploads
 	r.Static("/uploads", "./uploads")
@@ -69,6 +70,9 @@ func SetupRoutes(r *gin.Engine) {
 
 		//Stats
 		adminRoutes.GET("/article-stats", controllers.GetArticleStats)
+		adminRoutes.GET("/stats-weekly", controllers.GetWeeklyArticleStats)
+		adminRoutes.GET("/stats-views-category", controllers.GetViewsPerCategory)
+		adminRoutes.GET("/stats-top-author", controllers.GetTopAuthorsByArticles)
 
 		//Report
 		adminRoutes.GET("/reports", controllers.GetAllReports)
@@ -93,6 +97,8 @@ func SetupRoutes(r *gin.Engine) {
 		userRoutes.GET("/messages/:id", controllers.GetMessagesByUserID)
 		userRoutes.GET("/:id/messages", controllers.GetReply)
 		userRoutes.POST("/report", controllers.ReportArticle)
+		userRoutes.POST("/:id/like", controllers.LikeArticle)
+		userRoutes.DELETE("/:id/like", controllers.UnlikeArticle)
 	}
 
 	// Grup Author (dengan middleware Auth)

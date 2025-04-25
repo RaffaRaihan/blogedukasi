@@ -1,27 +1,27 @@
-import { ref } from 'vue';
-import { jwtDecode } from 'jwt-decode';
-import useAuth from '@/composables/api/token/useAuth';
+import { useCookie } from 'nuxt/app'
+import { ref } from 'vue'
+
+const userData = ref(null)
 
 export default function useDecodeToken() {
-  const { getTokenFromCookies } = useAuth();
-  const userId = ref('');
-
-  // Fungsi untuk mendekode token JWT
-  const decodeToken = () => {
+  const decodeToken = async () => {
     try {
-      const token = getTokenFromCookies();
-      if (!token) throw new Error('Token tidak ditemukan. Harap login terlebih dahulu.');
-
-      const decoded = jwtDecode(token); // Dekode JWT
-      userId.value = decoded.user_id; // Ambil user_id dari payload
-      console.log(decoded);
+      const jwt_decode = (await import('jwt-decode')).default
+      const token = useCookie('token')?.value
+      if (token) {
+        const decoded = jwt_decode(token)
+        userData.value = decoded
+      } else {
+        userData.value = null
+      }
     } catch (error) {
-      console.error('Error decoding token:', error);
+      console.error('Gagal decode token:', error)
+      userData.value = null
     }
-  };
+  }
 
   return {
-    userId,
     decodeToken,
-  };
+    userData
+  }
 }

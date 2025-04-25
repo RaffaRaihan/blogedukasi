@@ -1,17 +1,8 @@
 <template>
+  <div v-if="alertMessage" class="alert" :class="alertClass" role="alert">{{ alertMessage }}</div>
   <div class="container mt-3 mb-3">
     <h1>Edit Artikel</h1>
     <form @submit.prevent="updateArticle">
-      <div class="mb-3">
-        <label for="editLabel" class="form-label">Label</label>
-        <input
-          type="text"
-          id="editLabel"
-          class="form-control"
-          v-model="editArticle.label"
-          required
-        />
-      </div>
       <div class="mb-3">
         <label for="editTitle" class="form-label">Judul Artikel</label>
         <input
@@ -19,6 +10,16 @@
           id="editTitle"
           class="form-control"
           v-model="editArticle.title"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="editLabel" class="form-label">Label</label>
+        <input
+          type="text"
+          id="editLabel"
+          class="form-control"
+          v-model="editArticle.label"
           required
         />
       </div>
@@ -79,6 +80,8 @@ const categories = ref([]);
 const route = useRoute();
 const router = useRouter(); // Inisialisasi router untuk navigasi
 const articleId = route.params.id; // Assuming the article ID is passed as a URL param
+const alertMessage = ref('')
+const alertClass = ref('')
 
 const getTokenFromCookies = () => {
   const token = document.cookie
@@ -164,8 +167,11 @@ const updateArticle = async () => {
       await uploadImage();
     }
 
-    alert('Artikel berhasil diubah.');
-    router.push('/author/articles'); // Pastikan penggunaan router.push
+    alertMessage.value = `Artikel berhasil dibuat.`
+    alertClass.value = 'alert alert-success'
+    setTimeout(() => {
+      window.location.href ='/author/articles';
+    }, 1500);
   } catch (error) {
     console.error('Error updating article:', error);
   }
@@ -192,11 +198,11 @@ const uploadImage = async () => {
         },
       }
     );
-    alert('Gambar berhasil diunggah.');
     console.log(response.data)
   } catch (error) {
     console.error('Error uploading image:', error);
-    alert('Gagal mengunggah gambar.');
+    alertMessage.value = `Gagal mengunggah gambar.`
+    alertClass.value = 'alert alert-danger'
   }
 };
 
@@ -205,3 +211,16 @@ onMounted(() => {
   fetchArticle();
 });
 </script>
+
+<style scoped>
+.alert {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 500px;
+  z-index: 1050;
+  text-align: center;
+}
+</style>

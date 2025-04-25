@@ -9,7 +9,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// TrackView mencatat tampilan artikel
 func TrackView(c *gin.Context) {
 	var input struct {
 		ArticleID uint `json:"article_id" binding:"required"`
@@ -17,6 +16,13 @@ func TrackView(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Optional: Validasi bahwa artikelnya ada
+	var article models.Article
+	if err := config.GetDB().First(&article, input.ArticleID).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Artikel tidak ditemukan"})
 		return
 	}
 
@@ -65,3 +71,124 @@ func GetArticleStats(c *gin.Context) {
     c.JSON(http.StatusOK, stats)
 }
 
+func GetWeeklyArticleStats(c *gin.Context) {
+	type Result struct {
+		Day   int
+		Count int
+	}
+
+	// Ambil query param
+	week := c.Query("week")
+	month := c.Query("month")
+	year := c.Query("year")
+
+	// Base query
+	query := `
+		SELECT EXTRACT(DOW FROM created_at) AS day, COUNT(*) AS count
+		FROM articles
+		WHERE 1=1
+	`
+
+	// Dynamic filter
+	var params []interface{}
+	if week != "" {
+		query += " AND EXTRACT(WEEK FROM created_at) = ?"
+		params = append(params, week)
+	}
+	if month != "" {
+		query += " AND EXTRACT(MONTH FROM created_at) = ?"
+		params = append(params, month)
+	}
+	if year != "" {
+		query += " AND EXTRACT(YEAR FROM created_at) = ?"
+		params = append(params, year)
+	}
+
+	query += " GROUP BY day"
+
+	db := config.GetDB()
+	var dataDB []Result
+	db.Raw(query, params...).Scan(&dataDB)
+
+	// Inisialisasi struktur output
+	labels := []string{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"}
+	data := make([]int, 7)
+
+	// Mapping berdasarkan PostgreSQL EXTRACT(DOW)
+	for _, r := range dataDB {
+		index := (r.Day + 6) % 7 // Shift agar Monday = index 0
+		data[index] = r.Count
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"labels": labels,
+		"data":   data,
+	})
+}
+
+
+func GetViewsPerCategory(c *gin.Context) {
+	type Result struct {
+		Category string
+		Total    int
+	}
+
+	var results []Result
+
+	db := config.GetDB()
+	db.
+		Raw(`
+			SELECT c.name AS category, COUNT(v.id) AS total
+			FROM article_views v
+			JOIN articles a ON v.article_id = a.id
+			JOIN categories c ON a.category_id = c.id
+			GROUP BY c.name
+		`).
+		Scan(&results)
+
+	var labels []string
+	var data []int
+
+	for _, r := range results {
+		labels = append(labels, r.Category)
+		data = append(data, r.Total)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"labels": labels,
+		"data":   data,
+	})
+}
+
+func GetTopAuthorsByArticles(c *gin.Context) {
+	type Result struct {
+		Author string
+		Total  int
+	}
+
+	var results []Result
+
+	db := config.GetDB()
+	db.
+		Raw(`
+			SELECT u.name AS author, COUNT(a.id) AS total
+			FROM articles a
+			JOIN users u ON a.author_id = u.id
+			GROUP BY u.name
+			ORDER BY total DESC
+		`).
+		Scan(&results)
+
+	var labels []string
+	var data []int
+
+	for _, r := range results {
+		labels = append(labels, r.Author)
+		data = append(data, r.Total)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"labels": labels,
+		"data":   data,
+	})
+}

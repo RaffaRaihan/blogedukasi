@@ -15,9 +15,16 @@ type Article struct {
     FileName    string    	`json:"file_name"` // Menyimpan nama file yang diupload
 	Status		string		`json:"status"`
 	Note		string		`json:"note"`
+	Likes     []ArticleLike `gorm:"foreignKey:ArticleID"`
 }
 
 type ArticleStatus struct {
     Status string `json:"status"`
     Count  int64  `json:"count"`
+}
+
+type ArticleLike struct {
+	gorm.Model
+	UserID    uint
+	ArticleID uint
 }

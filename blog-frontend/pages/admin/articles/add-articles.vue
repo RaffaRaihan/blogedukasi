@@ -4,17 +4,6 @@
     <h1 class="my-4">Tambah Artikel Baru</h1>
     <form @submit.prevent="submitArticle">
       <div class="mb-3">
-        <label for="articleLabel" class="form-label">Label</label>
-        <input
-          type="text"
-          id="articleLabel"
-          class="form-control"
-          v-model="newArticle.label"
-          required
-          placeholder="Masukkan label"
-        />
-      </div>
-      <div class="mb-3">
         <label for="articleTitle" class="form-label">Judul Artikel</label>
         <input
           type="text"
@@ -23,6 +12,17 @@
           v-model="newArticle.title"
           required
           placeholder="Masukkan judul artikel"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="articleLabel" class="form-label">Label</label>
+        <input
+          type="text"
+          id="articleLabel"
+          class="form-control"
+          v-model="newArticle.label"
+          required
+          placeholder="Masukkan label"
         />
       </div>
       <div class="mb-3">

@@ -24,10 +24,10 @@
                     <div class="card-body">
                       <h5 class="card-title">{{ article.title }}</h5>
                       <p class="card-text" v-html="getTruncatedContent(article.content)"></p>
-                      <h5 class="text-muted">*Catatan dari admin</h5>
+                      <h6 class="text-muted">*Catatan dari admin</h6>
                       <div class="card">
                         <div class="card-body">
-                          <p class="card-text" v-html="article.note"></p>
+                          <div class="card-text" v-html="formattedNote(article.note)"></div>
                         </div>
                         <button class="btn btn-outline-warning mb-2 mx-2" @click="navigateToEditArticle(article.ID)">
                           <i class="bi bi-pencil"></i>  Perbaiki
@@ -143,6 +143,13 @@ const router = useRouter()
 const navigateToEditArticle = (id) => {
   router.push(`/author/articles/edit/${id}`);
 };
+
+function formattedNote(note) {
+  if (!note) return '';
+  return note
+    .replace(/<img /g, '<img class="img-fluid" ')
+    .replace(/style="[^"]*"/g, ''); // Hapus inline style
+}
 
 onMounted(() => {
   fetchArticles();

@@ -28,6 +28,14 @@
           <hr>
           <!-- Alert Message -->
           <div v-if="alertMessage" class="alert" :class="alertClass" role="alert">{{ alertMessage }}</div>
+
+          <!-- Like Button -->
+          <div class="d-flex align-items-center mt-3">
+            <button @click="likeArticle" class="btn btn-sm" :class="likedByUser ? 'btn-danger' : 'btn-outline-danger'">
+              <i class="bi" :class="likedByUser ? 'bi-heart-fill' : 'bi-heart'"></i> Suka
+            </button>
+            <span class="ms-2">{{ likeCount }} suka</span>
+          </div>    
           <!-- Comments Section -->
           <div class="mt-5">
             <h4>Komentar</h4>
@@ -49,24 +57,34 @@
                   >
                     <div class="d-flex mt-2">
                       <img 
-                        :src="comment.user.foto ? `http://localhost:8080/uploads/${comment.user.foto}` : '../../../assets/img/windah senyum Roblox.jpg'" 
-                        class="img-fluid" 
+                        :src="comment.user?.foto ? `http://localhost:8080/uploads/${comment.user.foto}` : '../../../assets/img/windah senyum Roblox.jpg'" 
+                        class="img-fluid mt-2" 
                         alt="Foto Profile" 
                         style="width: 5rem; height: 5rem; border-radius: 50%;"
                       >
                       <div class="d-block ms-3">
-                        <div class="d-flex">
-                          <h5 class="mb-0 fw-bold">{{ comment.user.name || 'user tidak ada' }}</h5>
-                          <p class="ms-2 mb-1 text-muted">@{{ comment.user.email }}</p>
+                        <div class="d-block">
+                          <h5 class="mb-0 fw-bold">
+                            {{ comment.user?.name || 'user tidak ada' }}
+                            <span
+                              v-if="comment.user && comment.user.ID === articles?.author?.ID"
+                              class="badge bg-primary ms-2"
+                            >Author</span>
+                          </h5>
+                          <p class="mb-2 text-muted">@{{ comment.user?.email || '-' }}</p>
                         </div>
                         <p class="mb-1">{{ comment.content }}</p>
                         <div class="d-flex">
                           <NuxtLink class="text-muted mt-2" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="setReplyComment(comment.ID)">Balas</NuxtLink>
-                          <a class="text-decoration-none text-dark ms-2 mt-2" href="#" role="button" id="dropdown" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-three-dots-vertical"></i></a>
-                          <ul class="dropdown-menu" aria-labelledby="dropdown">
-                            <li><NuxtLink class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editModal" @click="setReplyComment(comment.ID)">Edit</NuxtLink></li>
-                            <li><NuxtLink class="dropdown-item" data-bs-toggle="modal" data-bs-target="#hapusModal">Hapus</NuxtLink></li>
-                          </ul>
+                        
+                          <!-- Hanya pemilik komentar yang bisa edit/hapus -->
+                          <template v-if="isUserDecoded && comment.user && Number(comment.user.ID) === Number(userData?.ID)">
+                            <a class="text-decoration-none text-dark ms-2 mt-2" href="#" role="button" id="dropdown" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-three-dots-vertical"></i></a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdown">
+                              <li><NuxtLink class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editModal" @click="setReplyComment(comment.ID)">Edit</NuxtLink></li>
+                              <li><NuxtLink class="dropdown-item" data-bs-toggle="modal" data-bs-target="#hapusModal" @click="setReplyComment(comment.ID)">Hapus</NuxtLink></li>
+                            </ul>
+                          </template>
                         </div>
                       </div>
                     </div>
@@ -77,39 +95,49 @@
                   class="accordion-collapse collapse"
                   data-bs-parent="#accordionExample"
                 >
-                <div class="accordion-body">
-                  <strong>Balasan:</strong>
-                  <div v-if="comments.some(c => c.parent_id === comment.ID)">
-                    <div
-                      v-for="reply in comments.filter(c => c.parent_id === comment.ID)"
-                      :key="reply.ID"
-                      class="mt-2 p-2 border rounded border-dark"
-                    >
-                      <div class="d-flex">
-                        <img 
-                          :src="reply.user.foto ? `http://localhost:8080/uploads/${reply.user.foto}` : '../../../assets/img/windah senyum Roblox.jpg'" 
-                          class="img-fluid" 
-                          alt="Foto Profile" 
-                          style="width: 3rem; height: 3rem; border-radius: 50%;"
-                        >
-                        <div class="d-block ms-3">
-                          <div class="d-flex">
-                            <h6 class="mb-0 fw-bold">{{ reply.user.name || 'user tidak ada' }}</h6>
-                            <p class="ms-2 mb-0 text-muted">@{{ reply.user.email }}</p>
+                  <div class="accordion-body">
+                    <strong>Balasan:</strong>
+                    <div v-if="comments.some(c => c.parent_id === comment.ID)">
+                      <div
+                        v-for="reply in comments.filter(c => c.parent_id === comment.ID)"
+                        :key="reply.ID"
+                        class="mt-2 p-2 border rounded border-dark"
+                      >
+                        <div class="d-flex">
+                          <img 
+                            :src="reply.user?.foto ? `http://localhost:8080/uploads/${reply.user.foto}` : '../../../assets/img/windah senyum Roblox.jpg'" 
+                            class="img-fluid mt-2" 
+                            alt="Foto Profile" 
+                            style="width: 3rem; height: 3rem; border-radius: 50%;"
+                          >
+                          <div class="d-block ms-3">
+                            <div class="d-block">
+                              <h6 class="mb-0 fw-bold">
+                                {{ reply.user?.name || 'user tidak ada' }}
+                                <span
+                                  v-if="reply.user && reply.user.ID === articles?.author?.ID"
+                                  class="badge bg-primary ms-2"
+                                >Author</span>
+                              </h6>
+                              <p class="mb-1 text-muted">@{{ reply.user?.email || '-' }}</p>
+                            </div>
+                            <p class="mb-1">{{ reply.content }}</p>
+                            <NuxtLink class="text-muted mt-2" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="setReplyComment(reply.ID)">Balas</NuxtLink>
+                          
+                            <!-- Hanya pemilik reply yang bisa edit/hapus -->
+                            <template v-if="isUserDecoded && reply.user && Number(reply.user.ID) === Number(userData?.ID)">
+                              <a class="text-decoration-none text-dark ms-2 mt-2" href="#" role="button" id="dropdown" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-three-dots-vertical"></i></a>
+                              <ul class="dropdown-menu" aria-labelledby="dropdown">
+                                <li><NuxtLink class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editModal" @click="setReplyComment(reply.ID)">Edit</NuxtLink></li>
+                                <li><NuxtLink class="dropdown-item" data-bs-toggle="modal" data-bs-target="#hapusModal" @click="setReplyComment(reply.ID)">Hapus</NuxtLink></li>
+                              </ul>
+                            </template>
                           </div>
-                          <p class="mb-1">{{ reply.content }}</p>
-                          <NuxtLink class="text-muted mt-2" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="setReplyComment(reply.ID)">Balas</NuxtLink>
-                          <a class="text-decoration-none text-dark ms-2 mt-2" href="#" role="button" id="dropdown" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-three-dots-vertical"></i></a>
-                          <ul class="dropdown-menu" aria-labelledby="dropdown">
-                            <li><NuxtLink class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editModal" @click="setReplyComment(reply.ID)">Edit</NuxtLink></li>
-                            <li><NuxtLink class="dropdown-item" data-bs-toggle="modal" data-bs-target="#hapusModal" @click="setReplyComment(reply.ID)">Hapus</NuxtLink></li>
-                          </ul>
                         </div>
                       </div>
                     </div>
+                    <p v-else>Tidak ada balasan.</p>
                   </div>
-                  <p v-else>Tidak ada balasan.</p>
-                </div>
                 </div>
               </div>
             </div>
@@ -200,70 +228,119 @@ import useDecodeToken from '@/composables/api/token/useDecodeToken';
 import useArticlesById from '~/composables/api/useArticlesById';
 import useComments from '@/composables/api/useComments';
 import useCommentForm from '~/composables/api/token/useCommentsForm';
-import { computed } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { useRoute } from 'vue-router';
+import axios from 'axios';
 
 const { getTokenFromCookies } = useAuth();
+const { decodeToken, userData } = useDecodeToken();
 
-const { decodeToken } = useDecodeToken();
-decodeToken();
-
-const isLoggedIn = computed(() => {
-  const token = getTokenFromCookies();
-  return !!token; // Return true jika token ada, false jika tidak ada
-});
-
-const formatDate = (date) => {
-  const formattedDate = new Date(date);
-  if (isNaN(formattedDate)) {
-    return 'Tanggal tidak valid';
-  }
-  return format(formattedDate, 'dd MMMM yyyy', { locale: id });
-};
 const route = useRoute();
 const articleId = route.params.id;
 
+// Decode token on mount
+onMounted(() => {
+  decodeToken();
+  fetchArticle(articleId);
+  fetchComments(articleId);
+});
+
+const likeCount = ref(0);
+const likedByUser = ref(false);
+
+const fetchLikes = async () => {
+  try {
+    const { data } = await axios.get(`http://localhost:8080/articles/like/${articleId}`);
+    likeCount.value = data.total_likes;
+    likedByUser.value = data.liked_by_user;
+  } catch (error) {
+    console.error('Gagal mengambil data like:', error);
+  }
+};
+
+const likeArticle = async () => {
+  try {
+    const token = getTokenFromCookies();
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
+
+    if (likedByUser.value) {
+      // Sudah like, jadi kita unlike (DELETE)
+      await axios.delete(`http://localhost:8080/user/${articleId}/like`, config);
+    } else {
+      // Belum like, jadi kita like (POST)
+      await axios.post(`http://localhost:8080/user/${articleId}/like`, {}, config);
+    }
+
+    await fetchLikes(); // update tampilan
+  } catch (error) {
+    console.error('Gagal melakukan toggle like:', error);
+  }
+};
+
+
+onMounted(() => {
+  fetchLikes();
+});
+
+const isLoggedIn = computed(() => {
+  const token = getTokenFromCookies();
+  return !!token;
+});
+
+const isUserDecoded = computed(() => !!userData.value?.ID);
+
+const formatDate = (date) => {
+  const formattedDate = new Date(date);
+  return isNaN(formattedDate) ? 'Tanggal tidak valid' : format(formattedDate, 'dd MMMM yyyy', { locale: id });
+};
+
 const { articles, fetchArticle } = useArticlesById();
-fetchArticle(articleId);
-
 const { comments, fetchComments } = useComments();
-fetchComments(articleId);
-
-const { newComment, replyComment, editComment, alertMessage, alertClass, submitComment, ReplyComment, EditComment, DeleteComment } = useCommentForm();
+const {
+  newComment,
+  replyComment,
+  editComment,
+  alertMessage,
+  alertClass,
+  submitComment,
+  ReplyComment,
+  EditComment,
+  DeleteComment
+} = useCommentForm();
 
 const formattedContent = computed(() => {
   if (!articles.value?.content) return '';
   return articles.value.content
     .replace(/<img /g, '<img class="img-fluid" ')
-    .replace(/style="[^"]*"/g, ''); // Hapus inline style
+    .replace(/style="[^"]*"/g, '');
 });
 
-// **Tambahkan ref untuk menyimpan ID komentar yang akan dibalas**
 const selectedCommentId = ref(null);
 
-// **Fungsi untuk menyimpan ID komentar saat tombol "Balas" diklik**
-const setReplyComment = (commentId) => {
+const setReplyComment = (commentId, content = '') => {
   selectedCommentId.value = commentId;
+  editComment.value = content;
 };
 
 const sendReplyComment = () => {
-  if (selectedCommentId.value) {
-    ReplyComment(selectedCommentId.value);
-  }
+  if (selectedCommentId.value) ReplyComment(selectedCommentId.value);
 };
+
 const sendEditComment = () => {
-  if (selectedCommentId.value) {
-    EditComment(selectedCommentId.value, editComment.value);
-  }
+  if (selectedCommentId.value) EditComment(selectedCommentId.value, editComment.value);
 };
+
 const sendHapusComment = () => {
-  if (selectedCommentId.value) {
-    DeleteComment(selectedCommentId.value);
-  }
+  if (selectedCommentId.value) DeleteComment(selectedCommentId.value);
 };
 </script>
+
 
 <style scoped>
 .breadcrumb {
@@ -280,8 +357,8 @@ const sendHapusComment = () => {
 }
 .btn-2{
   padding: 0.5rem;
-  border: solid 1px;
-  border-radius: 0.5rem;
+  border: solid 2px;
+  border-radius: 8px;
   color: #F0F3FF;
   background-color: #211951;
   border-color: #211951;
@@ -304,5 +381,8 @@ const sendHapusComment = () => {
 }
 .ql-editor p{
   background-color: transparent;
+}
+.badge.bg-primary {
+  background-color: #7F27FF !important;
 }
 </style>

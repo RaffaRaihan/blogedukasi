@@ -63,6 +63,10 @@
               </form>
             </div>
           </div>
+          <div class="container" v-else>
+              <h5>*Catatan dari admin</h5>
+              <div class="text-muted" v-html="formattedNote"></div>
+            </div>
         </div>
       </div>
       <!-- Sidebar -->
@@ -117,15 +121,16 @@ const formattedContent = computed(() => {
     .replace(/<img /g, '<img class="img-fluid" ')
     .replace(/style="[^"]*"/g, ''); // Hapus inline style
 });
+
+const formattedNote = computed(() => {
+  if (!articles.value?.note) return '';
+  return articles.value.note
+    .replace(/<img /g, '<img class="img-fluid" ')
+    .replace(/style="[^"]*"/g, ''); // Hapus inline style
+});
 </script>
 
 <style scoped>
-.text-muted{
-  text-decoration: none;
-}
-.text-muted:hover{
-  text-decoration: underline;
-}
 .breadcrumb {
   background-color: transparent;
   padding: 0;

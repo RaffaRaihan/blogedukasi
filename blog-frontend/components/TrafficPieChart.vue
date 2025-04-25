@@ -13,13 +13,23 @@ if (process.client) {
   Chart.register(...registerables);
 }
 
+const colors = [
+  '#9fa8da', // Monday
+  '#a5d6d9', // Tuesday
+  '#90caf9', // Wednesday
+  '#ce93d8', // Thursday
+  '#f48fb1', // Friday
+  '#b39ddb', // Saturday
+  '#e3f2fd'  // Sunday
+];
+
 onMounted(async () => {
   if (!process.client || !chartRef.value) return;
 
   try {
-    // Ganti dengan endpoint API kamu
+    // Ganti URL ini dengan API backend kamu
     const token = getTokenFromCookies();
-    const response = await axios.get('http://localhost:8080/admin/stats-weekly', {
+    const response = await axios.get('http://localhost:8080/admin/stats-views-category', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -28,33 +38,33 @@ onMounted(async () => {
     const labels = response.data.labels;
     const data = response.data.data;
 
+    if (chartInstance) chartInstance.destroy();
+
     chartInstance = new Chart(chartRef.value, {
-      type: 'bar',
+      type: 'pie',
       data: {
         labels,
         datasets: [{
-          label: 'Traffic',
           data,
-          backgroundColor: 'blue',
-          borderColor: 'blue',
-          borderWidth: 1
+          backgroundColor: colors,
+          borderColor: '#ffffff',
+          borderWidth: 2
         }]
       },
       options: {
         responsive: true,
         plugins: {
           legend: {
-            display: true,
-            labels: { color: 'black' }
+            position: 'top',
+            labels: {
+              color: '#444'
+            }
           }
-        },
-        scales: {
-          y: { beginAtZero: true }
         }
       }
     });
-  } catch (err) {
-    console.error('Gagal mengambil data:', err);
+  } catch (error) {
+    console.error('Gagal ambil data dari API:', error);
   }
 });
 </script>

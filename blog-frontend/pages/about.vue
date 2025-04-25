@@ -4,12 +4,12 @@
       <div class="container mt-lg-4 mb-5">
         <div class="row">
           <div class="col-lg-6 col-md-8 col-sm-12 mt-4">
-            <h1 class="mt-5" style="color: #1D2B53;">About Us</h1>
+            <h1 class="mt-5" style="color: #1D2B53;">Tentang Saya</h1>
             <p style="color: #1D2B53;">Hallo perkenalkan nama saya Raffa Muhammad Raihan, Ini adalah website untuk tugas akhir saya untuk sidang Praktek Kerja Lapangan.
               Untuk kemampuan saya yang sekarang setelah menyelesaikan Praktek Kerja Lapangan, mungkin saya bisa di sebut sebagai Junior Developer.
             </p>
             <div class="container g-0">
-              <h1 style="color: #1D2B53;">My Skill</h1>
+              <h1 style="color: #1D2B53;">Kemampuan Saya</h1>
               <ul class="list-unstyled">
                 <li class="me-2 mt-1" style="color: #1D2B53;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M4.136 3.012h15.729l-1.431 16.15-6.451 1.826-6.414-1.826-1.433-16.15zm5.266 7.302-.173-2.035 7.533.002.173-1.963-9.87-.002.522 5.998h6.835l-.243 2.566-2.179.602-2.214-.605-.141-1.58H7.691l.247 3.123L12 17.506l4.028-1.08.558-6.111H9.402v-.001z"></path></svg>HTML</li>
                 <li class="me-2 mt-1" style="color: #1D2B53;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M4.192 3.143h15.615l-1.42 16.034-6.404 1.812-6.369-1.813L4.192 3.143zM16.9 6.424l-9.8-.002.158 1.949 7.529.002-.189 2.02H9.66l.179 1.913h4.597l-.272 2.62-2.164.598-2.197-.603-.141-1.569h-1.94l.216 2.867L12 17.484l3.995-1.137.905-9.923z"></path></svg>CSS</li>

@@ -18,48 +18,31 @@
           </div>
           <div class="card w-50 ms-2">
             <div class="card-header">
-              Penonton Artikel
-            </div>
-            <div class="card-body">
-              <TrafficChart />
-            </div>
-          </div>
-        </div>
-        <div class="d-flex justify-content-between mt-2">
-          <div class="card w-50">
-            <div class="card-header">
               Artikel Baru
             </div>
             <div class="card-body">
               <Chart />
             </div>
           </div>
-          <div class="card w-50 ms-2">
+        </div>
+        <div class="d-flex justify-content-between mt-2">
+          <div class="card w-50">
             <div class="card-header">
               Penonton Artikel Berdasarkan Kategori
             </div>
             <div class="card-body">
-              <Chart />
+              <TrafficPieChart />
             </div>
           </div>
-        </div>
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+          <div class="card w-50 ms-2">
+            <div class="card-header">
+              Author Paling Aktif
+            </div>
+            <div class="card-body">
+              <PolarChart />
+            </div>
+          </div>
+        </div>                                   
       </main>
     </div>
   </div>

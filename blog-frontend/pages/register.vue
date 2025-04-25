@@ -132,9 +132,13 @@ const handleRegister = async () => {
   border-color: #211951;
 }
 .alert {
-  position: absolute;
-  z-index: 1;
-  width: 400px;
-  margin-left: 600px;
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 500px;
+  z-index: 1050;
+  text-align: center;
 }
 </style>

@@ -56,10 +56,11 @@
           <div class="modal-body">
             <form @submit.prevent="addCategory">
               <div class="mb-3">
-                <label for="name" class="form-label">Nama</label>
+                <label for="name" class="form-label">Nama Kategori</label>
                 <input type="text" class="form-control" id="name" v-model="newCategory.name" required />
               </div>
               <button type="submit" class="btn btn-outline-primary" data-bs-dismiss="modal">Tambah Kategori</button>
+              <button type="button" class="btn btn-outline-danger ms-2" data-bs-dismiss="modal">Batal</button>
             </form>
           </div>
         </div>
@@ -81,6 +82,7 @@
                 <input type="text" class="form-control" id="edit-name" v-model="editCategory.name" required />
               </div>
               <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Simpan Perubahan</button>
+              <button type="button" class="btn btn-danger ms-2" data-bs-dismiss="modal">Batal</button>
             </form>
           </div>
         </div>

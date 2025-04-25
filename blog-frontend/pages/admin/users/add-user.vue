@@ -32,6 +32,7 @@
         />
       </div>
       <button type="submit" class="btn btn-primary">Tambah User</button>
+      <NuxtLink to="/admin/users" class="btn btn-danger ms-2">Batal</NuxtLink>
     </form>
   </div>
 </template>

@@ -80,7 +80,6 @@ func GetAll(c *gin.Context) {
     c.JSON(http.StatusOK, articles)
 }
 
-
 // Get Article by ID
 func GetArticleByID(c *gin.Context) {
 	id := c.Param("id")
@@ -324,3 +323,104 @@ func GetArticlesByAuthor(c *gin.Context) {
     // Jika artikel ditemukan, kembalikan data artikel
     c.JSON(http.StatusOK, gin.H{"status": "success", "data": articles})
 }
+
+func LikeArticle(c *gin.Context) {
+	db := config.GetDB()
+	articleID := c.Param("id")
+
+	// Ambil user dari context (misalnya dari middleware auth)
+	userID := c.MustGet("userID").(uint)
+
+	// Cari artikel
+	var article models.Article
+	if err := db.Preload("Category").Preload("Author").First(&article, articleID).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"status": "error", "message": "Article not found", "error": err.Error()})
+		return
+	}
+
+	// Cek apakah user sudah like artikel ini
+	var existingLike models.ArticleLike
+	if err := db.Where("user_id = ? AND article_id = ?", userID, article.ID).First(&existingLike).Error; err == nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "You already liked this article"})
+		return
+	}
+
+	// Simpan like
+	like := models.ArticleLike{
+		UserID:    userID,
+		ArticleID: article.ID,
+	}
+	if err := db.Create(&like).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": "Failed to like article", "error": err.Error()})
+		return
+	}
+
+	var totalLikes int64
+	db.Model(&models.ArticleLike{}).Where("article_id = ?", article.ID).Count(&totalLikes)
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":      "success",
+		"message":     "Article liked",
+		"total_likes": totalLikes,
+	})
+}
+
+func UnlikeArticle(c *gin.Context) {
+	db := config.GetDB()
+	articleID := c.Param("id")
+	userID := c.MustGet("userID").(uint)
+
+	// Cari like yang sesuai
+	var like models.ArticleLike
+	if err := db.Where("user_id = ? AND article_id = ?", userID, articleID).First(&like).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"status": "error", "message": "Like not found", "error": err.Error()})
+		return
+	}
+
+	// Hapus like
+	if err := db.Delete(&like).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": "Failed to unlike article", "error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": "success", "message": "Article unliked"})
+}
+
+func GetLikeArticleByID(c *gin.Context) {
+	db := config.GetDB()
+	articleID := c.Param("id")
+
+	var article models.Article
+	if err := db.Preload("Category").Preload("Author").First(&article, articleID).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"status": "error", "message": "Article not found", "error": err.Error()})
+		return
+	}
+
+	// Hitung total like
+	var totalLikes int64
+	db.Model(&models.ArticleLike{}).Where("article_id = ?", article.ID).Count(&totalLikes)
+
+	// Default likedByUser = false
+	likedByUser := false
+
+	// Ambil userID dari context jika login
+	userIDVal, exists := c.Get("userID")
+	if exists {
+		userID := userIDVal.(uint)
+	
+		var existingLike models.ArticleLike
+		if err := db.Where("user_id = ? AND article_id = ?", userID, article.ID).First(&existingLike).Error; err == nil {
+			likedByUser = true
+		}
+	}
+
+	// Kirim response lengkap
+	c.JSON(http.StatusOK, gin.H{
+		"status":        "success",
+		"data":          article,
+		"total_likes":   totalLikes,
+		"liked_by_user": likedByUser,
+	})
+}
+
+

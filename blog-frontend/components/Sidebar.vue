@@ -17,7 +17,7 @@
     </div>
     <div class="mb-4">
       <h5>Kategori</h5>
-      <ul v-for="category in category" :key="category.id" class="list-group">
+      <ul v-for="category in category" :key="category.ID" class="list-group">
         <li class="category list-group-item mb-2">
           <NuxtLink class="text-decoration-none" style="color: #211951;" :to="`/category/${category.ID}`">#{{ category.name }}</NuxtLink>
         </li>

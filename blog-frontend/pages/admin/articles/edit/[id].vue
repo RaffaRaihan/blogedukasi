@@ -4,22 +4,22 @@
     <h1>Edit Artikel</h1>
     <form @submit.prevent="updateArticle">
       <div class="mb-3">
-        <label for="editLabel" class="form-label">Label</label>
-        <input
-          type="text"
-          id="editLabel"
-          class="form-control"
-          v-model="editArticle.label"
-          required
-        />
-      </div>
-      <div class="mb-3">
         <label for="editTitle" class="form-label">Judul Artikel</label>
         <input
           type="text"
           id="editTitle"
           class="form-control"
           v-model="editArticle.title"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="editLabel" class="form-label">Label</label>
+        <input
+          type="text"
+          id="editLabel"
+          class="form-control"
+          v-model="editArticle.label"
           required
         />
       </div>
@@ -42,17 +42,17 @@
         </select>
       </div>
       <div class="mb-3">
-        <label for="editTitle" class="form-label">Status</label>
+        <label class="form-label">Status</label>
         <select class="form-select" v-model="editArticle.status">
           <option value="Sesuai">Sesuai</option>
           <option value="Belum Sesuai">Belum Sesuai</option>
         </select>
       </div>
-      <div class="mb-3">
+      <div class="mb-3" v-if="showNoteField">
         <label for="editNote" class="form-label">Catatan</label>
         <QuillEditor v-model="editArticle.note" />
       </div>
-      <!-- Input untuk upload gambar -->
+      <!-- Input dan preview gambar artikel -->
       <div class="mb-3">
         <label for="editImage" class="form-label">Gambar Artikel</label>
         <input
@@ -61,6 +61,9 @@
           class="form-control"
           @change="handleImageChange"
         />
+        <div v-if="imagePreview" class="mt-2">
+          <img :src="imagePreview" alt="Preview Gambar" class="img-thumbnail" style="max-height: 200px;" />
+        </div>
       </div>
       <button type="submit" class="btn btn-primary me-2">Update Artikel</button>
       <NuxtLink to="/admin/articles" class="btn btn-danger">Batal</NuxtLink>
@@ -69,9 +72,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
-import { useRoute } from 'vue-router';  // Pastikan mengimpor useRouter
+import { useRoute } from 'vue-router';
 import QuillEditor from '@/components/QuillEditor.vue';
 
 definePageMeta({
@@ -87,13 +90,18 @@ const editArticle = ref({
   author: '',
   status: '',
   note: '',
-  file: null, // Tambahkan properti file untuk menyimpan file gambar
+  file_name: null,
 });
+
 const categories = ref([]);
 const route = useRoute();
-const articleId = route.params.id; // Assuming the article ID is passed as a URL param
+const articleId = route.params.id;
 const alertMessage = ref('');
 const alertClass = ref('');
+const imagePreview = ref('');
+
+// Menentukan apakah field catatan ditampilkan
+const showNoteField = computed(() => editArticle.value.status !== 'Sesuai');
 
 const getTokenFromCookies = () => {
   const token = document.cookie
@@ -105,16 +113,12 @@ const getTokenFromCookies = () => {
 const fetchArticle = async () => {
   try {
     const token = getTokenFromCookies();
-    if (!token) {
-      throw new Error('Token tidak ditemukan. Harap login terlebih dahulu.');
-    }
-    const response = await axios.get(`http://localhost:8080/admin/articles/${articleId}`,
-    {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    if (!token) throw new Error('Token tidak ditemukan. Harap login terlebih dahulu.');
+
+    const response = await axios.get(`http://localhost:8080/admin/articles/${articleId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
     const articleData = response.data.data;
     editArticle.value = {
       label: articleData.label,
@@ -124,8 +128,11 @@ const fetchArticle = async () => {
       author: articleData.author,
       status: articleData.status,
       note: articleData.note,
-      file: null, // Reset file karena ini hanya untuk upload baru
+      file_name: null,
     };
+
+    // Set preview gambar jika ada
+    imagePreview.value = articleData.file_name || `http://localhost:8080/uploads/${articleData.file_name}`;
   } catch (error) {
     console.error('Error fetching article:', error);
   }
@@ -140,11 +147,11 @@ const fetchCategories = async () => {
   }
 };
 
-// Fungsi untuk menangani perubahan file gambar
 const handleImageChange = (event) => {
   const file = event.target.files[0];
   if (file) {
-    editArticle.value.file = file; // Simpan file gambar yang dipilih
+    editArticle.value.file_name = file;
+    imagePreview.value = URL.createObjectURL(file);
   }
 };
 
@@ -160,9 +167,6 @@ const updateArticle = async () => {
       return;
     }
 
-    console.log('Artikel yang akan di-update:', editArticle.value);
-
-    // Pertama, update artikel
     const updatedArticle = {
       label: editArticle.value.label,
       title: editArticle.value.title,
@@ -177,13 +181,10 @@ const updateArticle = async () => {
       `http://localhost:8080/admin/articles/${articleId}`,
       updatedArticle,
       {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       }
     );
 
-    // Jika ada file gambar yang diubah, upload gambar tersebut
     if (editArticle.value.file) {
       await uploadImage();
     }
@@ -203,7 +204,6 @@ const updateArticle = async () => {
   }
 };
 
-// Fungsi untuk mengunggah gambar
 const uploadImage = async () => {
   const formData = new FormData();
   formData.append('file', editArticle.value.file);
@@ -219,7 +219,7 @@ const uploadImage = async () => {
       return;
     }
 
-    const response = await axios.post(
+    await axios.post(
       `http://localhost:8080/admin/articles/${articleId}/uploads`,
       formData,
       {
@@ -229,7 +229,6 @@ const uploadImage = async () => {
         },
       }
     );
-    console.log(response.data)
   } catch (error) {
     console.error('Error uploading image:', error);
     alertMessage.value = `Gagal menggungah gambar`;
@@ -242,6 +241,7 @@ onMounted(() => {
   fetchArticle();
 });
 </script>
+
 <style scoped>
 .alert {
   position: fixed;

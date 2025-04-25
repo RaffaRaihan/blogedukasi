@@ -63,8 +63,8 @@
               <div class="card shadow bg-body-tertiary rounded">
                 <img :src="`http://localhost:8080/uploads/${articlesItem.file_name}`" class="card-img-top" alt="...">
                 <div class="card-body">
-                  <h6 class="text-muted">{{ articlesItem.label }}</h6>
                   <h5 class="card-title">{{ articlesItem.title }}</h5>
+                  <h6 class="text-muted">{{ articlesItem.label }}</h6>
                   <p class="card-text" v-html="getTruncatedContent(articlesItem.content)"></p>
                   <p class="text-muted">Dibuat : {{ formatDate(articlesItem.CreatedAt) }}</p>
                   <NuxtLink :to="`/user/articles/${articlesItem.ID}`" @click="trackArticleView(articlesItem.ID)" class="btn">Baca Selengkapnya   <i class="bi bi-arrow-right-circle"></i></NuxtLink>

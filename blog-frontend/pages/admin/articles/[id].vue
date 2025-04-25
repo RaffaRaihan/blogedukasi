@@ -69,6 +69,25 @@
             <QuillEditor v-model="editArticle.note"/>
             <button class="btn mt-2">Kirim</button>
           </form>
+          <!-- Admin Konfirmasi Status Artikel -->
+          <div v-if="isLoggedIn && articles.status !== 'Sesuai'" class="mt-3 mb-2">
+            <h5>Konfirmasi Status Artikel</h5>
+            <p>Status saat ini: <strong>{{ articles.status }}</strong></p>
+            <button
+              class="btn me-2"
+              @click="confirmStatus('Sesuai')"
+              :disabled="articles.status === 'Sesuai'"
+            >
+              Tandai Sesuai
+            </button>
+            <button
+              class="btn btn-outline-danger"
+              @click="confirmStatus('Belum Sesuai')"
+              :disabled="articles.status === 'Belum Sesuai'"
+            >
+              Tandai Belum Sesuai
+            </button>
+          </div>
         </div>
       </div>
       <!-- Sidebar -->
@@ -158,17 +177,57 @@ const updateArticle = async () => {
       }
     );
 
-    alertMessage.value = `Artikel berhasil diubah.`;
+    alertMessage.value = `Catatan berhasil di kirim`;
     alertClass.value = 'alert alert-success';
     setTimeout(() => {
       window.location.href = "/admin/articles";
     }, 3000);
   } catch (error) {
     console.error('Error updating article:', error);
-    alertMessage.value = `Gagal mengubah artikel`;
+    alertMessage.value = `Gagal mengirim catatan`;
     alertClass.value = 'alert alert-danger';
   }
 };
+
+const confirmStatus = async (status) => {
+  try {
+    const token = getTokenFromCookies();
+    if (!token) {
+      alertMessage.value = `Token tidak ditemukan. Pastikan Anda sudah login!!`;
+      alertClass.value = 'alert alert-danger';
+      return;
+    }
+
+    await axios.put(
+      `http://localhost:8080/admin/articles/${articleId}`,
+      { status },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    alertMessage.value = `Status artikel berhasil diubah menjadi "${status}".`;
+    alertClass.value = 'alert alert-success';
+    setTimeout(() => {
+      window.location.reload();
+    }, 1500);
+
+    // Update tampilan status artikel
+    fetchArticle(articleId);
+  } catch (error) {
+    console.error('Gagal mengubah status artikel:', error);
+    alertMessage.value = `Gagal mengubah status artikel.`;
+    alertClass.value = 'alert alert-danger';
+  }
+};
+
+watchEffect(() => {
+  if (articles.value && articles.value.note) {
+    editArticle.value.note = articles.value.note;
+  }
+});
 </script>
 
 <style scoped>

@@ -2,21 +2,21 @@
     <LoginNavbar v-if="isLoggedIn"/>
     <Navbar v-else />
     <div class="container mt-5 mb-5">
-      <h1 class="mb-4" style="color: #1D2B53;">Contact Us</h1>
+      <h1 class="mb-4" style="color: #1D2B53;">Kontak</h1>
       <form>
         <div class="mb-3">
-          <label for="name" class="form-label">Name</label>
-          <input type="text" class="form-control" id="name" placeholder="Your Name" />
+          <label for="name" class="form-label">Nama</label>
+          <input type="text" class="form-control" id="name" placeholder="Nama Kamu" />
         </div>
         <div class="mb-3">
           <label for="email" class="form-label">Email</label>
-          <input type="email" class="form-control" id="email" placeholder="Your Email" />
+          <input type="email" class="form-control" id="email" placeholder="Email" />
         </div>
         <div class="mb-3">
-          <label for="message" class="form-label">Message</label>
-          <textarea class="form-control" id="message" rows="4" placeholder="Your Message"></textarea>
+          <label for="message" class="form-label">Pesan</label>
+          <textarea class="form-control" id="message" rows="4" placeholder="Pesan Kamu"></textarea>
         </div>
-        <button type="submit" class="btn">Send</button>
+        <button type="submit" class="btn btn-primary">Kirim</button>
       </form>
     </div>
     <Footer />
@@ -40,16 +40,6 @@ const getTokenFromCookies = () => {
 </script>
 
 <style scoped>
-.btn{
-  color: #1D2B53;
-  background-color: #FF004D;
-  border-color: #1D2B53;
-}
-.btn:hover{
-  color: #FF004D;
-  background-color: #1D2B53;
-  border-color: #FF004D;
-}
 label{
   color: #1D2B53;;
 }

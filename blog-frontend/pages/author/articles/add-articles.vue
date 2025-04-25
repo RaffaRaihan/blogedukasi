@@ -1,18 +1,8 @@
 <template>
   <div class="container mb-4">
+    <div v-if="alertMessage" class="alert" :class="alertClass" role="alert">{{ alertMessage }}</div>
     <h1 class="my-4">Tambah Artikel Baru</h1>
     <form @submit.prevent="submitArticle">
-      <div class="mb-3">
-        <label for="articleLabel" class="form-label">Label</label>
-        <input
-          type="text"
-          id="articleLabel"
-          class="form-control"
-          v-model="newArticle.label"
-          required
-          placeholder="Masukkan label"
-        />
-      </div>
       <div class="mb-3">
         <label for="articleTitle" class="form-label">Judul Artikel</label>
         <input
@@ -24,6 +14,18 @@
           placeholder="Masukkan judul artikel"
         />
       </div>
+      <div class="mb-3">
+        <label for="articleLabel" class="form-label">Label</label>
+        <input
+          type="text"
+          id="articleLabel"
+          class="form-control"
+          v-model="newArticle.label"
+          required
+          placeholder="Masukkan label"
+        />
+      </div>
+      <p class="text-muted">*Gambar harus lebih dari 850px</p>
       <div class="mb-3">
         <label for="articleContent" class="form-label">Konten Artikel</label>
         <QuillEditor v-model="newArticle.content" />
@@ -42,6 +44,7 @@
           </option>
         </select>
       </div>
+      <p class="text-muted">*Gambar harus jpg/jpeg</p>
       <div class="mb-3">
         <label for="articleImage" class="form-label">Gambar Artikel</label>
         <input
@@ -77,6 +80,8 @@ const newArticle = ref({
 });
 const categories = ref([]);
 const newArticleId = ref(null); // Untuk menyimpan ID artikel yang baru dibuat
+const alertMessage = ref('')
+const alertClass = ref('')
 
 const getTokenFromCookies = () => {
   return document.cookie
@@ -158,11 +163,15 @@ const submitArticle = async () => {
       await handleImageUpload(file, newArticleId.value);
     }
 
-    alert('Artikel berhasil dibuat.');
-    router.push('/author/articles');
+    alertMessage.value = `Artikel berhasil dibuat.`
+    alertClass.value = 'alert alert-success'
+    setTimeout(() => {
+      window.location.href ='/author/articles';
+    }, 1500);
   } catch (error) {
     console.error('Error submitting article:', error);
-    alert('Gagal membuat artikel');
+    alertMessage.value = `Gagal membuat artikel.`
+    alertClass.value = 'alert alert-success'
   }
 };
 
@@ -204,3 +213,16 @@ onMounted(() => {
   setUserIdFromToken(); // Ambil ID user saat komponen dimuat
 });
 </script>
+
+<style scoped>
+.alert {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 500px;
+  z-index: 1050;
+  text-align: center;
+}
+</style>
