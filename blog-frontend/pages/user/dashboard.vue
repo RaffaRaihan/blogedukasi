@@ -101,7 +101,7 @@ import useAuth from '@/composables/api/token/useAuth';
 import useArticles from '@/composables/api/useArticles';
 import { ref, computed } from 'vue';
 import { format } from 'date-fns'; // Format tanggal
-import { id } from 'date-fns/locale'; // Locale Indonesia
+import id from 'date-fns/locale/id/index.js'
 import DOMPurify from "dompurify";
 
 // State untuk artikel dan pencarian

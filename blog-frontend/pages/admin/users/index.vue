@@ -67,7 +67,7 @@
 import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 import { format } from 'date-fns';
-import { id } from 'date-fns/locale';
+import id from 'date-fns/locale/id/index.js'
 
 const searchQuery = ref('');
 const selectedRole = ref('');

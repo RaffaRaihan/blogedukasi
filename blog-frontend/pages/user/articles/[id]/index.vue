@@ -230,7 +230,7 @@ import useComments from '@/composables/api/useComments';
 import useCommentForm from '~/composables/api/token/useCommentsForm';
 import { computed, ref, onMounted } from 'vue';
 import { format } from 'date-fns';
-import { id } from 'date-fns/locale';
+import id from 'date-fns/locale/id/index.js'
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 
